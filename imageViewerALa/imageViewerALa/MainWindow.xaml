@@ -8,7 +8,7 @@
             <RowDefinition Height="350*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" >
-            <Label Content="Bilu Bilu na zjeździku" Height="28" Name="labelPath" Width="675"  />
+            <Label Content="Git hub!" Height="28" Name="labelPath" Width="675"  />
         </StackPanel>
         <Rectangle Grid.Row="1" Fill="#FF293875" />
         <Image Grid.Row="1" Margin="15" Name="imagePicture" Stretch="Uniform" MouseLeftButtonDown="imagePicture_MouseLeftButtonDown"/>

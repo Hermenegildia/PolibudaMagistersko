@@ -52,6 +52,7 @@ namespace imageViewerALa
         {
             imagePicture.Source = new BitmapImage(new Uri(p));
             labelPath.Content = p;
+            this.Topmost = true;
         }
 
        
