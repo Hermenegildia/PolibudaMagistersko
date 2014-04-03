@@ -33,26 +33,38 @@ namespace imageViewerALa
 
         private void InitializeFilesPath()
         {
-            System.Windows.MessageBox.Show("Witaj w programie! Wybierz lokalizację plików do wyświetlenia");
-            FolderBrowserDialog dialog = new FolderBrowserDialog();
-            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                path = dialog.SelectedPath;
-                labelPath.Content = path;
-                string[] buf = System.IO.Directory.GetFiles(path, "*.jpg");
-                for (int i = 0; i < buf.Length; i++)
-                    fileNames.Add(buf[i]);
-                iterator = 0;
-                ShowPicture(fileNames[iterator]);
-                
-            }
+            //System.Windows.MessageBox.Show("Witaj w programie! Wybierz lokalizację plików do wyświetlenia");
+            //FolderBrowserDialog dialog = new FolderBrowserDialog();
+            //if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            //{
+            //    path = dialog.SelectedPath;
+            //    labelPath.Content = path;
+            path = @"C:\Users\alA\Desktop";
+            string[] buf = System.IO.Directory.GetFiles(path, "*.jpg");
+            for (int i = 0; i < buf.Length; i++)
+                fileNames.Add(buf[i]);
+            iterator = 0;
+            ShowPicture(fileNames[iterator]);
+            this.Topmost = true;
+            //}
         }
 
         private void ShowPicture(string p)
         {
             imagePicture.Source = new BitmapImage(new Uri(p));
             labelPath.Content = p;
-            this.Topmost = true;
+            //this.Width = imagePicture.Width + 20;
+            //this.Height = imagePicture.Height + 20;
+
+            SetLoaction();
+        }
+
+        private void SetLoaction()
+        {
+            double height = SystemParameters.WorkArea.Height;
+            double width = SystemParameters.WorkArea.Width;
+           
+            this.Left = (width - this.Width) / 2;        
         }
 
        
