@@ -27,12 +27,32 @@ namespace imageViewerALa
         Point currentPoint;
         Point startPoint;
         Rectangle rectangle;
+        EventHandler endRecDrawing;
+
 
         public MainWindow()
         {
             InitializeComponent();
             fileNames = new List<string>();
             InitializeFilesPath();
+
+        }
+
+        public event EventHandler EndRectangleDrawing
+        {
+            add
+            {
+                lock (this)
+                {
+                    endRecDrawing += value;
+                }
+            }
+            remove {
+                lock (this)
+                {
+                    endRecDrawing -= value;
+                }
+            }
         }
 
         private void InitializeFilesPath()
@@ -49,7 +69,8 @@ namespace imageViewerALa
                 fileNames.Add(buf[i]);
             iterator = 0;
             ShowPicture(fileNames[iterator]);
-            this.Topmost = true;
+            croppedImage.Source = new BitmapImage(new Uri(fileNames[iterator]));
+         //   this.Topmost = true;
             //}
         }
 
@@ -57,18 +78,12 @@ namespace imageViewerALa
         {
             imagePicture.Source = new BitmapImage(new Uri(p));
             labelPath.Content = p;
-         
         }
 
-       
-       
+   
         private void imagePicture_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            //if (iterator < fileNames.Count-1)
-            //    iterator++;
-            //else
-            //    iterator = 0;
-            //ShowPicture(fileNames[iterator]);
+            
             CanvasControl.Children.Clear();
             startPoint = e.GetPosition(CanvasControl);
             rectangle = new Rectangle();
@@ -119,12 +134,50 @@ namespace imageViewerALa
 
         private void imagePicture_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            UIElement uie = CanvasControl.Children[0];
             
+            //int h = Int32.Parse( rectangle.Height.ToString());
+            //int w = Int32.Parse( rectangle.Width.ToString());
             rectangle = null;
+            //ShowCroppedImage(h,w );
+           
         }
 
-        
-   
+        private void ShowCroppedImage(int height, int width)
+        {
+            RenderTargetBitmap rtb = new RenderTargetBitmap(height, width, 96, 96, PixelFormats.Default);
+            DrawingVisual dv = new DrawingVisual();
+            using (DrawingContext dc = dv.RenderOpen())
+            {
+                VisualBrush vb = new VisualBrush();
+                dc.DrawRectangle(vb, null, new Rect(new Point(), new Size(width, height)));
+            }
+            rtb.Render(dv);
+          //  CroppedBitmap croppedPic = new CroppedBitmap(new BitmapImage(new Uri(fileNames[iterator])), new Int32Rect(0, 0, width, height));
+            croppedImage.Source = rtb;
+        }
+
+        private void imagePicture_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            CanvasControl.Children.Clear();
+            if (iterator < fileNames.Count - 1)
+                iterator++;
+            else
+                iterator = 0;
+            ShowPicture(fileNames[iterator]);
+        }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            UIElement myRectangle = CanvasControl.Children[0];
+            
+
+            int h = Int32.Parse(rectangle.Height.ToString());
+            int w = Int32.Parse(rectangle.Width.ToString());
+            
+            ShowCroppedImage(h, w);
+        }
+
     }
+
+   
 }
