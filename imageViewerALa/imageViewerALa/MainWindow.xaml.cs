@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Forms;
+using Microsoft.Kinect;
 
 namespace imageViewerALa
 {
@@ -23,6 +24,9 @@ namespace imageViewerALa
         List<string> fileNames;
         string path;
         int iterator;
+        Point currentPoint;
+        Point startPoint;
+        Rectangle rectangle;
 
         public MainWindow()
         {
@@ -53,28 +57,71 @@ namespace imageViewerALa
         {
             imagePicture.Source = new BitmapImage(new Uri(p));
             labelPath.Content = p;
-            //this.Width = imagePicture.Width + 20;
-            //this.Height = imagePicture.Height + 20;
-
-            SetLoaction();
-        }
-
-        private void SetLoaction()
-        {
-            double height = SystemParameters.WorkArea.Height;
-            double width = SystemParameters.WorkArea.Width;
-           
-            this.Left = (width - this.Width) / 2;        
+         
         }
 
        
+       
         private void imagePicture_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (iterator < fileNames.Count-1)
-                iterator++;
-            else
-                iterator = 0;
-            ShowPicture(fileNames[iterator]);
+            //if (iterator < fileNames.Count-1)
+            //    iterator++;
+            //else
+            //    iterator = 0;
+            //ShowPicture(fileNames[iterator]);
+            CanvasControl.Children.Clear();
+            startPoint = e.GetPosition(CanvasControl);
+            rectangle = new Rectangle();
+            rectangle.Stroke = Brushes.OrangeRed;
+            rectangle.StrokeThickness = 3;
+
+            Canvas.SetLeft(rectangle, startPoint.X);
+            Canvas.SetTop(rectangle, startPoint.X);
+            CanvasControl.Children.Add(rectangle);
+            //if (e.ButtonState == MouseButtonState.Pressed)
+            //    currentPoint = e.GetPosition(this);
+        }
+
+        private void imagePicture_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Released || rectangle == null)
+                return;
+
+            var pos = e.GetPosition(CanvasControl);
+
+            var x = Math.Min(pos.X, startPoint.X);
+            var y = Math.Min(pos.Y, startPoint.Y);
+
+            var w = Math.Max(pos.X, startPoint.X) - x;
+            var h = Math.Max(pos.Y, startPoint.Y) - y;
+
+            rectangle.Width = w;
+            rectangle.Height = h;
+
+            Canvas.SetLeft(rectangle, x);
+            Canvas.SetTop(rectangle, y);
+
+            //if (e.LeftButton == MouseButtonState.Pressed)
+            //{   
+            //    Line line = new Line();
+
+            //    line.Stroke = SystemColors.WindowFrameBrush;
+            //    line.X1 = currentPoint.X;
+            //    line.Y1 = currentPoint.Y;
+            //    line.X2 = e.GetPosition(this).X;
+            //    line.Y2 = e.GetPosition(this).Y;
+
+            //    currentPoint = e.GetPosition(this);
+
+            //    CanvasControl.Children.Add(line);
+            //}
+        }
+
+        private void imagePicture_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            UIElement uie = CanvasControl.Children[0];
+            
+            rectangle = null;
         }
 
         
