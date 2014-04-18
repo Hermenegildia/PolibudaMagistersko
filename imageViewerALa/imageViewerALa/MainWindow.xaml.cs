@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Forms;
+//using System.Windows.Forms;
 using Microsoft.Kinect;
 
 namespace imageViewerALa
@@ -168,13 +168,20 @@ namespace imageViewerALa
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            UIElement myRectangle = CanvasControl.Children[0];
-            
+            try
+            {
+                UIElement myRectangle = CanvasControl.Children[0];
 
-            int h = Int32.Parse(rectangle.Height.ToString());
-            int w = Int32.Parse(rectangle.Width.ToString());
-            
-            ShowCroppedImage(h, w);
+
+                int h = Int32.Parse(rectangle.Height.ToString());
+                int w = Int32.Parse(rectangle.Width.ToString());
+
+                ShowCroppedImage(h, w);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Nie udało się wyświetlić! " + ex.Message);
+            }
         }
 
     }
