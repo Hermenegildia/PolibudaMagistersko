@@ -7,7 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration; 
 using DBConnection;
+using CustomControls;
+using System.Xaml;
+using System.Collections;
 
 namespace connectionChecker
 {
@@ -33,6 +37,29 @@ namespace connectionChecker
             catch
             {
                 MessageBox.Show("Ups! Coś się nie powiodło!");
+            }
+        }
+
+      
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            LoadDataFromDatabase();
+
+            var wpfwindow = new MyDllWindow();
+            ElementHost.EnableModelessKeyboardInterop(wpfwindow);
+            wpfwindow.ShowWindow();
+            
+        }
+
+        private void btAdd_Click(object sender, EventArgs e)
+        {
+            InsertRecordForm insertRecordForm = new InsertRecordForm(myConnection);
+            if (insertRecordForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                dataGridView1.DataSource = insertRecordForm.GetDataTable();
+                LoadDataFromDatabase();
             }
         }
     }

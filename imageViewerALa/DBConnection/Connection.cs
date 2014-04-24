@@ -5,6 +5,7 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 using System.Data;
+using System.Collections;
 
 
 namespace DBConnection
@@ -64,6 +65,21 @@ namespace DBConnection
         public DataTable ExecuteQuery(string query)
         {
             SqlCommand myCommand = new SqlCommand(query, myConnection, myTransaction);
+            SqlDataAdapter adapter = new SqlDataAdapter(myCommand);
+            DataTable result = new DataTable();
+            adapter.Fill(result);
+            return result;
+        }
+
+        public DataTable ExecuteQuery(string query, Hashtable param)
+        {
+          
+            SqlCommand myCommand = new SqlCommand(query, myConnection, myTransaction);
+            foreach (DictionaryEntry parameterEntry in param)
+            {
+                myCommand.Parameters.AddWithValue((string)parameterEntry.Key, parameterEntry.Value) ;
+            }
+
             SqlDataAdapter adapter = new SqlDataAdapter(myCommand);
             DataTable result = new DataTable();
             adapter.Fill(result);
