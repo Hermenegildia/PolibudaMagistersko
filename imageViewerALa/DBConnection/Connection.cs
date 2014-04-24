@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
+using System.Windows.Forms;
+using System.Data;
 
 
 namespace DBConnection
@@ -10,6 +12,7 @@ namespace DBConnection
     public class Connection
     {
         SqlConnection myConnection;
+        SqlTransaction myTransaction;
         string dbUserName;
         string dbPassword;
 
@@ -25,11 +28,46 @@ namespace DBConnection
             myConnection = new SqlConnection("User ID=" + dbUserName +
                                             ";Password=" + dbPassword +
                                             ";Server=localhost" +
+                                            ";Database=Bazka" +
                                             ";Trusted_Connection=false" +
                                             ";connection timeout=30");
 
         }
 
+        public void OpenConnection()
+        {
+            try
+            {
+                myConnection.Close();
+                myConnection.Open();
+                myTransaction = myConnection.BeginTransaction();
+            }
+            catch (Exception ex)
+            {
+                ErrorConnection();
+                MessageBox.Show("Wystąpił błąd podczas łączenia z bazą danych! " + ex.Message);
+            }
+        }
 
+        public void CloseConnetcion()
+        {
+            myTransaction.Commit();
+            myConnection.Close();
+        }
+
+        public void ErrorConnection()
+        {
+            myTransaction.Rollback();
+            myConnection.Close();
+        }
+
+        public DataTable ExecuteQuery(string query)
+        {
+            SqlCommand myCommand = new SqlCommand(query, myConnection, myTransaction);
+            SqlDataAdapter adapter = new SqlDataAdapter(myCommand);
+            DataTable result = new DataTable();
+            adapter.Fill(result);
+            return result;
+        }
     }
 }

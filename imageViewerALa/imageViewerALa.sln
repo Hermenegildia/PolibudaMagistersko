@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "imageViewerALa", "imageViewerALa\imageViewerALa.csproj", "{55FBC96F-9A02-4E3B-870A-57728726F19F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "connectionChecker", "connectionChecker\connectionChecker.csproj", "{AA43D1A7-0F28-4864-8AB9-314E910B1BF7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7BB95258-7BA8-4D6E-8D97-F7231FFA57D4} = {7BB95258-7BA8-4D6E-8D97-F7231FFA57D4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBConnection", "DBConnection\DBConnection.csproj", "{7BB95258-7BA8-4D6E-8D97-F7231FFA57D4}"
 EndProject

@@ -18,6 +18,22 @@ namespace connectionChecker
         {
             InitializeComponent();
             myConnection = new Connection("sa", "mojeHaslo123");
+           
+            LoadDataFromDatabase();
+        }
+
+        private void LoadDataFromDatabase()
+        {
+            try
+            {
+                myConnection.OpenConnection();
+                dataGridView1.DataSource = myConnection.ExecuteQuery("SELECT * FROM Table_1");
+                myConnection.CloseConnetcion();
+            }
+            catch
+            {
+                MessageBox.Show("Ups! Coś się nie powiodło!");
+            }
         }
     }
 }
