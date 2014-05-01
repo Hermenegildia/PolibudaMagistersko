@@ -28,10 +28,10 @@ namespace DBConnection
         {
             myConnection = new SqlConnection("User ID=" + dbUserName +
                                             ";Password=" + dbPassword +
-                                            ";Server=localhost" +
-                                            ";Database=Bazka" +
+                                            ";Server=ALICJA-HP\\SQLEXPRESS" +
+                                            ";Database=bazka" +
                                             ";Trusted_Connection=false" +
-                                            ";connection timeout=30");
+                                            ";connection timeout=0");
 
         }
 
