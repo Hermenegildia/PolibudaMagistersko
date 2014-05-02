@@ -16,6 +16,8 @@ namespace connectionChecker
     {
         Connection myConnection;
         DataTable myTable;
+        ErrorProvider ep1 = new ErrorProvider();
+        ErrorProvider ep2 = new ErrorProvider();
 
         public InsertRecordForm(Connection conn)
         {
@@ -46,10 +48,32 @@ namespace connectionChecker
         {
             try
             {
-                string name = tbName.Text;
-                string lastName = tbLastName.Text;
-                myTable = InsertDataToDatabase(name, lastName);
-                DialogResult = System.Windows.Forms.DialogResult.OK;
+                ep1.SetError(tbName, String.Empty);
+                ep2.SetError(tbLastName,String.Empty);
+                if (tbName.Text != string.Empty && tbLastName.Text != string.Empty)
+                {
+                    string name = tbName.Text;
+                    string lastName = tbLastName.Text;
+                    myTable = InsertDataToDatabase(name, lastName);
+                    DialogResult = System.Windows.Forms.DialogResult.OK;
+                }
+                else
+                {
+                    if (tbName.Text == String.Empty)
+                    {
+                        ep1.BlinkStyle = ErrorBlinkStyle.NeverBlink;
+                        ep1.SetIconAlignment(tbName, ErrorIconAlignment.MiddleRight);
+                        ep1.SetError(tbName, "Uzupełnij imię!");
+                    }
+
+                    if (tbLastName.Text == String.Empty)
+                    {
+                        ep2.BlinkStyle = ErrorBlinkStyle.NeverBlink;
+                        ep2.SetIconAlignment(tbLastName, ErrorIconAlignment.MiddleRight);
+                        ep2.SetError(tbLastName, "Uzupełnij nazwisko!");
+                    }
+                    return;
+                }
             }
             catch 
             {
@@ -60,6 +84,23 @@ namespace connectionChecker
         public DataTable GetDataTable()
         {
             return myTable;
+        }
+
+      
+        private void tbLastName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == Convert.ToChar(Keys.Enter))
+            {
+                btOK.PerformClick();
+            }
+        }
+
+        private void tbName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == Convert.ToChar(Keys.Enter))
+            {
+                btOK.PerformClick();
+            }
         }
 
     }

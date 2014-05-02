@@ -29,10 +29,32 @@ namespace DBConnection
             myConnection = new SqlConnection("User ID=" + dbUserName +
                                             ";Password=" + dbPassword +
                                             ";Server=ALICJA-HP\\SQLEXPRESS" +
-                                            ";Database=bazka" +
+                                            //";Database=bazka" +
                                             ";Trusted_Connection=false" +
                                             ";connection timeout=0");
 
+            OpenConnection();
+            DataTable databases = ExecuteQuery("SELECT * FROM master.dbo.sysdatabases WHERE name = 'bazia'");
+            if (databases.Rows.Count < 1)
+            {
+                CloseConnetcion();
+                myConnection.Open();
+
+                ExecuteNonQuery(Queries.CreateDatabase("bazia"));
+                CloseConnetcion();
+                //todo: bazia stworzona, teraz podłączyć się do bazi i w bazi stworzyć tabelę!
+                ExecuteNonQuery(Queries.CreateTable("Table_1"));
+
+            }
+            CloseConnetcion();
+            myConnection = new SqlConnection("User ID=" + dbUserName +
+                                              ";Password=" + dbPassword +
+                                              ";Server=ALICJA-HP\\SQLEXPRESS" +
+                                              ";Database=bazia" +
+                                              ";Trusted_Connection=false" +
+                                              ";connection timeout=0");
+     
+            
         }
 
         public void OpenConnection()
@@ -52,7 +74,11 @@ namespace DBConnection
 
         public void CloseConnetcion()
         {
-            myTransaction.Commit();
+            try
+            {
+                myTransaction.Commit();
+            }
+            catch { }
             myConnection.Close();
         }
 
@@ -64,11 +90,29 @@ namespace DBConnection
 
         public DataTable ExecuteQuery(string query)
         {
-            SqlCommand myCommand = new SqlCommand(query, myConnection, myTransaction);
-            SqlDataAdapter adapter = new SqlDataAdapter(myCommand);
             DataTable result = new DataTable();
-            adapter.Fill(result);
+            try
+            {
+                SqlCommand myCommand = new SqlCommand(query, myConnection, myTransaction);
+                SqlDataAdapter adapter = new SqlDataAdapter(myCommand);
+                adapter.Fill(result);
+            }
+            catch (Exception ex)
+            { }
             return result;
+        }
+
+        public void ExecuteNonQuery(string query)
+        {
+            
+            try
+            {
+                SqlCommand myCommand = new SqlCommand(query, myConnection);
+                myCommand.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            { }
+         
         }
 
         public DataTable ExecuteQuery(string query, Hashtable param)

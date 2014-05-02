@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InsertRecordForm));
             this.btOK = new System.Windows.Forms.Button();
             this.tbName = new System.Windows.Forms.TextBox();
             this.tbLastName = new System.Windows.Forms.TextBox();
@@ -51,6 +52,7 @@
             this.tbName.Name = "tbName";
             this.tbName.Size = new System.Drawing.Size(141, 20);
             this.tbName.TabIndex = 1;
+            this.tbName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbName_KeyPress);
             // 
             // tbLastName
             // 
@@ -58,6 +60,7 @@
             this.tbLastName.Name = "tbLastName";
             this.tbLastName.Size = new System.Drawing.Size(141, 20);
             this.tbLastName.TabIndex = 2;
+            this.tbLastName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbLastName_KeyPress);
             // 
             // lbName
             // 
@@ -87,9 +90,10 @@
             this.Controls.Add(this.tbLastName);
             this.Controls.Add(this.tbName);
             this.Controls.Add(this.btOK);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "InsertRecordForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "InsertRecordForm";
+            this.Text = "Dodaj pacjenta";
             this.ResumeLayout(false);
             this.PerformLayout();
 

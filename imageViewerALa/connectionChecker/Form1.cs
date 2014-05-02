@@ -18,11 +18,10 @@ namespace connectionChecker
     public partial class Form1 : Form
     {
         Connection myConnection;
-        public Form1()
+        public Form1(Connection connection)
         {
             InitializeComponent();
-            myConnection = new Connection("sa", "mojeHaslo123");
-           
+            myConnection = connection;
             LoadDataFromDatabase();
         }
 
@@ -62,5 +61,8 @@ namespace connectionChecker
                 LoadDataFromDatabase();
             }
         }
+
+     
+     
     }
 }
