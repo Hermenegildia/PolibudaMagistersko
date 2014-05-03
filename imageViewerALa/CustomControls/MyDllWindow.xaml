@@ -1,4 +1,4 @@
-﻿<Window x:Class="CustomControls.MyDllWindow"
+﻿<Window x:Class="WPFControls.MyDllWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Picture Viewer" Height="350" Width="781" WindowStartupLocation="CenterScreen" WindowState="Maximized">

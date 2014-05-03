@@ -19,33 +19,51 @@ namespace connectionChecker
         public StartupWindow()
         {
             InitializeComponent();
-          
+            tbLogin.Text = Properties.Settings.Default.dbLogin;
+            tbPassword.Text = Properties.Settings.Default.dbPssword;
         }
 
-        private void StartupWindow_Shown(object sender, EventArgs e)
-        {
-           button1_Click(this, new EventArgs());
-
-        }
-
-      
+       
 
         private void button1_Click(object sender, EventArgs e)
         {
+            ReadLoginParams();
+            ShowHideLabels();
+            try
+            {
+                myConnection = new Connection(Properties.Settings.Default.dbLogin, Properties.Settings.Default.dbPssword);
+                int i = 0;
+                while (i < 10000)
+                {
+                    progressBar1.PerformStep();
+                    i++;
+                }
+                Form1 mainWindow = new Form1(myConnection);
+                progressBar1.PerformStep();
+                mainWindow.FormClosed += new FormClosedEventHandler(mainWindow_Closed);
+                this.Hide();
+                mainWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Wystąpił błąd! Spradź poprawność loginu i hasła do bazy danych " + ex);
+            }
+        }
+
+        private void ReadLoginParams()
+        {
+            Properties.Settings.Default.dbLogin = tbLogin.Text;
+            Properties.Settings.Default.dbPssword = tbPassword.Text;
+            Properties.Settings.Default.Save();
+        }
+
+        private void ShowHideLabels()
+        {
+            lbInfo.Visible = false;
+            lbWait.Visible = true;
+            lbTitle.Visible = true;
             lbWait.Refresh();
             lbTitle.Refresh();
-            myConnection = new Connection("sa", "mojeHaslo123");
-            int i = 0;
-            while (i < 10000)
-            {
-                progressBar1.PerformStep();
-                i++;
-            }
-            Form1 mainWindow = new Form1(myConnection);
-            progressBar1.PerformStep();
-            mainWindow.FormClosed += new FormClosedEventHandler(mainWindow_Closed);
-            this.Hide();
-            mainWindow.Show();
         }
 
         private void mainWindow_Closed(object sender, FormClosedEventArgs e)
@@ -53,6 +71,18 @@ namespace connectionChecker
             this.Close();
         }
 
+        private void tbLogin_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == Convert.ToChar(Keys.Enter))
+            {
+                btLogIn.PerformClick();
+            }
+        }
+
+        
+
+     
+      
        
     }
 }

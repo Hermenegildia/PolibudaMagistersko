@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using System.Windows.Markup;
 using System.Xaml;
 
-namespace CustomControls
+namespace WPFControls
 {
     /// <summary>
     /// Interaction logic for MyControl.xaml

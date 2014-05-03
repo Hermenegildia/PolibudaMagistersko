@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using Microsoft.Kinect;
 using System.Windows.Forms;
 
-namespace CustomControls
+namespace WPFControls
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

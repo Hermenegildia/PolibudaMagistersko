@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration; 
 using DBConnection;
-using CustomControls;
+using WPFControls;
 using System.Xaml;
 using System.Collections;
 
@@ -46,10 +46,11 @@ namespace connectionChecker
         {
             LoadDataFromDatabase();
 
-            var wpfwindow = new MyDllWindow();
-            ElementHost.EnableModelessKeyboardInterop(wpfwindow);
-            wpfwindow.ShowWindow();
-            
+            //var wpfwindow = new MyDllWindow();
+            //ElementHost.EnableModelessKeyboardInterop(wpfwindow);
+            //wpfwindow.ShowWindow();
+            MainWindow mw = new MainWindow();
+            mw.Show();
         }
 
         private void btAdd_Click(object sender, EventArgs e)
