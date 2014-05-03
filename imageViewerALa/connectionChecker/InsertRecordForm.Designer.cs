@@ -29,22 +29,12 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InsertRecordForm));
-            this.btOK = new System.Windows.Forms.Button();
             this.tbName = new System.Windows.Forms.TextBox();
             this.tbLastName = new System.Windows.Forms.TextBox();
             this.lbName = new System.Windows.Forms.Label();
             this.lbLastName = new System.Windows.Forms.Label();
+            this.btOK = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // btOK
-            // 
-            this.btOK.Location = new System.Drawing.Point(286, 147);
-            this.btOK.Name = "btOK";
-            this.btOK.Size = new System.Drawing.Size(75, 23);
-            this.btOK.TabIndex = 0;
-            this.btOK.Text = "OK";
-            this.btOK.UseVisualStyleBackColor = true;
-            this.btOK.Click += new System.EventHandler(this.btOK_Click);
             // 
             // tbName
             // 
@@ -79,6 +69,20 @@
             this.lbLastName.Size = new System.Drawing.Size(53, 13);
             this.lbLastName.TabIndex = 4;
             this.lbLastName.Text = "Nazwisko";
+            // 
+            // btOK
+            // 
+            this.btOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btOK.Image = global::connectionChecker.Properties.Resources.add;
+            this.btOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btOK.Location = new System.Drawing.Point(277, 130);
+            this.btOK.Name = "btOK";
+            this.btOK.Size = new System.Drawing.Size(84, 40);
+            this.btOK.TabIndex = 0;
+            this.btOK.Text = "OK";
+            this.btOK.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btOK.UseVisualStyleBackColor = true;
+            this.btOK.Click += new System.EventHandler(this.btOK_Click);
             // 
             // InsertRecordForm
             // 

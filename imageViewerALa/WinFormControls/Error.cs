@@ -16,5 +16,18 @@ namespace WinFormControls
         {
             InitializeComponent();
         }
+
+        public Error(string errorText)
+        {
+            InitializeComponent();
+            this.tbText.Text = errorText;
+            this.tbText.Visible = true;
+            //this.tbText.ReadOnly = true;
+        }
+
+        private void btOK_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

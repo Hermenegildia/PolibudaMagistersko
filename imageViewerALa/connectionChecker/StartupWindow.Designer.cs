@@ -79,11 +79,15 @@
             // 
             // btLogIn
             // 
+            this.btLogIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btLogIn.Image = global::connectionChecker.Properties.Resources.accept;
+            this.btLogIn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btLogIn.Location = new System.Drawing.Point(144, 218);
             this.btLogIn.Name = "btLogIn";
-            this.btLogIn.Size = new System.Drawing.Size(75, 23);
+            this.btLogIn.Size = new System.Drawing.Size(100, 40);
             this.btLogIn.TabIndex = 3;
             this.btLogIn.Text = "Zaloguj";
+            this.btLogIn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btLogIn.UseVisualStyleBackColor = true;
             this.btLogIn.Click += new System.EventHandler(this.button1_Click);
             // 

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WinFormControls;
 
 namespace connectionChecker
 {
@@ -15,6 +16,12 @@ namespace connectionChecker
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Error er = new Error("Wystąpił błąd! Spradź poprawność loginu i hasła do bazy danych \n");
+            er.ShowDialog();
         }
     }
 }

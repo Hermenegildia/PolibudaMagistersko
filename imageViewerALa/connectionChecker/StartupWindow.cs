@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WinFormControls;
 
 namespace connectionChecker
 {
@@ -41,12 +42,14 @@ namespace connectionChecker
                 Form1 mainWindow = new Form1(myConnection);
                 progressBar1.PerformStep();
                 mainWindow.FormClosed += new FormClosedEventHandler(mainWindow_Closed);
+
                 this.Hide();
                 mainWindow.Show();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Wystąpił błąd! Spradź poprawność loginu i hasła do bazy danych " + ex);
+                Error er = new Error("Wystąpił błąd! Spradź poprawność loginu i hasła do bazy danych \n" + ex);
+                er.ShowDialog();
             }
         }
 

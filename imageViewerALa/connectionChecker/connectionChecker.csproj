@@ -35,7 +35,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>ikonka2.ico</ApplicationIcon>
+    <ApplicationIcon>broken_link.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DBConnection">
@@ -58,6 +58,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="WinFormControls">
+      <HintPath>..\WinFormControls\bin\Debug\WinFormControls.dll</HintPath>
+    </Reference>
     <Reference Include="WPFControls">
       <HintPath>..\CustomControls\bin\Debug\WPFControls.dll</HintPath>
     </Reference>
@@ -129,7 +132,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="broken_link.ico" />
     <Content Include="ikonka2.ico" />
+    <None Include="Resources\add.png" />
+    <None Include="Resources\accept.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
