@@ -34,7 +34,7 @@ namespace connectionChecker
                 param["last_name"] = last_name;
                 myConnection.OpenConnection();
                 DataTable result = myConnection.ExecuteQuery("INSERT INTO Table_1 (name, last_name) VALUES (@name, @last_name)", param);
-                myConnection.CloseConnetcion();
+                myConnection.CloseConnection();
                 return result;
             }
             catch

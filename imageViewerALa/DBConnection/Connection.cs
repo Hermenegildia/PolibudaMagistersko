@@ -12,8 +12,8 @@ namespace DBConnection
 {
     public class Connection
     {
-        SqlConnection myConnection;
-        SqlTransaction myTransaction;
+        SqlConnection mySqlConnection;
+        SqlTransaction mySqlTransaction;
         string dbUserName;
         string dbPassword;
 
@@ -26,34 +26,39 @@ namespace DBConnection
 
         private void CreateConnection()
         {
-            myConnection = new SqlConnection("User ID=" + dbUserName +
+            mySqlConnection = new SqlConnection("User ID=" + dbUserName +
                                             ";Password=" + dbPassword +
                                             ";Server=ALICJA-HP\\SQLEXPRESS" +
-                                            //";Database=bazka" +
+                                            //";Database=bazka" + //nie laczymy z baza, bo nie wiemy czy istnieje!
                                             ";Trusted_Connection=false" +
                                             ";connection timeout=0");
 
             OpenConnection();
-            DataTable databases = ExecuteQuery("SELECT * FROM master.dbo.sysdatabases WHERE name = 'bazia'");
-            if (databases.Rows.Count < 1)
+            DataTable databases = ExecuteQuery("SELECT * FROM master.dbo.sysdatabases WHERE name = 'bazka'");
+            if (databases.Rows.Count < 1) //todo: w pracy opisać dlaczego tworzenie bazy danych bez transakcji - szukaj po wyjatku
+            //CREATE DATABASE statement not allowed within multi-statement transaction.
             {
-                CloseConnetcion();
-                myConnection.Open();
-
-                ExecuteNonQuery(Queries.CreateDatabase("bazia"));
-                CloseConnetcion();
-                //todo: bazia stworzona, teraz podłączyć się do bazi i w bazi stworzyć tabelę!
+                CloseConnection();
+                mySqlConnection.Open();
+                
+                ExecuteNonQueryNoTransaction(Queries.CreateDatabase("bazka"));
+                mySqlConnection.Close();
+                mySqlConnection = new SqlConnection("User ID=" + dbUserName +
+                                                  ";Password=" + dbPassword +
+                                                  ";Server=ALICJA-HP\\SQLEXPRESS" +
+                                                  ";Database=bazka" +
+                                                  ";Trusted_Connection=false" +
+                                                  ";connection timeout=0");
+                OpenConnection();
                 ExecuteNonQuery(Queries.CreateTable("Table_1"));
-
+                CloseConnection();
             }
-            CloseConnetcion();
-            myConnection = new SqlConnection("User ID=" + dbUserName +
-                                              ";Password=" + dbPassword +
-                                              ";Server=ALICJA-HP\\SQLEXPRESS" +
-                                              ";Database=bazia" +
-                                              ";Trusted_Connection=false" +
-                                              ";connection timeout=0");
-     
+            mySqlConnection = new SqlConnection("User ID=" + dbUserName +
+                                                  ";Password=" + dbPassword +
+                                                  ";Server=ALICJA-HP\\SQLEXPRESS" +
+                                                  ";Database=bazka" +
+                                                  ";Trusted_Connection=false" +
+                                                  ";connection timeout=0");
             
         }
 
@@ -61,9 +66,9 @@ namespace DBConnection
         {
             try
             {
-                myConnection.Close();
-                myConnection.Open();
-                myTransaction = myConnection.BeginTransaction();
+                mySqlConnection.Close();
+                mySqlConnection.Open();
+                mySqlTransaction = mySqlConnection.BeginTransaction();
             }
             catch (Exception ex)
             {
@@ -72,20 +77,23 @@ namespace DBConnection
             }
         }
 
-        public void CloseConnetcion()
+        public void CloseConnection()
         {
             try
             {
-                myTransaction.Commit();
+                mySqlTransaction.Commit();
             }
-            catch { }
-            myConnection.Close();
+            catch 
+            {
+                ErrorConnection();
+            }
+            mySqlConnection.Close();
         }
 
         public void ErrorConnection()
         {
-            myTransaction.Rollback();
-            myConnection.Close();
+            mySqlTransaction.Rollback();
+            mySqlConnection.Close();
         }
 
         public DataTable ExecuteQuery(string query)
@@ -93,7 +101,7 @@ namespace DBConnection
             DataTable result = new DataTable();
             try
             {
-                SqlCommand myCommand = new SqlCommand(query, myConnection, myTransaction);
+                SqlCommand myCommand = new SqlCommand(query, mySqlConnection, mySqlTransaction);
                 SqlDataAdapter adapter = new SqlDataAdapter(myCommand);
                 adapter.Fill(result);
             }
@@ -102,23 +110,33 @@ namespace DBConnection
             return result;
         }
 
-        public void ExecuteNonQuery(string query)
+        public void ExecuteNonQueryNoTransaction(string query)
         {
-            
-            try
+           try
             {
-                SqlCommand myCommand = new SqlCommand(query, myConnection);
+                SqlCommand myCommand = new SqlCommand(query, mySqlConnection);
                 myCommand.ExecuteNonQuery();
             }
             catch (Exception ex)
             { }
-         
+        }
+
+        public void ExecuteNonQuery(string query)
+        {
+            try
+            {
+                SqlCommand myCommand = new SqlCommand(query, mySqlConnection, mySqlTransaction);
+                myCommand.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            { }
+
         }
 
         public DataTable ExecuteQuery(string query, Hashtable param)
         {
           
-            SqlCommand myCommand = new SqlCommand(query, myConnection, myTransaction);
+            SqlCommand myCommand = new SqlCommand(query, mySqlConnection, mySqlTransaction);
             foreach (DictionaryEntry parameterEntry in param)
             {
                 myCommand.Parameters.AddWithValue((string)parameterEntry.Key, parameterEntry.Value) ;

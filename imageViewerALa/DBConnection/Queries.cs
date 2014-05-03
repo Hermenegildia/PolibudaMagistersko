@@ -11,6 +11,7 @@ namespace DBConnection
         public static string CreateDatabase()
         {
             return @"CREATE DATABASE [bazka] ";
+            //return @"CREATE DATABASE [bazka] CONTAINMENT = NONE ON  PRIMARY ( NAME = N'bazia', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL11.SQLEXPRESS\MSSQL\DATA\bazia.mdf' , SIZE = 5120KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB ) LOG ON ( NAME = N'bazia_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL11.SQLEXPRESS\MSSQL\DATA\bazia_log.ldf' , SIZE = 2048KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)";
         }
 
         public static string CreateDatabase(string dbName)
