@@ -50,7 +50,8 @@ namespace DBConnection
                                                   ";Trusted_Connection=false" +
                                                   ";connection timeout=0");
                 OpenConnection();
-                ExecuteNonQuery(Queries.CreateTable("Table_1"));
+                ExecuteNonQuery(Queries.CreateTablePatients());
+                ExecuteNonQuery(Queries.CreateTableDocumentation());
                 CloseConnection();
             }
             mySqlConnection = new SqlConnection("User ID=" + dbUserName +

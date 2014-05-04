@@ -18,6 +18,7 @@ namespace connectionChecker
         DataTable myTable;
         ErrorProvider ep1 = new ErrorProvider();
         ErrorProvider ep2 = new ErrorProvider();
+        ErrorProvider ep3 = new ErrorProvider();
 
         public InsertRecordForm(Connection conn)
         {
@@ -25,15 +26,16 @@ namespace connectionChecker
             myConnection = conn;
         }
 
-        private DataTable InsertDataToDatabase(string name, string last_name)
+        private DataTable InsertDataToDatabase(string name, string last_name, string PESEL)
         {
             try
             {
                 Hashtable param = new Hashtable();
                 param["name"] = name;
                 param["last_name"] = last_name;
+                param["PESEL"] = PESEL;
                 myConnection.OpenConnection();
-                DataTable result = myConnection.ExecuteQuery("INSERT INTO Table_1 (name, last_name) VALUES (@name, @last_name)", param);
+                DataTable result = myConnection.ExecuteQuery("INSERT INTO patients (name, last_name, PESEL) VALUES (@name, @last_name, @PESEL)", param);
                 myConnection.CloseConnection();
                 return result;
             }
@@ -50,11 +52,10 @@ namespace connectionChecker
             {
                 ep1.SetError(tbName, String.Empty);
                 ep2.SetError(tbLastName,String.Empty);
-                if (tbName.Text != string.Empty && tbLastName.Text != string.Empty)
+                ep3.SetError(tbPESEL, String.Empty);
+                if (tbName.Text != string.Empty && tbLastName.Text != string.Empty && tbPESEL.Text != string.Empty)
                 {
-                    string name = tbName.Text;
-                    string lastName = tbLastName.Text;
-                    myTable = InsertDataToDatabase(name, lastName);
+                    myTable = InsertDataToDatabase(tbName.Text, tbLastName.Text, tbPESEL.Text);
                     DialogResult = System.Windows.Forms.DialogResult.OK;
                 }
                 else
@@ -71,6 +72,13 @@ namespace connectionChecker
                         ep2.BlinkStyle = ErrorBlinkStyle.NeverBlink;
                         ep2.SetIconAlignment(tbLastName, ErrorIconAlignment.MiddleRight);
                         ep2.SetError(tbLastName, "Uzupełnij nazwisko!");
+                    }
+
+                    if (tbPESEL.Text == String.Empty)
+                    {
+                        ep3.BlinkStyle = ErrorBlinkStyle.NeverBlink;
+                        ep3.SetIconAlignment(tbPESEL, ErrorIconAlignment.MiddleRight);
+                        ep3.SetError(tbPESEL, "Uzupełnij PESEL!");
                     }
                     return;
                 }

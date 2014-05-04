@@ -30,7 +30,7 @@ namespace connectionChecker
             try
             {
                 myConnection.OpenConnection();
-                dataGridView1.DataSource = myConnection.ExecuteQuery("SELECT * FROM Table_1");
+                dataGridView1.DataSource = myConnection.ExecuteQuery("SELECT * FROM patients");
                 myConnection.CloseConnection();
             }
             catch

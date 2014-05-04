@@ -21,11 +21,15 @@ namespace DBConnection
             return query;
         }
 
-        public static string CreateTable(string tableName)
+        public static string CreateTablePatients()
         {
-            string query = @"CREATE TABLE [dbo].[Table_1] ([id] [int] IDENTITY(1,1) NOT NULL, [name] [nvarchar](max) NULL, [last_name] [nvarchar](max) NULL, CONSTRAINT [PK_Table_1] PRIMARY KEY CLUSTERED ([id] ASC) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY] ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]";
-            query = query.Replace("Table_1", tableName);
-            return query;
+            return @"CREATE TABLE [dbo].[patients] ([id] [int] IDENTITY(1,1) NOT NULL, [name] [nvarchar](max) NULL, [last_name] [nvarchar](max) NULL, CONSTRAINT [PK_patients] PRIMARY KEY CLUSTERED ([id] ASC) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY] ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]";
+        
+        }
+
+        public static string CreateTableDocumentation()
+        {
+            return @"CREATE TABLE [dbo].[documentation]([id] [int] IDENTITY(1,1) NOT NULL, [patient_id] [int] NULL, [filePath] [nvarchar](max) NULL, CONSTRAINT [PK_documentation] PRIMARY KEY CLUSTERED ([id] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY] ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]";
         }
     }
 }
