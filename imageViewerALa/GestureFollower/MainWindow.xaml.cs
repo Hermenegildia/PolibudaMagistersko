@@ -163,42 +163,7 @@ namespace GestureFollower
             kinectSensorChooser.KinectChanged += kinectSencorChooser_KinectChanged;
             kinectSensorChooserUI.KinectSensorChooser = this.kinectSensorChooser;
             kinectSensorChooser.Start();
-            // Look through all sensors and start the first connected one.
-            // This requires that a Kinect is connected at the time of app startup.
-            // To make your app robust against plug/unplug, 
-            // it is recommended to use KinectSensorChooser provided in Microsoft.Kinect.Toolkit (See components in Toolkit Browser).
-            //foreach (var potentialSensor in KinectSensor.KinectSensors)
-            //{
-            //    if (potentialSensor.Status == KinectStatus.Connected)
-            //    {
-            //        this.sensor = potentialSensor;
-            //        break;
-            //    }
-            //}
-
-            //if (null != this.sensor)
-            //{
-            //    // Turn on the skeleton stream to receive skeleton frames
-            //    this.sensor.SkeletonStream.Enable();
-
-            //    // Add an event handler to be called whenever there is new color frame data
-            //    this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
-
-            //    // Start the sensor!
-            //    try
-            //    {
-            //        this.sensor.Start();
-            //    }
-            //    catch (IOException)
-            //    {
-            //        this.sensor = null;
-            //    }
-            //}
-
-            //if (null == this.sensor)
-            //{
-            //    this.statusBarText.Text = Properties.Resources.NoKinectReady;
-            //}
+           
         }
 
         private void kinectSencorChooser_KinectChanged(object sender, KinectChangedEventArgs e)
@@ -211,6 +176,8 @@ namespace GestureFollower
                     e.OldSensor.SkeletonStream.EnableTrackingInNearRange = false;
                     e.OldSensor.DepthStream.Disable();
                     e.OldSensor.SkeletonStream.Disable();
+                    e.OldSensor.SkeletonFrameReady -= SensorSkeletonFrameReady;
+                    e.OldSensor.ColorFrameReady -= sensor_ColorFrameReady;
                 }
                 catch (InvalidOperationException)
                 {
@@ -263,8 +230,15 @@ namespace GestureFollower
                     {
                         //Using standard SDK
                         this.colorPixelData = new byte[colorFrame.PixelDataLength];
-
+                       
                         colorFrame.CopyPixelDataTo(this.colorPixelData);
+
+                        //turn off green&blue
+                        //for (int i = 0; i < colorPixelData.Length; i += colorFrame.BytesPerPixel)
+                        //{
+                        //    colorPixelData[i] = 0x00;
+                        //    colorPixelData[i + 1] = 0x00;
+                        //}
 
                         this.outputImage = new WriteableBitmap(
                         colorFrame.Width,
@@ -279,10 +253,8 @@ namespace GestureFollower
                         this.colorPixelData,
                         colorFrame.Width * 4,
                         0);
-                        this.ColorImage.Source = this.outputImage;
 
-                        //Using Coding4Fun Kinect Toolkit
-                        //kinectColorImage.Source = imageFrame.ToBitmapSource();
+                        this.ColorImage.Source = this.outputImage;
 
                     }
                 }   
