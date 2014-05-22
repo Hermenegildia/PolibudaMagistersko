@@ -228,7 +228,7 @@ namespace GestureFollower
                    this.sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
                    this.sensor.SkeletonStream.Enable();
                    this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
-                   //this.sensor.ColorFrameReady += sensor_ColorFrameReady;
+                   this.sensor.ColorFrameReady += sensor_ColorFrameReady;
 
                    try
                    {
@@ -482,10 +482,11 @@ namespace GestureFollower
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (this.ColorImage.Visibility == System.Windows.Visibility.Hidden)
-                this.ColorImage.Visibility = System.Windows.Visibility.Visible;
-            else
-                this.ColorImage.Visibility = System.Windows.Visibility.Hidden;
+            //if (this.ColorImage.Visibility == System.Windows.Visibility.Hidden)
+            //    this.ColorImage.Visibility = System.Windows.Visibility.Visible;
+            //else
+            //    this.ColorImage.Visibility = System.Windows.Visibility.Hidden;
+            
             //DepthWindow dw = new DepthWindow(this.sensor);
             //dw.Show();
         }

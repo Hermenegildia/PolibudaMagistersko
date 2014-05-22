@@ -57,21 +57,21 @@ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0" Margin="0 0 0 20">
             <Image DockPanel.Dock="Left" Source="Images\Logo.png" Stretch="Fill" Height="32" Width="81" Margin="0 10 0 5"/>
-            <TextBlock DockPanel.Dock="Right" Margin="0 0 -1 0" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18">Skeleton Basics</TextBlock>
+            <TextBlock DockPanel.Dock="Right" Margin="0 0 -1 0" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18"><Run Text="Skeleton Basics"/></TextBlock>
             <Image Grid.Column="1" Source="Images\Status.png" Stretch="None" HorizontalAlignment="Left"  Margin="0 0 0 5"/>
-            <kin:KinectSensorChooserUI Name="kinectSensorChooserUI" Width="320" HorizontalAlignment="Center"  />
+            <kin:KinectSensorChooserUI x:Name="kinectSensorChooserUI" Width="320" HorizontalAlignment="Center"  />
         </DockPanel>
-        <Viewbox Grid.Row="1"  Stretch="Uniform" HorizontalAlignment="Center">
-            <Image Name="Image" Width="640" Height="480"  />
-            <Image Name="ColorImage" Width="640" Height="480" />
-        </Viewbox>
-        <StatusBar Grid.Row="3" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
+        <!--</Viewbox>-->
+        <StatusBar Grid.Row="3" HorizontalAlignment="Stretch" x:Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
             <StatusBarItem Padding="0 0 0 10">
-                <TextBlock Name="statusBarText" Margin="-1 0 0 0">Click 'Seated' to change skeletal pipeline type!</TextBlock>
+                <TextBlock x:Name="statusBarText" Margin="-1 0 0 0"><Run Text="Click 'Seated' to change skeletal pipeline type!"/></TextBlock>
             </StatusBarItem>
         </StatusBar>
         <CheckBox Grid.Row="2" Content="Seated Mode" Style="{StaticResource SquareCheckBox}" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0 10 10 10" x:Name="checkBoxSeatedMode" Checked="CheckBoxSeatedModeChanged" Unchecked="CheckBoxSeatedModeChanged"/>
         <Button Content="Button" HorizontalAlignment="Center" Margin="183,10,0,0" Grid.Row="2" VerticalAlignment="Center" Click="Button_Click" Width="75"/>
+        <!--<Viewbox Grid.Row="1"  Stretch="Uniform" HorizontalAlignment="Center">-->
+        <Image  Grid.Row="1"  x:Name="ColorImage" Width="640" Height="480" />
+        <Image Grid.Row="1"  x:Name="Image" Width="640" Height="480"  />
 
     </Grid>
 </Window>
