@@ -90,7 +90,7 @@ namespace GestureFollower
         private DrawingImage imageSource;
 
         //dopisane przeze mnie
-        private KinectSensorChooser kinectSencorChooser;
+        private KinectSensorChooser kinectSensorChooser;
 
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
@@ -156,46 +156,46 @@ namespace GestureFollower
             // Display the drawing using our image control
             Image.Source = this.imageSource;
 
-            kinectSencorChooser = new KinectSensorChooser();
-            kinectSencorChooser.KinectChanged += kinectSencorChooser_KinectChanged;
-            kinectSensorChooserUI.KinectSensorChooser = this.kinectSencorChooser;
-            kinectSencorChooser.Start();
+            kinectSensorChooser = new KinectSensorChooser();
+            kinectSensorChooser.KinectChanged += kinectSencorChooser_KinectChanged;
+            kinectSensorChooserUI.KinectSensorChooser = this.kinectSensorChooser;
+            kinectSensorChooser.Start();
             // Look through all sensors and start the first connected one.
             // This requires that a Kinect is connected at the time of app startup.
             // To make your app robust against plug/unplug, 
             // it is recommended to use KinectSensorChooser provided in Microsoft.Kinect.Toolkit (See components in Toolkit Browser).
-            foreach (var potentialSensor in KinectSensor.KinectSensors)
-            {
-                if (potentialSensor.Status == KinectStatus.Connected)
-                {
-                    this.sensor = potentialSensor;
-                    break;
-                }
-            }
+            //foreach (var potentialSensor in KinectSensor.KinectSensors)
+            //{
+            //    if (potentialSensor.Status == KinectStatus.Connected)
+            //    {
+            //        this.sensor = potentialSensor;
+            //        break;
+            //    }
+            //}
 
-            if (null != this.sensor)
-            {
-                // Turn on the skeleton stream to receive skeleton frames
-                this.sensor.SkeletonStream.Enable();
+            //if (null != this.sensor)
+            //{
+            //    // Turn on the skeleton stream to receive skeleton frames
+            //    this.sensor.SkeletonStream.Enable();
 
-                // Add an event handler to be called whenever there is new color frame data
-                this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
+            //    // Add an event handler to be called whenever there is new color frame data
+            //    this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
 
-                // Start the sensor!
-                try
-                {
-                    this.sensor.Start();
-                }
-                catch (IOException)
-                {
-                    this.sensor = null;
-                }
-            }
+            //    // Start the sensor!
+            //    try
+            //    {
+            //        this.sensor.Start();
+            //    }
+            //    catch (IOException)
+            //    {
+            //        this.sensor = null;
+            //    }
+            //}
 
-            if (null == this.sensor)
-            {
-                this.statusBarText.Text = Properties.Resources.NoKinectReady;
-            }
+            //if (null == this.sensor)
+            //{
+            //    this.statusBarText.Text = Properties.Resources.NoKinectReady;
+            //}
         }
 
         private void kinectSencorChooser_KinectChanged(object sender, KinectChangedEventArgs e)
@@ -220,19 +220,22 @@ namespace GestureFollower
            {
                try
                {
-                   e.NewSensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
-                   e.NewSensor.SkeletonStream.Enable();
+                   this.sensor = e.NewSensor;
+                   this.sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
+                   this.sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
+                   this.sensor.SkeletonStream.Enable();
+                   this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
 
                    try
                    {
-                       e.NewSensor.DepthStream.Range = DepthRange.Near;
-                       e.NewSensor.SkeletonStream.EnableTrackingInNearRange = true;
+                       this.sensor.DepthStream.Range = DepthRange.Near;
+                       this.sensor.SkeletonStream.EnableTrackingInNearRange = true;
                    }
                    catch (InvalidOperationException)
                    {
                        // Non Kinect for Windows devices do not support Near mode, so reset back to default mode.
-                       e.NewSensor.DepthStream.Range = DepthRange.Default;
-                       e.NewSensor.SkeletonStream.EnableTrackingInNearRange = false;
+                       this.sensor.DepthStream.Range = DepthRange.Default;
+                       this.sensor.SkeletonStream.EnableTrackingInNearRange = false;
                    }
                }
                catch (InvalidOperationException)
@@ -240,7 +243,10 @@ namespace GestureFollower
                    // KinectSensor might enter an invalid state while enabling/disabling streams or stream features.
                    // E.g.: sensor might be abruptly unplugged.
                }
+               this.sensor.Start();
            }
+           else
+               this.statusBarText.Text = Properties.Resources.NoKinectReady;
         }
 
         /// <summary>
@@ -275,7 +281,7 @@ namespace GestureFollower
             }
 
             using (DrawingContext dc = this.drawingGroup.Open())
-            {
+            {//todo: Ala dopiane przeze mnie!
                 // Draw a transparent background to set the render size
                 dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, RenderWidth, RenderHeight));
 

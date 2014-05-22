@@ -96,25 +96,25 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\CheckedHover.png" />
+    <Resource Include="Images\CheckedHover.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\CheckedNormal.png" />
+    <Resource Include="Images\CheckedNormal.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\Kinect.ico" />
+    <Resource Include="Images\Kinect.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\Logo.png" />
+    <Resource Include="Images\Logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\Status.png" />
+    <Resource Include="Images\Status.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\UncheckedHover.png" />
+    <Resource Include="Images\UncheckedHover.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\UncheckedNormal.png" />
+    <Resource Include="Images\UncheckedNormal.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.Kinect.Toolkit\Microsoft.Kinect.Toolkit.csproj">
