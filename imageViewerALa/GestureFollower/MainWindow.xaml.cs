@@ -89,7 +89,7 @@ namespace GestureFollower
         /// </summary>
         private DrawingImage imageSource;
 
-        //dopisane przeze mnie
+        //todo: dopisane przeze mnie
         private KinectSensorChooser kinectSencorChooser;
 
         /// <summary>
@@ -158,8 +158,6 @@ namespace GestureFollower
 
             kinectSencorChooser = new KinectSensorChooser();
             kinectSencorChooser.KinectChanged += kinectSencorChooser_KinectChanged;
-            kinectSensorChooserUI.KinectSensorChooser = this.kinectSencorChooser;
-            kinectSencorChooser.Start();
             // Look through all sensors and start the first connected one.
             // This requires that a Kinect is connected at the time of app startup.
             // To make your app robust against plug/unplug, 
@@ -200,47 +198,7 @@ namespace GestureFollower
 
         private void kinectSencorChooser_KinectChanged(object sender, KinectChangedEventArgs e)
         {
-           if (e.OldSensor != null)
-            {
-                try
-                {
-                    e.OldSensor.DepthStream.Range = DepthRange.Default;
-                    e.OldSensor.SkeletonStream.EnableTrackingInNearRange = false;
-                    e.OldSensor.DepthStream.Disable();
-                    e.OldSensor.SkeletonStream.Disable();
-                }
-                catch (InvalidOperationException)
-                {
-                    // KinectSensor might enter an invalid state while enabling/disabling streams or stream features.
-                    // E.g.: sensor might be abruptly unplugged.
-                }
-            }
-
-           if (e.NewSensor != null)
-           {
-               try
-               {
-                   e.NewSensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
-                   e.NewSensor.SkeletonStream.Enable();
-
-                   try
-                   {
-                       e.NewSensor.DepthStream.Range = DepthRange.Near;
-                       e.NewSensor.SkeletonStream.EnableTrackingInNearRange = true;
-                   }
-                   catch (InvalidOperationException)
-                   {
-                       // Non Kinect for Windows devices do not support Near mode, so reset back to default mode.
-                       e.NewSensor.DepthStream.Range = DepthRange.Default;
-                       e.NewSensor.SkeletonStream.EnableTrackingInNearRange = false;
-                   }
-               }
-               catch (InvalidOperationException)
-               {
-                   // KinectSensor might enter an invalid state while enabling/disabling streams or stream features.
-                   // E.g.: sensor might be abruptly unplugged.
-               }
-           }
+           // throw new NotImplementedException();
         }
 
         /// <summary>
