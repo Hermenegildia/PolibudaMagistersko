@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect.Toolkit;
+using CustomControls;
 
 
 namespace GestureFollower
@@ -91,6 +92,8 @@ namespace GestureFollower
 
         //dopisane przeze mnie
         private KinectSensorChooser kinectSensorChooser;
+        private WriteableBitmap outputImage;
+        private byte[] colorPixelData;
 
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
@@ -225,6 +228,7 @@ namespace GestureFollower
                    this.sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
                    this.sensor.SkeletonStream.Enable();
                    this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
+                   //this.sensor.ColorFrameReady += sensor_ColorFrameReady;
 
                    try
                    {
@@ -247,6 +251,44 @@ namespace GestureFollower
            }
            else
                this.statusBarText.Text = Properties.Resources.NoKinectReady;
+        }
+
+        void sensor_ColorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
+        {
+            try 
+            {
+                using (ColorImageFrame colorFrame = e.OpenColorImageFrame())
+                {
+                    if (colorFrame != null)
+                    {
+                        //Using standard SDK
+                        this.colorPixelData = new byte[colorFrame.PixelDataLength];
+
+                        colorFrame.CopyPixelDataTo(this.colorPixelData);
+
+                        this.outputImage = new WriteableBitmap(
+                        colorFrame.Width,
+                        colorFrame.Height,
+                        96,  // DpiX
+                        96,  // DpiY
+                        PixelFormats.Bgr32,
+                        null);
+
+                        this.outputImage.WritePixels(
+                        new Int32Rect(0, 0, colorFrame.Width, colorFrame.Height),
+                        this.colorPixelData,
+                        colorFrame.Width * 4,
+                        0);
+                        this.ColorImage.Source = this.outputImage;
+
+                        //Using Coding4Fun Kinect Toolkit
+                        //kinectColorImage.Source = imageFrame.ToBitmapSource();
+
+                    }
+                }   
+            }
+            catch { }
+
         }
 
         /// <summary>
@@ -283,7 +325,7 @@ namespace GestureFollower
             using (DrawingContext dc = this.drawingGroup.Open())
             {//todo: Ala dopiane przeze mnie!
                 // Draw a transparent background to set the render size
-                dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, RenderWidth, RenderHeight));
+                dc.DrawRectangle(Brushes.Transparent, null, new Rect(0.0, 0.0, RenderWidth, RenderHeight));
 
                 if (skeletons.Length != 0)
                 {
@@ -436,6 +478,16 @@ namespace GestureFollower
                     this.sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Default;
                 }
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.ColorImage.Visibility == System.Windows.Visibility.Hidden)
+                this.ColorImage.Visibility = System.Windows.Visibility.Visible;
+            else
+                this.ColorImage.Visibility = System.Windows.Visibility.Hidden;
+            //DepthWindow dw = new DepthWindow(this.sensor);
+            //dw.Show();
         }
     }
 }

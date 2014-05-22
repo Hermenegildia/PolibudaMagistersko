@@ -117,6 +117,10 @@
     <Resource Include="Images\UncheckedNormal.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CustomControls\WPFControls.csproj">
+      <Project>{4f56c1a8-f0f0-46b1-978c-2d461310bb1d}</Project>
+      <Name>WPFControls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Microsoft.Kinect.Toolkit\Microsoft.Kinect.Toolkit.csproj">
       <Project>{c6f9c31b-6130-4443-a5cc-ef0664552ecd}</Project>
       <Name>Microsoft.Kinect.Toolkit</Name>

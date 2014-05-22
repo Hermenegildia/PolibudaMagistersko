@@ -17,6 +17,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestureFollower", "GestureFollower\GestureFollower.csproj", "{2589CF02-8C88-479A-B334-F1D389C4484D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C6F9C31B-6130-4443-A5CC-EF0664552ECD} = {C6F9C31B-6130-4443-A5CC-EF0664552ECD}
+		{4F56C1A8-F0F0-46B1-978C-2D461310BB1D} = {4F56C1A8-F0F0-46B1-978C-2D461310BB1D}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Kinect.Toolkit", "Microsoft.Kinect.Toolkit\Microsoft.Kinect.Toolkit.csproj", "{C6F9C31B-6130-4443-A5CC-EF0664552ECD}"
