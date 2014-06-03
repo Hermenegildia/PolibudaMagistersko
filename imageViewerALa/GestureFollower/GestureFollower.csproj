@@ -128,6 +128,10 @@
       <Project>{4f56c1a8-f0f0-46b1-978c-2d461310bb1d}</Project>
       <Name>WPFControls</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Gestures\Gestures.csproj">
+      <Project>{617e95c8-3bdf-4d59-b21d-9280e1749049}</Project>
+      <Name>Gestures</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Microsoft.Kinect.Toolkit\Microsoft.Kinect.Toolkit.csproj">
       <Project>{c6f9c31b-6130-4443-a5cc-ef0664552ecd}</Project>
       <Name>Microsoft.Kinect.Toolkit</Name>

@@ -101,7 +101,9 @@ namespace GestureFollower
         public MainWindow()
         {
             InitializeComponent();
+          
         }
+
 
         /// <summary>
         /// Draws indicators to show which edges are clipping skeleton data
@@ -291,6 +293,7 @@ namespace GestureFollower
                 {
                     skeletons = new Skeleton[skeletonFrame.SkeletonArrayLength];
                     skeletonFrame.CopySkeletonDataTo(skeletons);
+                
                 }
             }
 

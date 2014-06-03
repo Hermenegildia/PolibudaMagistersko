@@ -1,4 +1,5 @@
-﻿using Microsoft.Kinect;
+﻿using Gestures;
+using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+
 namespace GestureFollower
 {
     /// <summary>
@@ -23,10 +25,18 @@ namespace GestureFollower
     {
         private KinectSensor sensor;
         private KinectSensorChooser kinectSensorChooser;
+        WaveGesture waveGesture;
 
         public WindowWithSkeletonViewer()
         {
             InitializeComponent();
+            waveGesture = new WaveGesture();
+            waveGesture.GestureDetected += new EventHandler(waveGesture_gestureDetected);
+        }
+
+        private void waveGesture_gestureDetected(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Kiwka była!");
         }
 
         private void CheckBoxSeatedModeChanged(object sender, RoutedEventArgs e)
@@ -117,7 +127,15 @@ namespace GestureFollower
 
         private void SensorSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
- 	
+            using (SkeletonFrame frame = e.OpenSkeletonFrame())
+            {
+                if (frame!= null)
+                {
+                    Skeleton[] skeletons = new Skeleton[sensor.SkeletonStream.FrameSkeletonArrayLength];
+                    frame.CopySkeletonDataTo(skeletons);
+                    waveGesture.Update(skeletons, frame.Timestamp);
+                }
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
