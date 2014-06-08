@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace Gestures
 {
-    public class WaveGesture
+    public class WaveGesture: Gesture
     {
         const float WAVE_TRESHOLD = 0.1f;
         const int WAVE_MOMENT_TIMEOUT = 5000;
@@ -58,14 +58,15 @@ namespace Gestures
         {
             JointType handJointId = (isLeft) ? JointType.HandLeft : JointType.HandRight;
             JointType elbowJointId = (isLeft) ? JointType.ElbowLeft : JointType.ElbowRight;
+            
             Joint hand = skeleton.Joints[handJointId];
             Joint elbow = skeleton.Joints[elbowJointId];
 
             if (hand.TrackingState != JointTrackingState.NotTracked && elbow.TrackingState != JointTrackingState.NotTracked)
             {
-                if (tracker.State == WaveGestureState.InProgress && tracker.Timestamp + WAVE_MOMENT_TIMEOUT < timeStamp)
+                if (tracker.State == GestureState.InProgress && tracker.Timestamp + WAVE_MOMENT_TIMEOUT < timeStamp)
                 {
-                    tracker.UpdateState(WaveGestureState.Failure, timeStamp);
+                    tracker.UpdateState(GestureState.Failure, timeStamp);
                 }
                 else if (hand.Position.Y > elbow.Position.Y)
                 {
@@ -76,9 +77,9 @@ namespace Gestures
                     else
                         tracker.UpdatePosition(WavePosition.Neutral, timeStamp);
 
-                    if (tracker.State != WaveGestureState.Success && tracker.IterationCount == REQUIRED_ITERATIONS)
+                    if (tracker.State != GestureState.Success && tracker.IterationCount == REQUIRED_ITERATIONS)
                     {
-                        tracker.UpdateState(WaveGestureState.Success, timeStamp);
+                        tracker.UpdateState(GestureState.Success, timeStamp);
                         System.Diagnostics.Debug.WriteLine("Success!");
 
                         if (GestureDetected != null)
@@ -89,10 +90,10 @@ namespace Gestures
                 }
                 else
                 {
-                    if (tracker.State == WaveGestureState.InProgress)
+                    if (tracker.State == GestureState.InProgress)
                     {
-                        tracker.UpdateState(WaveGestureState.Failure, timeStamp);
-                        System.Diagnostics.Debug.WriteLine("Fail!");
+                        tracker.UpdateState(GestureState.Failure, timeStamp);
+                        //System.Diagnostics.Debug.WriteLine("Fail!");
                     }
                     else
                         tracker.Reset();
@@ -112,18 +113,18 @@ namespace Gestures
             Neutral = 3
         }
 
-        enum WaveGestureState
-        {
-            None = 0,
-            Success = 1,
-            Failure = 2,
-            InProgress = 3
-        }
+        //enum WaveGestureState
+        //{
+        //    None = 0,
+        //    Success = 1,
+        //    Failure = 2,
+        //    InProgress = 3
+        //}
 
         struct WaveGestureTracker
         {
             public int IterationCount;
-            public WaveGestureState State;
+            public GestureState State;
             public WavePosition StartPosition;
             public WavePosition CurrentPosition;
             public long Timestamp;
@@ -131,13 +132,13 @@ namespace Gestures
             public void Reset()
             {
                 IterationCount = 0;
-                State = WaveGestureState.None;
+                State = GestureState.None;
                 Timestamp = 0;
                 StartPosition = WavePosition.None;
                 CurrentPosition = WavePosition.None;
             }
 
-            public void UpdateState(WaveGestureState state, long timestamp)
+            public void UpdateState(GestureState state, long timestamp)
             {
                 State = state;
                 Timestamp = timestamp;
@@ -149,9 +150,9 @@ namespace Gestures
                 {
                     if (position == WavePosition.Left || position == WavePosition.Right)
                     {
-                        if (State != WaveGestureState.InProgress)
+                        if (State != GestureState.InProgress)
                         {
-                            State = WaveGestureState.InProgress;
+                            State = GestureState.InProgress;
                             IterationCount = 0;
                             StartPosition = position;
                         }

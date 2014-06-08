@@ -36,7 +36,7 @@ namespace GestureFollower
 
         private void waveGesture_gestureDetected(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Kiwka była!");
+            //System.Diagnostics.Debug.WriteLine("Kiwka była!");
         }
 
         private void CheckBoxSeatedModeChanged(object sender, RoutedEventArgs e)
