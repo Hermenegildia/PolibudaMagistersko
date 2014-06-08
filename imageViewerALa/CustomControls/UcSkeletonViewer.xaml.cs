@@ -72,6 +72,8 @@ namespace CustomControls
 
                             TrackJoint(this._FrameSkeletons[i].Joints[JointType.HandLeft], this._SkeletonBrushes[i]);
                             TrackJoint(this._FrameSkeletons[i].Joints[JointType.HandRight], this._SkeletonBrushes[i]);
+                            TrackJoint(this._FrameSkeletons[i].Joints[JointType.HandLeft], this._FrameSkeletons[i].Joints[JointType.HandRight], this._SkeletonBrushes[i]);
+                            
                         }
                         
                     }
@@ -145,7 +147,7 @@ namespace CustomControls
                 Point jointPoint = GetJointPoint(joint);
 
                 //FeetPerMeters is a class constant of 3.2808399f;
-                double z = joint.Position.Z * FeetPerMeters;
+                double z = joint.Position.Z;// *FeetPerMeters;
 
                 Ellipse element = new Ellipse();
                 element.Height = 15;
@@ -170,6 +172,65 @@ namespace CustomControls
                 JointInfoPanel.Children.Add(container);
             }
         }                       
+
+        //Ala helper function
+        private void TrackJoint(Joint leftHand, Joint rightHand, Brush brush)
+        {
+            if (leftHand.TrackingState != JointTrackingState.NotTracked && rightHand.TrackingState != JointTrackingState.NotTracked)
+            {
+                Canvas container = new Canvas();
+                Point leftHandPoint = GetJointPoint(leftHand);
+                Point rightHandPoint = GetJointPoint(rightHand);
+
+                //FeetPerMeters is a class constant of 3.2808399f;
+                //double z = joint.Position.Z;// *FeetPerMeters;
+
+                double pythagoras1 = Math.Pow(rightHandPoint.X - leftHandPoint.X, 2);
+                double pythagoras2 = Math.Pow(leftHandPoint.Y - rightHandPoint.Y, 2);
+                double vec_length = Math.Sqrt(pythagoras1 + pythagoras2);
+
+                pythagoras1 = Math.Pow(rightHand.Position.X - leftHand.Position.X, 2);
+                pythagoras2 = Math.Pow(leftHand.Position.Y - rightHand .Position.Y, 2);
+                double real_vec_length = Math.Sqrt(pythagoras1 + pythagoras2);
+
+                //Ellipse element = new Ellipse();
+                //element.Height = 15;
+                //element.Width = 15;
+                //element.Fill = brush;
+                //Canvas.SetLeft(element, 0 - (element.Width / 2));
+                //Canvas.SetTop(element, 0 - (element.Height / 2));
+                //container.Children.Add(element);
+
+                TextBlock positionText = new TextBlock();
+                positionText.Text = string.Format("odległość przeskalowana: {0:0.00}", vec_length);
+                positionText.Text = positionText.Text + string.Format(" odległość real: {0:0.00}", real_vec_length);
+                positionText.Foreground = brush;
+                positionText.FontSize = 44;
+                positionText.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                Canvas.SetLeft(positionText, 35);
+                Canvas.SetTop(positionText, 15);
+                container.Children.Add(positionText);
+
+                //Canvas.SetLeft(container, jointPoint.X);
+                //Canvas.SetTop(container, jointPoint.Y);
+
+                JointInfoPanel.Children.Add(container);
+            }
+        }
+
+        private bool CheckHandElbowPosition(Skeleton skeleton)
+        {
+            if (skeleton.Joints[JointType.HandLeft].Position.Y > skeleton.Joints[JointType.ElbowLeft].Position.Y)
+            {
+                if (skeleton.Joints[JointType.HandRight].Position.Y > skeleton.Joints[JointType.ElbowRight].Position.Y)
+                    return true;
+                else
+                    return false;
+            }
+            else
+                return false;
+        }
+
         #region KinectDevice
         protected const string KinectDevicePropertyName = "KinectDevice";
         public static readonly DependencyProperty KinectDeviceProperty =

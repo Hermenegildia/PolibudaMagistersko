@@ -12,6 +12,7 @@
 //***********************************************************************************************************************************************
 
 
+using Gestures.Common;
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace Gestures
+namespace Gestures.Wave
 {
     public class WaveGesture: Gesture
     {
@@ -33,7 +34,7 @@ namespace Gestures
         WaveGestureTracker[,] playerWaveTracker = new WaveGestureTracker[6, 2];
         public event EventHandler GestureDetected;
 
-        public void Update(Skeleton[] skeletons, long frameTimeStamp)
+        public override void Update(Skeleton[] skeletons, long frameTimeStamp)
         {
             if (skeletons != null)
             {
@@ -104,67 +105,7 @@ namespace Gestures
         }
 
 
-        #region Helpers
-        enum WavePosition
-        {
-            None = 0,
-            Left = 1,
-            Right = 2,
-            Neutral = 3
-        }
-
-        //enum WaveGestureState
-        //{
-        //    None = 0,
-        //    Success = 1,
-        //    Failure = 2,
-        //    InProgress = 3
-        //}
-
-        struct WaveGestureTracker
-        {
-            public int IterationCount;
-            public GestureState State;
-            public WavePosition StartPosition;
-            public WavePosition CurrentPosition;
-            public long Timestamp;
-
-            public void Reset()
-            {
-                IterationCount = 0;
-                State = GestureState.None;
-                Timestamp = 0;
-                StartPosition = WavePosition.None;
-                CurrentPosition = WavePosition.None;
-            }
-
-            public void UpdateState(GestureState state, long timestamp)
-            {
-                State = state;
-                Timestamp = timestamp;
-            }
-
-            public void UpdatePosition(WavePosition position, long timestamp)
-            {
-                if (CurrentPosition != position)
-                {
-                    if (position == WavePosition.Left || position == WavePosition.Right)
-                    {
-                        if (State != GestureState.InProgress)
-                        {
-                            State = GestureState.InProgress;
-                            IterationCount = 0;
-                            StartPosition = position;
-                        }
-                        IterationCount++;
-                    }
-                    CurrentPosition = position;
-                    Timestamp = timestamp;
-                }
-
-            }
-        }
-        #endregion Helpers
+     
     }
 
 

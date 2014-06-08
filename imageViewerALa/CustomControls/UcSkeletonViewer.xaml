@@ -8,7 +8,7 @@
 
     <Grid x:Name="LayoutRoot">
         <Grid x:Name="SkeletonsPanel"/>
-        <Canvas x:Name="JointInfoPanel" />
+        <Canvas x:Name="JointInfoPanel"  />
         </Grid>
 
 </UserControl>

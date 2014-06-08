@@ -1,4 +1,5 @@
 ﻿using Gestures;
+using Gestures.Wave;
 using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit;
 using System;
