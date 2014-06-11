@@ -70,8 +70,8 @@ namespace CustomControls
                         {
                             DrawSkeleton(this._FrameSkeletons[i], this._SkeletonBrushes[i]);
 
-                            TrackJoint(this._FrameSkeletons[i].Joints[JointType.HandLeft], this._SkeletonBrushes[i]);
-                            TrackJoint(this._FrameSkeletons[i].Joints[JointType.HandRight], this._SkeletonBrushes[i]);
+                            TrackJoint(this._FrameSkeletons[i].Joints[JointType.HandLeft], Brushes.YellowGreen);  //this._SkeletonBrushes[i]);
+                            TrackJoint(this._FrameSkeletons[i].Joints[JointType.HandRight], Brushes.Turquoise);//this._SkeletonBrushes[i]);
                             TrackJoint(this._FrameSkeletons[i].Joints[JointType.HandLeft], this._FrameSkeletons[i].Joints[JointType.HandRight], this._SkeletonBrushes[i]);
                             
                         }
