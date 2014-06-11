@@ -1,11 +1,14 @@
 ﻿using Gestures;
 using Gestures.Wave;
+using Gestures.Stretch;
 using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,6 +18,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+
 
 
 namespace GestureFollower
@@ -27,17 +32,38 @@ namespace GestureFollower
         private KinectSensor sensor;
         private KinectSensorChooser kinectSensorChooser;
         WaveGesture waveGesture;
+        StretchGesture stretchGesture;
 
         public WindowWithSkeletonViewer()
         {
             InitializeComponent();
             waveGesture = new WaveGesture();
             waveGesture.GestureDetected += new EventHandler(waveGesture_gestureDetected);
+            stretchGesture = new StretchGesture();
+            stretchGesture.GestureDetected += new EventHandler(stretchGesture_gestureDetected);
+        }
+
+        private void stretchGesture_gestureDetected(object sender, EventArgs e)
+        {
+    
         }
 
         private void waveGesture_gestureDetected(object sender, EventArgs e)
         {
-            //System.Diagnostics.Debug.WriteLine("Kiwka była!");
+            gestureStateTB.Text = "waveeeeee...!";
+            int threadNumb = Process.GetCurrentProcess().Threads.Count;
+            var clearingthread = new Thread(ClearGestureStatusTextBlock);
+            clearingthread.Start(threadNumb);
+        }
+
+        void ClearGestureStatusTextBlock(object threadNumber)
+        {
+            Thread.Sleep(TimeSpan.FromSeconds(5));
+            this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate()
+            {
+                gestureStateTB.Text = "waiting for a gesture recognition...." + (Int32)threadNumber;
+            });
+            
         }
 
         private void CheckBoxSeatedModeChanged(object sender, RoutedEventArgs e)

@@ -193,6 +193,7 @@ namespace CustomControls
                 pythagoras2 = Math.Pow(leftHand.Position.Y - rightHand .Position.Y, 2);
                 double real_vec_length = Math.Sqrt(pythagoras1 + pythagoras2);
 
+                
                 //Ellipse element = new Ellipse();
                 //element.Height = 15;
                 //element.Width = 15;

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Kinect;
 using Gestures.Common;
+using System.Windows;
+
 
 namespace Gestures.Stretch
 {
@@ -14,6 +16,8 @@ namespace Gestures.Stretch
      
         double handsDistance;
         StretchGestureTracker tracker;
+        public event EventHandler GestureDetected;
+
      
         public StretchGesture()
         {
@@ -34,6 +38,7 @@ namespace Gestures.Stretch
                         Joint rightHand = skeletons[i].Joints[JointType.HandRight];
                         if (leftHand.TrackingState != JointTrackingState.NotTracked && rightHand.TrackingState != JointTrackingState.NotTracked)
                         {
+                          
                             double currentHandsDistance = CountHandsDistance(leftHand, rightHand);
                             if (tracker.State == GestureState.InProgress && tracker.Timestamp - frameTimeStamp < MOMENT_TIMEOUT)
                             {
@@ -42,18 +47,29 @@ namespace Gestures.Stretch
                             else
                             {
                                 {
-                                    double handsDistance = CountHandsDistance(leftHand, rightHand);
-                                    if (handsDistance > tracker.HandsDistance + 0.05)
+                                    if (tracker.State == GestureState.InProgress)
+                                    if (currentHandsDistance > tracker.HandsDistance )
                                     {
                                         tracker.UpdateLength(handsDistance, frameTimeStamp);
-
                                     }
-                                    
-                                   
+
+
                                 }
 
                             }
                         }
+                        else
+                        {
+                            if (tracker.State == GestureState.InProgress)
+                            {
+                                tracker.UpdateState(GestureState.Failure, frameTimeStamp);
+                                System.Diagnostics.Debug.WriteLine("Fail!");
+                            }
+                            else
+                                tracker.Reset();
+                        }
+
+
                     }
                 }
             }

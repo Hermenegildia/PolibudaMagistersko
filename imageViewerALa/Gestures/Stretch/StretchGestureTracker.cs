@@ -27,7 +27,9 @@ namespace Gestures.Stretch
                 Iterator = 0;
                 State = GestureState.None;
                 Timestamp = 0;
-                HandsDistance = 0.0;
+                HandsDistance = 0.20; //gdy dlonie blisko, to duza niepewnosc pomiarowa, 
+                                      //wiec dopiero gdy dalej niz 20cm
+                                      //to obserwujemy zmiany i śledzimy rozciąganie
             }
 
             public void UpdateState(GestureState state, long timestamp)
