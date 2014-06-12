@@ -97,6 +97,7 @@ namespace GestureFollower
             kinectSensorChooser.KinectChanged += kinectSencorChooser_KinectChanged;
             kinectSensorChooserUI.KinectSensorChooser = this.kinectSensorChooser;
             kinectSensorChooser.Start();
+            
         }
 
         private void kinectSencorChooser_KinectChanged(object sender, KinectChangedEventArgs e)
@@ -109,8 +110,10 @@ namespace GestureFollower
                     e.OldSensor.SkeletonStream.EnableTrackingInNearRange = false;
                     e.OldSensor.DepthStream.Disable();
                     e.OldSensor.SkeletonStream.Disable();
-                    e.OldSensor.SkeletonFrameReady -= SensorSkeletonFrameReady;
-                    e.OldSensor.ColorFrameReady -= sensor_ColorFrameReady;
+                    //e.OldSensor.SkeletonFrameReady -= SensorSkeletonFrameReady;
+                    //e.OldSensor.ColorFrameReady -= sensor_ColorFrameReady;
+                    //e.OldSensor.DepthFrameReady -= sensor_DepthFrameReady;
+                    e.OldSensor.AllFramesReady -= sensor_AllFramesReady;
                     this.SkeletonViewerControl.KinectDevice = null;
                         
                 }
@@ -130,9 +133,12 @@ namespace GestureFollower
                    this.sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
                    this.SkeletonViewerControl.KinectDevice = this.sensor;
                    this.sensor.SkeletonStream.Enable(parameters);
-                   this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
-                   this.sensor.ColorFrameReady += sensor_ColorFrameReady;
-                   this.sensor.DepthFrameReady += sensor_DepthFrameReady;
+                   this.sensor.SkeletonStream.AppChoosesSkeletons = false; //we manually choose which skeleton to track
+                   //this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
+                   //this.sensor.ColorFrameReady += sensor_ColorFrameReady;
+                   //this.sensor.DepthFrameReady += sensor_DepthFrameReady;
+                   this.sensor.AllFramesReady += sensor_AllFramesReady;
+               
 
                    try
                    {
@@ -156,6 +162,59 @@ namespace GestureFollower
            else
                this.statusBarText.Text = Properties.Resources.NoKinectReady;
         }
+
+        private void sensor_AllFramesReady(object sender, AllFramesReadyEventArgs e)
+        {
+            DepthImageFrame depthFrame = e.OpenDepthImageFrame();
+            SkeletonFrame skeletonFrame = e.OpenSkeletonFrame();
+
+            if (skeletonFrame != null) //skeleton processing
+            {
+                if (depthFrame != null)
+                {
+                    Skeleton[] skeletons = new Skeleton[sensor.SkeletonStream.FrameSkeletonArrayLength];
+                    skeletonFrame.CopySkeletonDataTo(skeletons);
+                    foreach (Skeleton x in skeletons)
+                    {
+                        if (x.TrackingState == SkeletonTrackingState.Tracked)
+                        {
+                            statusBarText.Text = "tracked skeleton trackingId " + x.TrackingId; 
+                            break;
+                        }
+                      
+
+                    }
+                    waveGesture.Update(skeletons, skeletonFrame.Timestamp);
+                }
+            }
+        }
+
+        private void TrackClosestSkeleton(Skeleton[] skeletons)
+        {
+
+            if (!this.sensor.SkeletonStream.AppChoosesSkeletons)
+            {
+                this.sensor.SkeletonStream.AppChoosesSkeletons = true; // Ensure AppChoosesSkeletons is set
+            }
+
+            float closestDistance = 10000f; // Start with a far enough distance
+            int closestID = 0;
+
+            foreach (Skeleton skeleton in skeletons.Where(s => s.TrackingState != SkeletonTrackingState.NotTracked))
+            {
+                if (skeleton.Position.Z < closestDistance)
+                {
+                    closestID = skeleton.TrackingId;
+                    closestDistance = skeleton.Position.Z;
+                }
+            }
+
+            if (closestID > 0)
+            {
+                this.sensor.SkeletonStream.ChooseSkeletons(closestID); // Track this skeleton
+            }
+        }
+        
 
         private void sensor_DepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
         {
@@ -206,15 +265,15 @@ namespace GestureFollower
 
         private void SensorSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
-            using (SkeletonFrame frame = e.OpenSkeletonFrame())
-            {
-                if (frame!= null)
-                {
-                    Skeleton[] skeletons = new Skeleton[sensor.SkeletonStream.FrameSkeletonArrayLength];
-                    frame.CopySkeletonDataTo(skeletons);
-                    waveGesture.Update(skeletons, frame.Timestamp);
-                }
-            }
+            //using (SkeletonFrame frame = e.OpenSkeletonFrame())
+            //{
+            //    if (frame!= null)
+            //    {
+            //        Skeleton[] skeletons = new Skeleton[sensor.SkeletonStream.FrameSkeletonArrayLength];
+            //        frame.CopySkeletonDataTo(skeletons);
+            //        waveGesture.Update(skeletons, frame.Timestamp);
+            //    }
+            //}
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
