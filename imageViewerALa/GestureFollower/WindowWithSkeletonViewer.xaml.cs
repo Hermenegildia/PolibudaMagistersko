@@ -45,11 +45,11 @@ namespace GestureFollower
 
             parameters = new TransformSmoothParameters
             {
-                Smoothing = 0.0f,
-                Correction = 0.0f,
-                Prediction = 0.0f,
-                JitterRadius = 1.0f,
-                MaxDeviationRadius = 0.05f
+                Smoothing = 0.5f,
+                Correction = 0.1f,
+                Prediction = 0.5f,
+                JitterRadius = 0.1f,
+                MaxDeviationRadius = 0.1f
             };
            
         }
@@ -133,13 +133,13 @@ namespace GestureFollower
                    this.sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
                    this.SkeletonViewerControl.KinectDevice = this.sensor;
                    this.sensor.SkeletonStream.Enable(parameters);
-                   this.sensor.SkeletonStream.AppChoosesSkeletons = false; //we manually choose which skeleton to track
+
                    //this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
                    //this.sensor.ColorFrameReady += sensor_ColorFrameReady;
                    //this.sensor.DepthFrameReady += sensor_DepthFrameReady;
                    this.sensor.AllFramesReady += sensor_AllFramesReady;
                
-
+               
                    try
                    {
                        this.sensor.DepthStream.Range = DepthRange.Near;
@@ -174,16 +174,7 @@ namespace GestureFollower
                 {
                     Skeleton[] skeletons = new Skeleton[sensor.SkeletonStream.FrameSkeletonArrayLength];
                     skeletonFrame.CopySkeletonDataTo(skeletons);
-                    foreach (Skeleton x in skeletons)
-                    {
-                        if (x.TrackingState == SkeletonTrackingState.Tracked)
-                        {
-                            statusBarText.Text = "tracked skeleton trackingId " + x.TrackingId; 
-                            break;
-                        }
-                      
-
-                    }
+                    TrackClosestSkeleton(skeletons);
                     waveGesture.Update(skeletons, skeletonFrame.Timestamp);
                 }
             }

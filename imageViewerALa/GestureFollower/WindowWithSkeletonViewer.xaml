@@ -65,10 +65,10 @@
                 <TextBlock Name="gestureStateTB" DockPanel.Dock="Right" Margin="0 0 0 0" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18"><Run Text="Skeleton Basics"/></TextBlock>
                 <kin:KinectSensorChooserUI x:Name="kinectSensorChooserUI" Width="320" HorizontalAlignment="Center"  />
         </DockPanel>
-
-            <myControls:UcSkeletonViewer x:Name="SkeletonViewerControl" IsEnabled="True" Grid.Row="1" />
       
-     
+            <myControls:UcSkeletonViewer x:Name="SkeletonViewerControl" IsEnabled="True" Grid.Row="1" />
+        <Image Name="ColorImage" Grid.Row="1"  />
+    
         <CheckBox  Content="Seated Mode"  Grid.Row="2" Style="{StaticResource SquareCheckBox}" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" x:Name="checkBoxSeatedMode" Checked="CheckBoxSeatedModeChanged" Unchecked="CheckBoxSeatedModeChanged"/>
         <StatusBar  HorizontalAlignment="Stretch" Grid.Row="3" x:Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
                 <StatusBarItem Padding="0 0 0 10">
