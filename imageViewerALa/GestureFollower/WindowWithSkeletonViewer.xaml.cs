@@ -33,6 +33,7 @@ namespace GestureFollower
         private KinectSensorChooser kinectSensorChooser;
         WaveGesture waveGesture;
         StretchGesture stretchGesture;
+        TransformSmoothParameters parameters;
 
         public WindowWithSkeletonViewer()
         {
@@ -41,6 +42,16 @@ namespace GestureFollower
             waveGesture.GestureDetected += new EventHandler(waveGesture_gestureDetected);
             stretchGesture = new StretchGesture();
             stretchGesture.GestureDetected += new EventHandler(stretchGesture_gestureDetected);
+
+            parameters = new TransformSmoothParameters
+            {
+                Smoothing = 0.0f,
+                Correction = 0.0f,
+                Prediction = 0.0f,
+                JitterRadius = 1.0f,
+                MaxDeviationRadius = 0.05f
+            };
+           
         }
 
         private void stretchGesture_gestureDetected(object sender, EventArgs e)
@@ -51,17 +62,16 @@ namespace GestureFollower
         private void waveGesture_gestureDetected(object sender, EventArgs e)
         {
             gestureStateTB.Text = "waveeeeee...!";
-            int threadNumb = Process.GetCurrentProcess().Threads.Count;
-            var clearingthread = new Thread(ClearGestureStatusTextBlock);
-            clearingthread.Start(threadNumb);
+                     var clearingthread = new Thread(ClearGestureStatusTextBlock);
+            clearingthread.Start();
         }
 
-        void ClearGestureStatusTextBlock(object threadNumber)
+        void ClearGestureStatusTextBlock(object playerIndex)
         {
             Thread.Sleep(TimeSpan.FromSeconds(5));
             this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate()
             {
-                gestureStateTB.Text = "waiting for a gesture recognition...." + (Int32)threadNumber;
+                gestureStateTB.Text = "waiting for a gesture recognition.... player index: ";//+ (Int32)playerIndex;
             });
             
         }
@@ -119,10 +129,10 @@ namespace GestureFollower
                    this.sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
                    this.sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
                    this.SkeletonViewerControl.KinectDevice = this.sensor;
-                   this.sensor.SkeletonStream.Enable();
+                   this.sensor.SkeletonStream.Enable(parameters);
                    this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
                    this.sensor.ColorFrameReady += sensor_ColorFrameReady;
-                   
+                   this.sensor.DepthFrameReady += sensor_DepthFrameReady;
 
                    try
                    {
@@ -146,6 +156,48 @@ namespace GestureFollower
            else
                this.statusBarText.Text = Properties.Resources.NoKinectReady;
         }
+
+        private void sensor_DepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
+        {
+
+            //using (DepthImageFrame frame = e.OpenDepthImageFrame())
+            //{
+            //    if (frame != null)
+            //    { 
+            //        CreatePlayerDepthImage(frame, this._RawDepthPixelData);
+            //    }
+            //}
+
+        }
+
+        //private void CreatePlayerDepthImage(DepthImageFrame depthFrame, short[] pixelData)
+        //{
+        //    int playerIndex;
+        //    int depthBytePerPixel = 4;
+        //    byte[] enhPixelData = new byte[depthFrame.Width * depthFrame.Height * depthBytePerPixel];
+
+
+        //    for (int i = 0, j = 0; i < pixelData.Length; i++, j += depthBytePerPixel)
+        //    {
+        //        playerIndex = pixelData[i] & DepthImageFrame.PlayerIndexBitmask;
+
+        //        if (playerIndex == 0)
+        //        {
+        //            enhPixelData[j] = 0xFF;
+        //            enhPixelData[j + 1] = 0xFF;
+        //            enhPixelData[j + 2] = 0xFF;
+        //        }
+        //        else
+        //        {
+        //            enhPixelData[j] = 0x00;
+        //            enhPixelData[j + 1] = 0x00;
+        //            enhPixelData[j + 2] = 0x00;
+        //        }
+        //    }
+
+
+        //    this._EnhDepthImage.WritePixels(this._EnhDepthImageRect, enhPixelData, this._EnhDepthImageStride, 0);
+        //}
 
         private void sensor_ColorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
         {

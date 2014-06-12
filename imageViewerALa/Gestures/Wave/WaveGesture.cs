@@ -86,6 +86,7 @@ namespace Gestures.Wave
                         if (GestureDetected != null)
                         {
                             GestureDetected(this, new EventArgs());
+                            
                         }
                     }
                 }
