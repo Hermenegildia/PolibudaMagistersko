@@ -34,6 +34,7 @@ namespace GestureFollower
         WaveGesture waveGesture;
         StretchGesture stretchGesture;
         TransformSmoothParameters parameters;
+        
 
         public WindowWithSkeletonViewer()
         {
@@ -132,7 +133,7 @@ namespace GestureFollower
                    this.sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
                    this.sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
                    this.SkeletonViewerControl.KinectDevice = this.sensor;
-                   this.sensor.SkeletonStream.Enable(parameters);
+                   this.sensor.SkeletonStream.Enable(); //parameters
 
                    //this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
                    //this.sensor.ColorFrameReady += sensor_ColorFrameReady;
