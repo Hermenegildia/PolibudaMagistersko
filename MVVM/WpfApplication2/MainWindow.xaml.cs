@@ -23,10 +23,8 @@ namespace WpfApplication2
         public MainWindow()
         {
             InitializeComponent();
-            CustomerViewModel viewModel = new CustomerViewModel();
-            //viewModel.Customer = new Customer("Zdzisław Różewiczki");
-         
-            this.DataContext = viewModel;
+            CustomerViewModel viewModel =( CustomerViewModel)base.DataContext;
+           //this.DataContext = viewModel;
         }
     }
 }
