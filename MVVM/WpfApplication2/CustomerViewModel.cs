@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace WpfApplication2
 {
-    public class CustomerViewModel : DependencyObject
+    public class CustomerViewModel : DependencyObject, INotifyPropertyChanged
     {
         Customer myCustomer;
 
@@ -17,12 +19,12 @@ namespace WpfApplication2
         }
 
         
-        public static readonly DependencyProperty CustomerProperty =
-            DependencyProperty.Register(
-            "Customer",
-            typeof(Customer),
-            typeof(CustomerViewModel),
-            new PropertyMetadata(null));
+        //public static readonly DependencyProperty CustomerProperty =
+        //    DependencyProperty.Register(
+        //    "Customer",
+        //    typeof(Customer),
+        //    typeof(CustomerViewModel),
+        //    new PropertyMetadata(null));
 
         //public Customer Customer
         //{
@@ -33,13 +35,31 @@ namespace WpfApplication2
         public Customer Customer
         {
             get { return myCustomer; }
-            set { myCustomer = value; }
+            set {
+                if (myCustomer != value)
+                {
+                    myCustomer = value;
+                    NotifyPropertyChanged();
+                }   
+            }
         }
 
-        public string CustomerName
+        //public string CustomerName
+        //{
+        //    get { return Customer.Name; }
+        //    set {
+        //        if (Customer.Name != value)
+        //        Customer.Name = value;
+        //        NotifyPropertyChanged();
+        //    }
+        //}
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
-            get { return Customer.Name; }
-            set { Customer.Name = value; }
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

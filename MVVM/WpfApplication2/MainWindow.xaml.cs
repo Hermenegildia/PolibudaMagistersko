@@ -20,11 +20,15 @@ namespace WpfApplication2
     /// </summary>
     public partial class MainWindow : Window
     {
+        CustomerViewModel viewModel;
         public MainWindow()
         {
             InitializeComponent();
-            CustomerViewModel viewModel =( CustomerViewModel)base.DataContext;
+            viewModel =( CustomerViewModel)base.DataContext;
            //this.DataContext = viewModel;
         }
+
+
+
     }
 }

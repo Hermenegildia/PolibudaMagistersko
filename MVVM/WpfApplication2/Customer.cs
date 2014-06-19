@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WpfApplication2
 {
-    public class Customer :INotifyPropertyChanged
+    public class Customer
     {
     
         public Customer(string customerName, string customerHeadquaters, double customerAccountState)
@@ -26,7 +26,7 @@ namespace WpfApplication2
                 if (name != value)
                 {
                     name = value;
-                    NotifyPropertyChanged("Name");
+                
                 }
             }
         }
@@ -40,7 +40,7 @@ namespace WpfApplication2
                 if (headquaters != value)
                 {
                     headquaters = value;
-                    NotifyPropertyChanged("Headquaters");
+                  
                 }
             }
         }
@@ -54,18 +54,12 @@ namespace WpfApplication2
                 if (accountState != value)
                 {
                     accountState = value;
-                    NotifyPropertyChanged("AccountState");
+                   
                 }
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
+      
 
 
     }
