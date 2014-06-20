@@ -134,7 +134,7 @@ namespace GestureFollower
                    this.sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
                    this.SkeletonViewerControl.KinectDevice = this.sensor;
                    this.sensor.SkeletonStream.Enable(); //parameters
-
+                   
                    //this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
                    //this.sensor.ColorFrameReady += sensor_ColorFrameReady;
                    //this.sensor.DepthFrameReady += sensor_DepthFrameReady;

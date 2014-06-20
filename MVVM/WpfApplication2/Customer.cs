@@ -44,12 +44,29 @@ namespace WpfApplication2
         }
 
         public static readonly DependencyProperty AccountStateProperty = DependencyProperty.Register(
-          "AccountState", typeof(double), typeof(Customer), new FrameworkPropertyMetadata(100000.00));
+          "AccountState", typeof(double), typeof(Customer), new FrameworkPropertyMetadata(100000.00), Validate);
+
+        private static bool Validate(object value)
+        {
+            if (value == null)
+                return false;
+            if (value.GetType() != typeof(double))
+                return false;
+
+            return true;
+        }
 
         public double AccountState
         {
             get { return (double)GetValue(AccountStateProperty); }
-            set { SetValue(AccountStateProperty, value); }
+            set
+            {
+                try { SetValue(AccountStateProperty, value); }
+                catch
+                {
+                   
+                }
+            }
         }
 
         //public string Name

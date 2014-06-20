@@ -20,7 +20,7 @@ namespace WpfApplication2
     /// </summary>
     public partial class MainWindow : Window
     {
-        CustomerViewModel viewModel;
+       
         public MainWindow()
         {
             InitializeComponent();
