@@ -11,7 +11,7 @@
             <TextBox Name="csName" Text="{Binding Path=Customer.Name, Mode=TwoWay}" BorderBrush="AliceBlue" />
             <TextBox Text="{Binding Path=Customer.AccountState, Mode=TwoWay}" BorderBrush="AliceBlue" />
             <TextBox Text="{Binding Path=Customer.Headquaters, Mode=TwoWay}" BorderBrush="AliceBlue" />
-            <TextBox Name="changingBox" Text="{Binding Path=Customer.Name, Mode=TwoWay}" BorderBrush="Aquamarine" />
+            <TextBox Name="changingBox" Text="{Binding Path=Customer.Name, Mode=OneWay}" BorderBrush="Aquamarine" />
             <!--<Image Source="Untitled.png" />-->
         </ItemsControl>
     </Grid>

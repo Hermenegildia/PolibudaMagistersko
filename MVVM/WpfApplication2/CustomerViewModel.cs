@@ -9,16 +9,16 @@ using System.Windows;
 
 namespace WpfApplication2
 {
-    public class CustomerViewModel : DependencyObject, INotifyPropertyChanged
+    public class CustomerViewModel :  INotifyPropertyChanged
     {
         Customer myCustomer;
 
         public CustomerViewModel()
         {
-            myCustomer = new Customer("Drzymisławowow", "Jasienice", 157.87);
+            myCustomer = new Customer();//"Drzymisławowow", "Jasienice", 157.87);
         }
 
-        
+
         //public static readonly DependencyProperty CustomerProperty =
         //    DependencyProperty.Register(
         //    "Customer",
@@ -35,12 +35,13 @@ namespace WpfApplication2
         public Customer Customer
         {
             get { return myCustomer; }
-            set {
+            set
+            {
                 if (myCustomer != value)
                 {
                     myCustomer = value;
                     NotifyPropertyChanged();
-                }   
+                }
             }
         }
 
@@ -61,5 +62,6 @@ namespace WpfApplication2
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
 }

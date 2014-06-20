@@ -24,8 +24,7 @@ namespace WpfApplication2
         public MainWindow()
         {
             InitializeComponent();
-            viewModel =( CustomerViewModel)base.DataContext;
-           //this.DataContext = viewModel;
+
         }
 
 
