@@ -34,7 +34,8 @@ namespace GestureFollower
         WaveGesture waveGesture;
         StretchGesture stretchGesture;
         TransformSmoothParameters parameters;
-        
+        int skeletonId;
+        int depthId;
 
         public WindowWithSkeletonViewer()
         {
@@ -64,16 +65,16 @@ namespace GestureFollower
         private void waveGesture_gestureDetected(object sender, EventArgs e)
         {
             gestureStateTB.Text = "waveeeeee...!";
-                     var clearingthread = new Thread(ClearGestureStatusTextBlock);
-            clearingthread.Start();
+            var clearingthread = new Thread(() => ClearGestureStatusTextBlock(skeletonId, depthId));
+                     clearingthread.Start(); //skeletonId
         }
 
-        void ClearGestureStatusTextBlock(object playerIndex)
+        void ClearGestureStatusTextBlock(int playerIndex, int playerIndexDepth)
         {
             Thread.Sleep(TimeSpan.FromSeconds(5));
             this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate()
             {
-                gestureStateTB.Text = "waiting for a gesture recognition.... player index: ";//+ (Int32)playerIndex;
+                gestureStateTB.Text = "waiting for a gesture recognition.... player index: " + playerIndex + " / " + playerIndexDepth;
             });
             
         }
@@ -177,13 +178,29 @@ namespace GestureFollower
                 {
                     Skeleton[] skeletons = new Skeleton[sensor.SkeletonStream.FrameSkeletonArrayLength];
                     skeletonFrame.CopySkeletonDataTo(skeletons);
-                    TrackClosestSkeleton(skeletons);
+                    skeletonId = TrackClosestSkeleton(skeletons);
+                    short[] depthArray = new short[this.sensor.DepthStream.FramePixelDataLength];
+                    depthFrame.CopyPixelDataTo(depthArray);
+                    depthId = ScanDepthForPlayer(depthArray);
                     waveGesture.Update(skeletons, skeletonFrame.Timestamp);
                 }
             }
         }
 
-        private void TrackClosestSkeleton(Skeleton[] skeletons)
+        private int ScanDepthForPlayer(short[] depthArray) //todo: Ala sprawdzić na kilku osobach jak działa playerindexing!
+        {
+            int id = 0;
+            for (int i = 0; i < depthArray.Length; i++)
+            {
+                int buf = (depthArray[i] & DepthImageFrame.PlayerIndexBitmask);
+                if (buf != 0)
+                    id = buf;
+
+            }
+            return id;
+        }
+
+        private int TrackClosestSkeleton(Skeleton[] skeletons)
         {
 
             if (!this.sensor.SkeletonStream.AppChoosesSkeletons)
@@ -207,6 +224,8 @@ namespace GestureFollower
             {
                 this.sensor.SkeletonStream.ChooseSkeletons(closestID); // Track this skeleton
             }
+
+            return closestID;
         }
         
 

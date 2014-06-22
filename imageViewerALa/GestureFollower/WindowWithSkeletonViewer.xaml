@@ -76,9 +76,9 @@
             </StatusBarItem>
         </StatusBar>
         
-        <Border BorderBrush="Red" BorderThickness="8" Grid.Row="1">
+        <Border BorderBrush="Red" BorderThickness="3" Grid.Row="1">
             <k:KinectRegion Name="kinectRegion" Content="KinectRegion" Margin="10,10,0,0" IsCursorVisible="True" Grid.Row="1"  BorderBrush="Red" BorderThickness="5"/>
-            </Border>
+        </Border>
         
     </Grid>
 
