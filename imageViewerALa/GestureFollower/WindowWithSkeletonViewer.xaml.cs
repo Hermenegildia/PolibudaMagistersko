@@ -43,14 +43,15 @@ namespace GestureFollower
             waveGesture.GestureDetected += new EventHandler(waveGesture_gestureDetected);
             stretchGesture = new StretchGesture();
             stretchGesture.GestureDetected += new EventHandler(stretchGesture_gestureDetected);
+          
 
             parameters = new TransformSmoothParameters
             {
-                Smoothing = 0.5f,
-                Correction = 0.1f,
-                Prediction = 0.5f,
-                JitterRadius = 0.1f,
-                MaxDeviationRadius = 0.1f
+                Smoothing = 0.75f,
+                Correction = 0.07f,
+                Prediction = 0.08f,
+                JitterRadius = 0.08f,
+                MaxDeviationRadius = 0.07f
             };
            
         }
@@ -98,7 +99,7 @@ namespace GestureFollower
             kinectSensorChooser.KinectChanged += kinectSencorChooser_KinectChanged;
             kinectSensorChooserUI.KinectSensorChooser = this.kinectSensorChooser;
             kinectSensorChooser.Start();
-            
+            //kinectRegion.add
         }
 
         private void kinectSencorChooser_KinectChanged(object sender, KinectChangedEventArgs e)
@@ -116,6 +117,7 @@ namespace GestureFollower
                     //e.OldSensor.DepthFrameReady -= sensor_DepthFrameReady;
                     e.OldSensor.AllFramesReady -= sensor_AllFramesReady;
                     this.SkeletonViewerControl.KinectDevice = null;
+                    this.kinectRegion.KinectSensor = null;
                         
                 }
                 catch (InvalidOperationException)
@@ -133,13 +135,13 @@ namespace GestureFollower
                    this.sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
                    this.sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
                    this.SkeletonViewerControl.KinectDevice = this.sensor;
-                   this.sensor.SkeletonStream.Enable(); //parameters
+                   this.sensor.SkeletonStream.Enable(parameters); //
                    
                    //this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
                    //this.sensor.ColorFrameReady += sensor_ColorFrameReady;
                    //this.sensor.DepthFrameReady += sensor_DepthFrameReady;
                    this.sensor.AllFramesReady += sensor_AllFramesReady;
-               
+                   this.kinectRegion.KinectSensor = this.sensor;
                
                    try
                    {

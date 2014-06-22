@@ -1,11 +1,12 @@
-﻿<Window x:Class="GestureFollower.WindowWithSkeletonViewer"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:myControls="clr-namespace:CustomControls;assembly=WPFControls"
-          xmlns:kin ="clr-namespace:Microsoft.Kinect.Toolkit;assembly=Microsoft.Kinect.Toolkit"
-           mc:Ignorable="d" 
+        xmlns:kin ="clr-namespace:Microsoft.Kinect.Toolkit;assembly=Microsoft.Kinect.Toolkit"
+        xmlns:k="http://schemas.microsoft.com/kinect/2013" x:Class="GestureFollower.WindowWithSkeletonViewer"
+        mc:Ignorable="d" 
            WindowStartupLocation="CenterScreen" WindowState="Maximized"
         Title="WindowWithSkeletonViewer" Loaded="Window_Loaded" Closing="Window_Closing" KeyDown="Window_KeyDown" >
 
@@ -52,29 +53,33 @@
         </Style>
     </Window.Resources>
 
-   
-        <Grid  Margin="10 0 10 0" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+
+    <Grid  Margin="10 0 10 0" >
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <DockPanel Grid.Row="0" Margin="0 0 0 20" VerticalAlignment="Top">
-                <Image DockPanel.Dock="Left" Source="Images\Logo.png" Height="32" Width="81" Margin="0 10 0 5"/>
-                <TextBlock Name="gestureStateTB" DockPanel.Dock="Right" Margin="0 0 0 0" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18"><Run Text="Skeleton Basics"/></TextBlock>
-                <kin:KinectSensorChooserUI x:Name="kinectSensorChooserUI" Width="320" HorizontalAlignment="Center"  />
+            <Image DockPanel.Dock="Left" Source="Images\Logo.png" Height="32" Width="81" Margin="0 10 0 5"/>
+            <TextBlock x:Name="gestureStateTB" DockPanel.Dock="Right" Margin="0 0 0 0" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18"><Run Text="Skeleton Basics"/></TextBlock>
+            <kin:KinectSensorChooserUI x:Name="kinectSensorChooserUI" Width="320" HorizontalAlignment="Center"  />
         </DockPanel>
-      
-            <myControls:UcSkeletonViewer x:Name="SkeletonViewerControl" IsEnabled="True" Grid.Row="1" />
-        <Image Name="ColorImage" Grid.Row="1"  />
-    
-        <CheckBox  Content="Seated Mode"  Grid.Row="2" Style="{StaticResource SquareCheckBox}" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" x:Name="checkBoxSeatedMode" Checked="CheckBoxSeatedModeChanged" Unchecked="CheckBoxSeatedModeChanged"/>
+
+        <myControls:UcSkeletonViewer x:Name="SkeletonViewerControl" IsEnabled="True" Grid.Row="1" />
+        <CheckBox Content="Seated Mode"  Grid.Row="2" Style="{StaticResource SquareCheckBox}" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" x:Name="checkBoxSeatedMode" Checked="CheckBoxSeatedModeChanged" Unchecked="CheckBoxSeatedModeChanged"/>
         <StatusBar  HorizontalAlignment="Stretch" Grid.Row="3" x:Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
-                <StatusBarItem Padding="0 0 0 10">
-                    <TextBlock x:Name="statusBarText" Margin="-1 0 0 0"><Run Text="Click 'Seated' to change skeletal pipeline type!"/></TextBlock>
-                </StatusBarItem>
+            <StatusBarItem Padding="0 0 0 10">
+                <TextBlock x:Name="statusBarText" Margin="-1 0 0 0"><Run Text="Click 'Seated' to change skeletal pipeline type!"/></TextBlock>
+            </StatusBarItem>
         </StatusBar>
-        </Grid>
+        
+        <Border BorderBrush="Red" BorderThickness="8" Grid.Row="1">
+            <k:KinectRegion Name="kinectRegion" Content="KinectRegion" Margin="10,10,0,0" IsCursorVisible="True" Grid.Row="1"  BorderBrush="Red" BorderThickness="5"/>
+            </Border>
+        
+    </Grid>
 
 </Window>
