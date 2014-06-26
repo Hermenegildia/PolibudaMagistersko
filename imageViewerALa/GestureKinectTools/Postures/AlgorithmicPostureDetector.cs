@@ -20,7 +20,7 @@ namespace GestureKinectTools.Postures
             MaxRange = 0.25f;
         }
 
-        public override void TrackPosture(Skeleton skeleton)
+        public override void TrackPostures(Skeleton skeleton)
         {
             if (skeleton.TrackingState != SkeletonTrackingState.Tracked)
                 return;

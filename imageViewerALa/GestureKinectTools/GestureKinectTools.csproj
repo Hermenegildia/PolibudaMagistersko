@@ -50,13 +50,23 @@
     <Compile Include="Context\ContextPoint.cs" />
     <Compile Include="Context\ContextTracker.cs" />
     <Compile Include="Context\EyeTracker.cs" />
+    <Compile Include="Gestures\CombinedGestureDetector.cs" />
     <Compile Include="Gestures\Entry.cs" />
     <Compile Include="Gestures\GestureDetector.cs" />
+    <Compile Include="Gestures\SerialCombinedGestureDetector.cs" />
     <Compile Include="Gestures\SwipeGestureDetector.cs" />
+    <Compile Include="Gestures\TemplatedGestureDetector.cs" />
+    <Compile Include="LearningMachine\GoldenSection.cs" />
+    <Compile Include="LearningMachine\GoldenSectionExtensions.cs" />
+    <Compile Include="LearningMachine\LearningMachine.cs" />
+    <Compile Include="LearningMachine\RecordedPath.cs" />
+    <Compile Include="LearningMachine\Rectangle.cs" />
+    <Compile Include="MathTools\Helper.cs" />
     <Compile Include="MathTools\Vector2.cs" />
     <Compile Include="MathTools\Vector3.cs" />
     <Compile Include="Postures\AlgorithmicPostureDetector.cs" />
     <Compile Include="Postures\PostureDetector.cs" />
+    <Compile Include="Postures\TemplatePostureDetector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools.cs" />
   </ItemGroup>
@@ -74,6 +84,7 @@
       <Name>Microsoft.Kinect.Toolkit</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -29,7 +29,7 @@ namespace GestureKinectTools.Postures
             this.accumulatedPosture = string.Empty;
         }
 
-        public abstract void TrackPosture(Skeleton skeleton);
+        public abstract void TrackPostures(Skeleton skeleton);
 
         protected void RaisePostureDetected(string posture)
         {
