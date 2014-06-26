@@ -55,22 +55,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ContextPoint.cs" />
-    <Compile Include="ContextTracker.cs" />
-    <Compile Include="Vector3.cs" />
     <Compile Include="WindowWithSkeletonViewer.xaml.cs">
       <DependentUpon>WindowWithSkeletonViewer.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="WindowWithSkeletonViewer.xaml">
@@ -131,6 +120,10 @@
       <Project>{4f56c1a8-f0f0-46b1-978c-2d461310bb1d}</Project>
       <Name>WPFControls</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GestureKinectTools\GestureKinectTools.csproj">
+      <Project>{a3d41536-0437-4432-930a-124380a136b8}</Project>
+      <Name>GestureKinectTools</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Gestures\Gestures.csproj">
       <Project>{617e95c8-3bdf-4d59-b21d-9280e1749049}</Project>
       <Name>Gestures</Name>
@@ -138,6 +131,10 @@
     <ProjectReference Include="..\Microsoft.Kinect.Toolkit.Controls\Microsoft.Kinect.Toolkit.Controls.csproj">
       <Project>{4508c4d1-85bb-4f3f-9e3b-cc93d231c65d}</Project>
       <Name>Microsoft.Kinect.Toolkit.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Microsoft.Kinect.Toolkit.FaceTracking\Microsoft.Kinect.Toolkit.FaceTracking.csproj">
+      <Project>{1bcf9cee-df01-430e-b49d-41a9a88963eb}</Project>
+      <Name>Microsoft.Kinect.Toolkit.FaceTracking</Name>
     </ProjectReference>
     <ProjectReference Include="..\Microsoft.Kinect.Toolkit\Microsoft.Kinect.Toolkit.csproj">
       <Project>{c6f9c31b-6130-4443-a5cc-ef0664552ecd}</Project>
