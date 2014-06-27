@@ -139,5 +139,7 @@ namespace GestureKinectTools
 
             return new Vector2(x / width, y / height);
         }
+
+       
     }
 }
