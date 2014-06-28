@@ -4,7 +4,7 @@
           xmlns:kin ="clr-namespace:Microsoft.Kinect.Toolkit;assembly=Microsoft.Kinect.Toolkit"
         xmlns:k="http://schemas.microsoft.com/kinect/2013" 
         Title="WindowWithTools" WindowStartupLocation="CenterScreen" WindowState="Maximized"
-         Closing="Window_Closing" KeyDown="Window_KeyDown">
+         Closing="Window_Closing" KeyDown="Window_KeyDown" Loaded="Window_Loaded">
 
     <Window.Resources>
         <SolidColorBrush x:Key="MediumGreyBrush" Color="#ff6e6e6e"/>

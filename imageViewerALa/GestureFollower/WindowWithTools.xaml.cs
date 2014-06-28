@@ -1,8 +1,10 @@
 ﻿using GestureKinectTools;
+using GestureKinectTools.Context;
 using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +15,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
 
 namespace GestureFollower
 {
@@ -27,6 +29,12 @@ namespace GestureFollower
         readonly ColorStreamManager colorManager = new ColorStreamManager();
          SkeletonDisplayManager skeletonManager;
         Skeleton[] skeletons;
+
+        string circleKBPath;
+        string letterT_KBPath;
+
+        readonly ContextTracker contextTracker = new ContextTracker();
+
 
         public WindowWithTools()
         {
@@ -102,12 +110,13 @@ namespace GestureFollower
                 catch (InvalidOperationException)
                 {
                     // KinectSensor might enter an invalid state while enabling/disabling streams or stream features.
-                    // E.g.: sensor might be abruptly unplugged.
+                    // E.g.: sensor1 might be abruptly unplugged.
                 }
                 this.sensor.Start();
 
                 kinectDisplay.DataContext = colorManager;
                 skeletonManager = new SkeletonDisplayManager(this.sensor, kinectCanvas);
+              
             }
         }
 
@@ -158,6 +167,13 @@ namespace GestureFollower
         {
             if (e.Key == Key.Escape)
                 this.Close();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            circleKBPath = Path.Combine(Environment.CurrentDirectory, @"circleKB.save");
+            letterT_KBPath = Path.Combine(Environment.CurrentDirectory, @"t_KB.save");
+
         }
     }
 }

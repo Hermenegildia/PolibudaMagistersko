@@ -51,6 +51,9 @@
     <Compile Include="Context\ContextPoint.cs" />
     <Compile Include="Context\ContextTracker.cs" />
     <Compile Include="Context\EyeTracker.cs" />
+    <Compile Include="Controls\PresenceControl.xaml.cs">
+      <DependentUpon>PresenceControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DepthStreamManager.cs" />
     <Compile Include="Gestures\CombinedGestureDetector.cs" />
     <Compile Include="Gestures\Entry.cs" />
@@ -103,7 +106,12 @@
       <Name>Microsoft.Kinect.Toolkit</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Controls\PresenceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

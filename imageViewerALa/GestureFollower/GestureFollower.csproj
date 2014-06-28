@@ -97,6 +97,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Compile Include="WindowWithTools.Gestures.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
