@@ -40,5 +40,17 @@
             </Viewbox>
         </DockPanel>
 
+            <ListBox Name="stabilitiesList"  Grid.Row="3" Height="150">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Key}"/>
+                        <TextBlock Text=": "/>
+                        <TextBlock Text="{Binding Value}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+      
     </Grid>
 </Window>

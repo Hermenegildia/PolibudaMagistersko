@@ -39,7 +39,7 @@ namespace GestureFollower
         public WindowWithTools()
         {
             InitializeComponent();
-
+         
             InitializeKinect();
          
         }
