@@ -122,6 +122,7 @@
     <ProjectReference Include="..\Kinect.Toolbox.Voice\Kinect.Toolbox.Voice.csproj">
       <Project>{09DAE56B-715F-4069-BB66-A110D876A772}</Project>
       <Name>Kinect.Toolbox.Voice</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -20,6 +20,7 @@ namespace GesturesViewer
 
         SwipeGestureDetector swipeGestureRecognizer;
         TemplatedGestureDetector circleGestureRecognizer;
+        TemplatedGestureDetector eightGestureRecognizer;
         readonly ColorStreamManager colorManager = new ColorStreamManager();
         readonly DepthStreamManager depthManager = new DepthStreamManager();
         AudioStreamManager audioManager;
@@ -32,6 +33,7 @@ namespace GesturesViewer
 
         string circleKBPath;
         string letterT_KBPath;
+        string nowy_gest;
 
         KinectRecorder recorder;
         KinectReplay replay;
@@ -84,6 +86,7 @@ namespace GesturesViewer
         {
             circleKBPath = Path.Combine(Environment.CurrentDirectory, @"data\circleKB.save");
             letterT_KBPath = Path.Combine(Environment.CurrentDirectory, @"data\t_KB.save");
+            nowy_gest = Path.Combine(Environment.CurrentDirectory, @"data\nowy_gest.save");
 
             try
             {
@@ -145,6 +148,7 @@ namespace GesturesViewer
 
             LoadCircleGestureDetector();
             LoadLetterTPostureDetector();
+            LoadEightGestureDetector();
 
             nuiCamera = new BindableNUICamera(kinectSensor);
 
@@ -286,7 +290,7 @@ namespace GesturesViewer
                 audioManager = null;
             }
 
-            //CloseGestureDetector();
+            CloseGestureDetector();
 
             ClosePostureDetector();
 
@@ -414,6 +418,7 @@ namespace GesturesViewer
             kinectSensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Default;
         }
 
+     
        
     }
 }

@@ -21,6 +21,18 @@ namespace GesturesViewer
             }
         }
 
+        void LoadEightGestureDetector()
+        {
+            using (Stream recordStream = File.Open(nowy_gest, FileMode.OpenOrCreate))
+            {
+                eightGestureRecognizer = new TemplatedGestureDetector("Ósemeczka!", recordStream);
+                eightGestureRecognizer.DisplayCanvas = gesturesCanvas;
+                eightGestureRecognizer.OnGestureDetected += OnGestureDetected;
+
+                //MouseController.Current.ClickGestureDetector = circleGestureRecognizer;
+            }
+        }
+
         private void recordGesture_Click(object sender, RoutedEventArgs e)
         {
             if (circleGestureRecognizer.IsRecordingPath)
@@ -46,11 +58,24 @@ namespace GesturesViewer
             if (circleGestureRecognizer == null)
                 return;
 
+            //string newPath = Path.Combine(Environment.CurrentDirectory, @"data\eska.save");
             using (Stream recordStream = File.Create(circleKBPath))
             {
                 circleGestureRecognizer.SaveState(recordStream);
             }
             circleGestureRecognizer.OnGestureDetected -= OnGestureDetected;
+
+
+            //obsługa mojego gestu ósemeczki
+            if (eightGestureRecognizer == null)
+                return;
+
+            
+            using (Stream recordStream = File.Create(nowy_gest))
+            {
+                eightGestureRecognizer.SaveState(recordStream);
+            }
+            eightGestureRecognizer.OnGestureDetected -= OnGestureDetected;
         }
     }
 }

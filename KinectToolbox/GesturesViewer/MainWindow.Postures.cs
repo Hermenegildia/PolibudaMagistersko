@@ -30,7 +30,7 @@ namespace GesturesViewer
         void templatePostureDetector_PostureDetected(string posture)
         {
             MessageBox.Show("Give me a......." + posture);
-            stabilitiesList.Items.Add("nowa tetka");
+            //stabilitiesList.Items.Add("nowa tetka");
         }
 
         private void recordT_Click(object sender, RoutedEventArgs e)
