@@ -24,12 +24,17 @@ namespace Kinect.Toolbox
 
 
             paths = (List<RecordedPath>)formatter.Deserialize(kbStream);
+          
 
             string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            //using (StreamWriter writer = new StreamWriter(mydocpath + @"\rozmontowane_gesty.txt"))
-            //{
-            //    writer.Write(string.Empty);
-            //}
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\rozmontowane_gesty_x.txt"))
+            {
+                writer.Write(string.Empty);
+            }
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\rozmontowane_gesty_y.txt"))
+            {
+                writer.Write(string.Empty);
+            }
 
             foreach (RecordedPath path in paths)
             {
@@ -55,6 +60,8 @@ namespace Kinect.Toolbox
 
 
             }
+
+            //paths = new List<RecordedPath>();
         }
 
         public List<RecordedPath> Paths
