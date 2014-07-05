@@ -44,8 +44,8 @@ namespace Kinect.Toolbox
                 //sb.AppendLine("next vector " + DateTime.Now.ToString());
                 foreach (Vector2 point in path.Points)
                 {
-                    sbX.AppendLine(point.X.ToString());// + " y: " + point.Y.ToString());
-                    sbY.AppendLine(point.Y.ToString());
+                    sbX.AppendLine(point.X.ToString(System.Globalization.CultureInfo.InvariantCulture));// + " y: " + point.Y.ToString());
+                    sbY.AppendLine(point.Y.ToString(System.Globalization.CultureInfo.InvariantCulture));
 
                 }
                 //sbX.AppendLine();
