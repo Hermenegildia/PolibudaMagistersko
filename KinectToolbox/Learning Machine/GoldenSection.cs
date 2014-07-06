@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace Kinect.Toolbox.Gestures.Learning_Machine
 {
@@ -26,7 +28,11 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
                     x2 = x1;
                     fx2 = fx1;
                     x1 = ReductionFactor * a + (1 - ReductionFactor) * b;   // xL = b - k*(b-a)
+
                     rotatedList = current.Rotate(x1);
+                    SavePointsToFile(current, "before_rotation");
+                    SavePointsToFile(rotatedList, "after_rotation");
+                    SavePointsToFile(target, "target");
                     fx1 = rotatedList.DistanceTo(target);
                 }
                 else          //wybierz przedzial [xL, b]
@@ -36,6 +42,9 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
                     fx1 = fx2;
                     x2 = (1 - ReductionFactor) * a + ReductionFactor * b;   //xR = a + k*(b-a)
                     rotatedList = current.Rotate(x2);
+                    SavePointsToFile(current, "before_rotation");
+                    SavePointsToFile(rotatedList, "after_rotation");
+                    SavePointsToFile(target, "target");
                     fx2 = rotatedList.DistanceTo(target);
                 }
             }
@@ -115,6 +124,30 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
             locals.CenterToOrigin();
 
             return locals;
+        }
+
+        private static void SavePointsToFile(List<Vector2> pointsList, string fileName)
+        {
+            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            StringBuilder sbX = new StringBuilder();
+            StringBuilder sbY = new StringBuilder();
+
+            //sb.AppendLine("next vector " + DateTime.Now.ToString());
+            foreach (Vector2 point in pointsList)
+            {
+                sbX.AppendLine(point.X.ToString(System.Globalization.CultureInfo.InvariantCulture));// + " y: " + point.Y.ToString());
+                sbY.AppendLine(point.Y.ToString(System.Globalization.CultureInfo.InvariantCulture));
+
+            }
+            //sbX.AppendLine();
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_x.txt", true))
+            {
+                writer.Write(sbX.ToString());
+            }
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_y.txt", true))
+            {
+                writer.Write(sbY.ToString());
+            }
         }
     }
 }
