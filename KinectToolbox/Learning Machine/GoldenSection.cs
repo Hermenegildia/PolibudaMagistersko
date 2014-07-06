@@ -10,31 +10,31 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
 
         public static float Search(List<Vector2> current, List<Vector2> target, float a, float b, float epsilon)
         {
-            float x1 = ReductionFactor * a + (1 - ReductionFactor) * b;
+            float x1 = ReductionFactor * a + (1 - ReductionFactor) * b; // xL = b - k*(b-a)
             List<Vector2> rotatedList = current.Rotate(x1);
             float fx1 = rotatedList.DistanceTo(target);
 
-            float x2 = (1 - ReductionFactor) * a + ReductionFactor * b;
+            float x2 = (1 - ReductionFactor) * a + ReductionFactor * b; //xR = a + k*(b-a)
             rotatedList = current.Rotate(x2);
             float fx2 = rotatedList.DistanceTo(target);
 
             do
             {
-                if (fx1 < fx2)
+                if (fx1 < fx2) //wybierz przedzial [a, xR]
                 {
                     b = x2;
                     x2 = x1;
                     fx2 = fx1;
-                    x1 = ReductionFactor * a + (1 - ReductionFactor) * b;
+                    x1 = ReductionFactor * a + (1 - ReductionFactor) * b;   // xL = b - k*(b-a)
                     rotatedList = current.Rotate(x1);
                     fx1 = rotatedList.DistanceTo(target);
                 }
-                else
+                else          //wybierz przedzial [xL, b]
                 {
                     a = x1;
                     x1 = x2;
                     fx1 = fx2;
-                    x2 = (1 - ReductionFactor) * a + ReductionFactor * b;
+                    x2 = (1 - ReductionFactor) * a + ReductionFactor * b;   //xR = a + k*(b-a)
                     rotatedList = current.Rotate(x2);
                     fx2 = rotatedList.DistanceTo(target);
                 }

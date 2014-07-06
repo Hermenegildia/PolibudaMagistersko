@@ -64,6 +64,7 @@
     <Compile Include="Controls\PresenceControl.xaml.cs">
       <DependentUpon>PresenceControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Gestures\TwoHandsTemplatedGestureDetector.cs" />
     <Compile Include="IStreamManager.cs" />
     <Compile Include="Learning Machine\CustomBinder.cs" />
     <Compile Include="Math\MathHelper.cs" />
@@ -122,6 +123,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

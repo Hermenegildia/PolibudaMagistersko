@@ -260,7 +260,7 @@ namespace GesturesViewer
                 }
 
                 algorithmicPostureRecognizer.TrackPostures(skeleton);
-                templatePostureDetector.TrackPostures(skeleton);
+                //templatePostureDetector.TrackPostures(skeleton);
 
                 if (recordNextFrameForPosture)
                 {
