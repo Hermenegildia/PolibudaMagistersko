@@ -18,9 +18,10 @@ namespace GesturesViewer
     {
         KinectSensor kinectSensor;
 
-        SwipeGestureDetector swipeGestureRecognizer;
+        //SwipeGestureDetector swipeGestureRecognizer;
         //TemplatedGestureDetector circleGestureRecognizer;
-        TemplatedGestureDetector eightGestureRecognizer;
+        TwoHandsTemplatedGestureDetector twoHandsGestureRecognizer;
+        //TemplatedGestureDetector eightGestureRecognizer;
         readonly ColorStreamManager colorManager = new ColorStreamManager();
         readonly DepthStreamManager depthManager = new DepthStreamManager();
         AudioStreamManager audioManager;
@@ -34,6 +35,7 @@ namespace GesturesViewer
         string circleKBPath;
         string letterT_KBPath;
         string nowy_gest;
+        string twoHandsKBPath;
 
         KinectRecorder recorder;
         KinectReplay replay;
@@ -88,6 +90,7 @@ namespace GesturesViewer
             circleKBPath = Path.Combine(currentDirectory, @"data\circleKB.save");
             letterT_KBPath = Path.Combine(currentDirectory, @"data\t_KB.save");
             nowy_gest = Path.Combine(currentDirectory, @"data\nowy_gest.save");
+            twoHandsKBPath = Path.Combine(currentDirectory, @"data\twoHandsKBPath.save");
 
             try
             {
@@ -140,8 +143,8 @@ namespace GesturesViewer
                                              });
             kinectSensor.SkeletonFrameReady += kinectRuntime_SkeletonFrameReady;
 
-            swipeGestureRecognizer = new SwipeGestureDetector();
-            swipeGestureRecognizer.OnGestureDetected += OnGestureDetected;
+            //swipeGestureRecognizer = new SwipeGestureDetector();
+            //swipeGestureRecognizer.OnGestureDetected += OnGestureDetected;
 
             skeletonDisplayManager = new SkeletonDisplayManager(kinectSensor, kinectCanvas);
 
@@ -149,7 +152,8 @@ namespace GesturesViewer
 
             //LoadCircleGestureDetector();
             LoadLetterTPostureDetector();
-            LoadEightGestureDetector();
+            //LoadEightGestureDetector();
+            LoadTwoHandsDetector();
 
             nuiCamera = new BindableNUICamera(kinectSensor);
 
@@ -249,13 +253,18 @@ namespace GesturesViewer
 
                     if (joint.JointType == JointType.HandRight)
                     {
-                        swipeGestureRecognizer.Add(joint.Position, kinectSensor);
-                        eightGestureRecognizer.Add(joint.Position, kinectSensor);
+                        //swipeGestureRecognizer.Add(joint.Position, kinectSensor);
+                        //eightGestureRecognizer.Add(joint.Position, kinectSensor);
+                        twoHandsGestureRecognizer.Add(joint.Position, kinectSensor, true);
                         //circleGestureRecognizer.Add(joint.Position, kinectSensor);
                     }
                     else if (joint.JointType == JointType.HandLeft && controlMouse.IsChecked == true)
                     {
                         MouseController.Current.SetHandPosition(kinectSensor, joint, skeleton);
+                    }
+                    else if (joint.JointType == JointType.HandLeft)
+                    {
+                        twoHandsGestureRecognizer.Add(joint.Position, kinectSensor, false);
                     }
                 }
 
@@ -281,10 +290,10 @@ namespace GesturesViewer
 
         private void Clean()
         {
-            if (swipeGestureRecognizer != null)
-            {
-                swipeGestureRecognizer.OnGestureDetected -= OnGestureDetected;
-            }
+            //if (swipeGestureRecognizer != null)
+            //{
+            //    swipeGestureRecognizer.OnGestureDetected -= OnGestureDetected;
+            //}
 
             if (audioManager != null)
             {

@@ -21,13 +21,25 @@ namespace GesturesViewer
         //    }
         //}
 
-        void LoadEightGestureDetector()
+        //void LoadEightGestureDetector()
+        //{
+        //    using (Stream recordStream = File.Open(nowy_gest, FileMode.OpenOrCreate))
+        //    {
+        //        eightGestureRecognizer = new TemplatedGestureDetector("Ósemeczka!", recordStream);
+        //        eightGestureRecognizer.DisplayCanvas = gesturesCanvas;
+        //        eightGestureRecognizer.OnGestureDetected += OnGestureDetected;
+
+        //        //MouseController.Current.ClickGestureDetector = circleGestureRecognizer;
+        //    }
+        //}
+
+        void LoadTwoHandsDetector()
         {
-            using (Stream recordStream = File.Open(nowy_gest, FileMode.OpenOrCreate))
+            using (Stream recordStream = File.Open(twoHandsKBPath, FileMode.OpenOrCreate))
             {
-                eightGestureRecognizer = new TemplatedGestureDetector("Ósemeczka!", recordStream);
-                eightGestureRecognizer.DisplayCanvas = gesturesCanvas;
-                eightGestureRecognizer.OnGestureDetected += OnGestureDetected;
+                twoHandsGestureRecognizer = new TwoHandsTemplatedGestureDetector("Geścik dwuręczniasty!", recordStream);
+                twoHandsGestureRecognizer.DisplayCanvas = gesturesCanvas;
+                twoHandsGestureRecognizer.OnGestureDetected += OnGestureDetected;
 
                 //MouseController.Current.ClickGestureDetector = circleGestureRecognizer;
             }
@@ -45,14 +57,23 @@ namespace GesturesViewer
             //circleGestureRecognizer.StartRecordTemplate();
             //recordGesture.Content = "Stop Recording";
 
-            if (eightGestureRecognizer.IsRecordingPath)
+            //if (eightGestureRecognizer.IsRecordingPath)
+            //{
+            //    eightGestureRecognizer.EndRecordTemplate();
+            //    recordGesture.Content = "Record Gesture";
+            //    return;
+            //}
+
+            //eightGestureRecognizer.StartRecordTemplate();
+
+            if (twoHandsGestureRecognizer.IsRecordingPath)
             {
-                eightGestureRecognizer.EndRecordTemplate();
+                twoHandsGestureRecognizer.EndRecordTemplate();
                 recordGesture.Content = "Record Gesture";
                 return;
             }
 
-            eightGestureRecognizer.StartRecordTemplate();
+            twoHandsGestureRecognizer.StartRecordTemplate();
             recordGesture.Content = "Stop Recording";
         }
 
@@ -77,15 +98,24 @@ namespace GesturesViewer
 
 
             //obsługa mojego gestu ósemeczki
-            if (eightGestureRecognizer == null)
+            //if (eightGestureRecognizer == null)
+            //    return;
+            
+            //using (Stream recordStream = File.Create(nowy_gest))
+            //{
+            //    eightGestureRecognizer.SaveState(recordStream);
+            //}
+            //eightGestureRecognizer.OnGestureDetected -= OnGestureDetected;
+
+            //obsługa mojego gestu dwuręcznego
+            if (twoHandsGestureRecognizer == null)
                 return;
 
-            
-            using (Stream recordStream = File.Create(nowy_gest))
+            using (Stream recordStream = File.Create(twoHandsKBPath))
             {
-                eightGestureRecognizer.SaveState(recordStream);
+                twoHandsGestureRecognizer.SaveState(recordStream);
             }
-            eightGestureRecognizer.OnGestureDetected -= OnGestureDetected;
+            twoHandsGestureRecognizer.OnGestureDetected -= OnGestureDetected;
         }
     }
 }

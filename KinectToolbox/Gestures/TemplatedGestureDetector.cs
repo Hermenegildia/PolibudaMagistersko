@@ -33,7 +33,7 @@ namespace Kinect.Toolbox
             learningMachine = new LearningMachine(kbStream);
         }
 
-        public override void Add(SkeletonPoint position, KinectSensor sensor)
+        public override void Add(SkeletonPoint position, KinectSensor sensor, bool isRightHand=true)
         {
             base.Add(position, sensor);
 

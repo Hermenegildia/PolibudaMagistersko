@@ -50,7 +50,7 @@ namespace Kinect.Toolbox
             get { return windowSize; }
         }
 
-        public virtual void Add(SkeletonPoint position, KinectSensor sensor)
+        public virtual void Add(SkeletonPoint position, KinectSensor sensor, bool isRightHand=true) //obsługa prawej reki domyślnie!
         {
             Entry newEntry = new Entry {Position = position.ToVector3(), Time = DateTime.Now};
             Entries.Add(newEntry);
