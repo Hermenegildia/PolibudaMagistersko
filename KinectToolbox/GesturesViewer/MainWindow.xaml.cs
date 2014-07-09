@@ -20,8 +20,9 @@ namespace GesturesViewer
 
         //SwipeGestureDetector swipeGestureRecognizer;
         TemplatedGestureDetector circleGestureRecognizer;
+        SerialCombinedGestureDetector serialCombinedGestureDetector;
         //TwoHandsTemplatedGestureDetector twoHandsGestureRecognizer;
-        //TemplatedGestureDetector eightGestureRecognizer;
+        TemplatedGestureDetector eightGestureRecognizer;
         readonly ColorStreamManager colorManager = new ColorStreamManager();
         readonly DepthStreamManager depthManager = new DepthStreamManager();
         AudioStreamManager audioManager;
@@ -152,7 +153,7 @@ namespace GesturesViewer
 
             LoadCircleGestureDetector();
             LoadLetterTPostureDetector();
-            //LoadEightGestureDetector();
+            LoadEightGestureDetector();
             //LoadTwoHandsDetector();
 
             nuiCamera = new BindableNUICamera(kinectSensor);
@@ -258,7 +259,7 @@ namespace GesturesViewer
                     if (joint.JointType == JointType.HandRight)
                     {
                         //swipeGestureRecognizer.Add(joint.Position, kinectSensor);
-                        //eightGestureRecognizer.Add(joint.Position, kinectSensor);
+                        eightGestureRecognizer.Add(joint.Position, kinectSensor);
 
                         circleGestureRecognizer.Add(joint.Position, kinectSensor);
                     }

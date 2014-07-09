@@ -21,17 +21,26 @@ namespace GesturesViewer
             }
         }
 
-        //void LoadEightGestureDetector()
-        //{
-        //    using (Stream recordStream = File.Open(nowy_gest, FileMode.OpenOrCreate))
-        //    {
-        //        eightGestureRecognizer = new TemplatedGestureDetector("Ósemeczka!", recordStream);
-        //        eightGestureRecognizer.DisplayCanvas = gesturesCanvas;
-        //        eightGestureRecognizer.OnGestureDetected += OnGestureDetected;
+        void LoadSerialCombinedGestureDetector()
+        {
+            serialCombinedGestureDetector = new SerialCombinedGestureDetector();
+            serialCombinedGestureDetector.Add(circleGestureRecognizer);
+            serialCombinedGestureDetector.Add(eightGestureRecognizer);
 
-        //        //MouseController.Current.ClickGestureDetector = circleGestureRecognizer;
-        //    }
-        //}
+            serialCombinedGestureDetector.OnGestureDetected += OnGestureDetected;
+        }
+
+        void LoadEightGestureDetector()
+        {
+            using (Stream recordStream = File.Open(nowy_gest, FileMode.OpenOrCreate))
+            {
+                eightGestureRecognizer = new TemplatedGestureDetector("Ósemeczka!", recordStream);
+                eightGestureRecognizer.DisplayCanvas = gesturesCanvas;
+                eightGestureRecognizer.OnGestureDetected += OnGestureDetected;
+
+                //MouseController.Current.ClickGestureDetector = circleGestureRecognizer;
+            }
+        }
 
         //void LoadTwoHandsDetector()
         //{
@@ -86,26 +95,32 @@ namespace GesturesViewer
 
         void CloseGestureDetector()
         {
-            if (circleGestureRecognizer == null)
-                return;
+            if (circleGestureRecognizer != null)
+            {
 
             //string newPath = Path.Combine(Environment.CurrentDirectory, @"data\eska.save");
-            using (Stream recordStream = File.Create(circleKBPath))
-            {
-                circleGestureRecognizer.SaveState(recordStream);
+                using (Stream recordStream = File.Create(circleKBPath))
+                {
+                    circleGestureRecognizer.SaveState(recordStream);
+                }
+                circleGestureRecognizer.OnGestureDetected -= OnGestureDetected;
             }
-            circleGestureRecognizer.OnGestureDetected -= OnGestureDetected;
-
 
             //obsługa mojego gestu ósemeczki
-            //if (eightGestureRecognizer == null)
-            //    return;
-            
-            //using (Stream recordStream = File.Create(nowy_gest))
-            //{
-            //    eightGestureRecognizer.SaveState(recordStream);
-            //}
-            //eightGestureRecognizer.OnGestureDetected -= OnGestureDetected;
+            if (eightGestureRecognizer != null)
+            {
+
+                using (Stream recordStream = File.Create(nowy_gest))
+                {
+                    eightGestureRecognizer.SaveState(recordStream);
+                }
+                eightGestureRecognizer.OnGestureDetected -= OnGestureDetected;
+            }
+           
+            if (serialCombinedGestureDetector != null)
+            {
+                serialCombinedGestureDetector.OnGestureDetected -= OnGestureDetected;
+            }
 
             //obsługa mojego gestu dwuręcznego
             //if (twoHandsGestureRecognizer == null)
