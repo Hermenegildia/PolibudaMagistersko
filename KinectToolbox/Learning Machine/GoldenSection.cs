@@ -30,9 +30,9 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
                     x1 = ReductionFactor * a + (1 - ReductionFactor) * b;   // xL = b - k*(b-a)
 
                     rotatedList = current.Rotate(x1);
-                    SavePointsToFile(current, "before_rotation");
-                    SavePointsToFile(rotatedList, "after_rotation");
-                    SavePointsToFile(target, "target");
+                    //SavePointsToFile(current, "before_rotation");
+                    //SavePointsToFile(rotatedList, "after_rotation");
+                    //SavePointsToFile(target, "target");
                     fx1 = rotatedList.DistanceTo(target);
                 }
                 else          //wybierz przedzial [xL, b]
@@ -42,9 +42,9 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
                     fx1 = fx2;
                     x2 = (1 - ReductionFactor) * a + ReductionFactor * b;   //xR = a + k*(b-a)
                     rotatedList = current.Rotate(x2);
-                    SavePointsToFile(current, "before_rotation");
-                    SavePointsToFile(rotatedList, "after_rotation");
-                    SavePointsToFile(target, "target");
+                    //SavePointsToFile(current, "before_rotation");
+                    //SavePointsToFile(rotatedList, "after_rotation");
+                    //SavePointsToFile(target, "target");
                     fx2 = rotatedList.DistanceTo(target);
                 }
             }
@@ -116,11 +116,11 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
         public static List<Vector2> Pack(List<Vector2> positions, int samplesCount)
         {
             List<Vector2> locals = ProjectListToDefinedCount(positions, samplesCount);
-            SavePointsToFile(locals, "rozmontowane_gesty_przed_obrotem");
+            //SavePointsToFile(locals, "rozmontowane_gesty_przed_obrotem");
             float angle = GetAngleBetween(locals.Center(), positions[0]);
             locals = locals.Rotate(-angle);
 
-            SavePointsToFile(locals, "rozmontowane_gesty_po_packu");
+            //SavePointsToFile(locals, "rozmontowane_gesty_po_packu");
             locals.ScaleToReferenceWorld();
             locals.CenterToOrigin();
 

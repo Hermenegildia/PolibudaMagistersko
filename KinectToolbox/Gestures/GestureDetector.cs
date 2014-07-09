@@ -9,7 +9,7 @@ using Microsoft.Kinect;
 namespace Kinect.Toolbox
 {
     public abstract class GestureDetector
-    {       
+    {
         public int MinimalPeriodBetweenGestures { get; set; }
 
         readonly List<Entry> entries = new List<Entry>();
@@ -50,10 +50,9 @@ namespace Kinect.Toolbox
             get { return windowSize; }
         }
 
-        public virtual void Add(SkeletonPoint position, KinectSensor sensor)//, bool isRightHand=true) //obsługa prawej reki domyślnie!
+        public virtual void Add(SkeletonPoint position, KinectSensor sensor)
         {
-           
-            Entry newEntry = new Entry {Position = position.ToVector3(), Time = DateTime.Now};
+            Entry newEntry = new Entry { Position = position.ToVector3(), Time = DateTime.Now };
             Entries.Add(newEntry);
 
             // Drawing
@@ -82,10 +81,10 @@ namespace Kinect.Toolbox
             }
 
             // Remove too old positions
-            if (Entries.Count > WindowSize/2) // dzielimy przez 2 dla twohandsgesture!!
+            if (Entries.Count > WindowSize)
             {
                 Entry entryToRemove = Entries[0];
-                
+
                 if (DisplayCanvas != null)
                 {
                     DisplayCanvas.Children.Remove(entryToRemove.DisplayEllipse);
@@ -111,11 +110,11 @@ namespace Kinect.Toolbox
                 lastGestureDate = DateTime.Now;
             }
 
-            Entries.ForEach(e=>
-                                {
-                                    if (DisplayCanvas != null)
-                                        DisplayCanvas.Children.Remove(e.DisplayEllipse);
-                                });
+            Entries.ForEach(e =>
+            {
+                if (DisplayCanvas != null)
+                    DisplayCanvas.Children.Remove(e.DisplayEllipse);
+            });
             Entries.Clear();
         }
     }

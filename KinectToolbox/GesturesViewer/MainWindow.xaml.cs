@@ -21,7 +21,7 @@ namespace GesturesViewer
         //SwipeGestureDetector swipeGestureRecognizer;
         TemplatedGestureDetector circleGestureRecognizer;
         SerialCombinedGestureDetector serialCombinedGestureDetector;
-        //TwoHandsTemplatedGestureDetector twoHandsGestureRecognizer;
+        TwoHandsTemplatedGestureDetector twoHandsGestureRecognizer;
         TemplatedGestureDetector eightGestureRecognizer;
         readonly ColorStreamManager colorManager = new ColorStreamManager();
         readonly DepthStreamManager depthManager = new DepthStreamManager();
@@ -154,7 +154,8 @@ namespace GesturesViewer
             LoadCircleGestureDetector();
             LoadLetterTPostureDetector();
             LoadEightGestureDetector();
-            //LoadTwoHandsDetector();
+            LoadSerialCombinedGestureDetector();
+            LoadTwoHandsDetector();
 
             nuiCamera = new BindableNUICamera(kinectSensor);
 
@@ -247,8 +248,8 @@ namespace GesturesViewer
                 if (!contextTracker.IsStableRelativeToCurrentSpeed(skeleton.TrackingId))
                     continue;
 
-               //k if (skeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && skeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked)
-                    //twoHandsGestureRecognizer.Add(skeleton, kinectSensor);
+                if (skeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && skeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked)
+                    twoHandsGestureRecognizer.Add(skeleton, kinectSensor);
 
                 foreach (Joint joint in skeleton.Joints)
                 {

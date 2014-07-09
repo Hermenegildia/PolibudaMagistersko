@@ -5,10 +5,10 @@ namespace Kinect.Toolbox
 {
     public class SwipeGestureDetector : GestureDetector
     {
-        public float SwipeMinimalLength {get;set;}
-        public float SwipeMaximalHeight {get;set;}
-        public int SwipeMininalDuration {get;set;}
-        public int SwipeMaximalDuration {get;set;}
+        public float SwipeMinimalLength { get; set; }
+        public float SwipeMaximalHeight { get; set; }
+        public int SwipeMininalDuration { get; set; }
+        public int SwipeMaximalDuration { get; set; }
 
         public SwipeGestureDetector(int windowSize = 20)
             : base(windowSize)
@@ -19,7 +19,7 @@ namespace Kinect.Toolbox
             SwipeMaximalDuration = 1500;
         }
 
-        protected bool ScanPositions(Func<Vector3, Vector3, bool> heightFunction, Func<Vector3, Vector3, bool> directionFunction, 
+        protected bool ScanPositions(Func<Vector3, Vector3, bool> heightFunction, Func<Vector3, Vector3, bool> directionFunction,
             Func<Vector3, Vector3, bool> lengthFunction, int minTime, int maxTime)
         {
             int start = 0;
