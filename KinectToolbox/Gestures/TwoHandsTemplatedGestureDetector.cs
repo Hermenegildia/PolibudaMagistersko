@@ -69,10 +69,10 @@ namespace Kinect.Toolbox{
 
         private void JoinEntriesFromTwoHands()
         {
-            bothHandsEntries.Clear();
+            BothHandsEntries.Clear();
 
-            bothHandsEntries.AddRange(Entries);
-            bothHandsEntries.AddRange(leftsEntries);
+            BothHandsEntries.AddRange(Entries);
+            BothHandsEntries.AddRange(LeftEntries);
             //foreach (Entry entry in Entries)
             //    BothHandsEntries.Add(entry);
 

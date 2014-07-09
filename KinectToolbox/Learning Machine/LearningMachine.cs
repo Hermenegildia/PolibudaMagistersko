@@ -24,42 +24,42 @@ namespace Kinect.Toolbox
 
 
             paths = (List<RecordedPath>)formatter.Deserialize(kbStream);
-          
-
-            //string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            //using (StreamWriter writer = new StreamWriter(mydocpath + @"\rozmontowane_gesty_x.txt"))
-            //{
-            //    writer.Write(string.Empty);
-            //}
-            //using (StreamWriter writer = new StreamWriter(mydocpath + @"\rozmontowane_gesty_y.txt"))
-            //{
-            //    writer.Write(string.Empty);
-            //}
-
-            //foreach (RecordedPath path in paths)
-            //{
-            //    StringBuilder sbX = new StringBuilder();
-            //    StringBuilder sbY = new StringBuilder();
-
-            //    //sb.AppendLine("next vector " + DateTime.Now.ToString());
-            //    foreach (Vector2 point in path.Points)
-            //    {
-            //        sbX.AppendLine(point.X.ToString(System.Globalization.CultureInfo.InvariantCulture));// + " y: " + point.Y.ToString());
-            //        sbY.AppendLine(point.Y.ToString(System.Globalization.CultureInfo.InvariantCulture));
-
-            //    }
-            //    //sbX.AppendLine();
-            //    using (StreamWriter writer = new StreamWriter(mydocpath + @"\rozmontowane_gesty_x.txt", true))
-            //    {
-            //        writer.Write(sbX.ToString());
-            //    }
-            //    using (StreamWriter writer = new StreamWriter(mydocpath + @"\rozmontowane_gesty_y.txt", true))
-            //    {
-            //        writer.Write(sbY.ToString());
-            //    }
 
 
-            //}
+            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\rozmontowane_gesty_x.txt"))
+            {
+                writer.Write(string.Empty);
+            }
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\rozmontowane_gesty_y.txt"))
+            {
+                writer.Write(string.Empty);
+            }
+
+            foreach (RecordedPath path in paths)
+            {
+                StringBuilder sbX = new StringBuilder();
+                StringBuilder sbY = new StringBuilder();
+
+                //sb.AppendLine("next vector " + DateTime.Now.ToString());
+                foreach (Vector2 point in path.Points)
+                {
+                    sbX.AppendLine(point.X.ToString(System.Globalization.CultureInfo.InvariantCulture));// + " y: " + point.Y.ToString());
+                    sbY.AppendLine(point.Y.ToString(System.Globalization.CultureInfo.InvariantCulture));
+
+                }
+                //sbX.AppendLine();
+                using (StreamWriter writer = new StreamWriter(mydocpath + @"\rozmontowane_gesty_x.txt", true))
+                {
+                    writer.Write(sbX.ToString());
+                }
+                using (StreamWriter writer = new StreamWriter(mydocpath + @"\rozmontowane_gesty_y.txt", true))
+                {
+                    writer.Write(sbY.ToString());
+                }
+
+
+            }
 
             //paths = new List<RecordedPath>();
         }
