@@ -90,8 +90,8 @@ namespace Kinect.Toolbox
 
             List<Vector2> locals = GoldenSection.Pack(positions, samplesCount);
 
-            SavePointsToFile(locals, "locals");
-            SavePointsToFile(points, "current");
+            //SavePointsToFile(locals, "locals");
+            //SavePointsToFile(points, "current");
 
 
             float score = GoldenSection.Search(locals, points, -MathHelper.PiOver4, MathHelper.PiOver4, threshold);

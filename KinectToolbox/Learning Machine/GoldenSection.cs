@@ -116,10 +116,11 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
         public static List<Vector2> Pack(List<Vector2> positions, int samplesCount)
         {
             List<Vector2> locals = ProjectListToDefinedCount(positions, samplesCount);
-
+            SavePointsToFile(locals, "rozmontowane_gesty_przed_obrotem");
             float angle = GetAngleBetween(locals.Center(), positions[0]);
             locals = locals.Rotate(-angle);
 
+            SavePointsToFile(locals, "rozmontowane_gesty_po_packu");
             locals.ScaleToReferenceWorld();
             locals.CenterToOrigin();
 
@@ -133,6 +134,14 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
             StringBuilder sbY = new StringBuilder();
 
             //sb.AppendLine("next vector " + DateTime.Now.ToString());
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_x.txt", true))
+            {
+                writer.Write("");
+            }
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_y.txt", true))
+            {
+                writer.Write("");
+            }
             foreach (Vector2 point in pointsList)
             {
                 sbX.AppendLine(point.X.ToString(System.Globalization.CultureInfo.InvariantCulture));// + " y: " + point.Y.ToString());

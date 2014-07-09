@@ -50,8 +50,9 @@ namespace Kinect.Toolbox
             get { return windowSize; }
         }
 
-        public virtual void Add(SkeletonPoint position, KinectSensor sensor, bool isRightHand=true) //obsługa prawej reki domyślnie!
+        public virtual void Add(SkeletonPoint position, KinectSensor sensor)//, bool isRightHand=true) //obsługa prawej reki domyślnie!
         {
+           
             Entry newEntry = new Entry {Position = position.ToVector3(), Time = DateTime.Now};
             Entries.Add(newEntry);
 
@@ -81,7 +82,7 @@ namespace Kinect.Toolbox
             }
 
             // Remove too old positions
-            if (Entries.Count > WindowSize)
+            if (Entries.Count > WindowSize/2) // dzielimy przez 2 dla twohandsgesture!!
             {
                 Entry entryToRemove = Entries[0];
                 

@@ -19,8 +19,8 @@ namespace GesturesViewer
         KinectSensor kinectSensor;
 
         //SwipeGestureDetector swipeGestureRecognizer;
-        //TemplatedGestureDetector circleGestureRecognizer;
-        TwoHandsTemplatedGestureDetector twoHandsGestureRecognizer;
+        TemplatedGestureDetector circleGestureRecognizer;
+        //TwoHandsTemplatedGestureDetector twoHandsGestureRecognizer;
         //TemplatedGestureDetector eightGestureRecognizer;
         readonly ColorStreamManager colorManager = new ColorStreamManager();
         readonly DepthStreamManager depthManager = new DepthStreamManager();
@@ -150,10 +150,10 @@ namespace GesturesViewer
 
             kinectSensor.Start();
 
-            //LoadCircleGestureDetector();
+            LoadCircleGestureDetector();
             LoadLetterTPostureDetector();
             //LoadEightGestureDetector();
-            LoadTwoHandsDetector();
+            //LoadTwoHandsDetector();
 
             nuiCamera = new BindableNUICamera(kinectSensor);
 
@@ -246,26 +246,30 @@ namespace GesturesViewer
                 if (!contextTracker.IsStableRelativeToCurrentSpeed(skeleton.TrackingId))
                     continue;
 
+               //k if (skeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && skeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked)
+                    //twoHandsGestureRecognizer.Add(skeleton, kinectSensor);
+
                 foreach (Joint joint in skeleton.Joints)
                 {
                     if (joint.TrackingState != JointTrackingState.Tracked)
                         continue;
 
+
                     if (joint.JointType == JointType.HandRight)
                     {
                         //swipeGestureRecognizer.Add(joint.Position, kinectSensor);
                         //eightGestureRecognizer.Add(joint.Position, kinectSensor);
-                        twoHandsGestureRecognizer.Add(joint.Position, kinectSensor, true);
-                        //circleGestureRecognizer.Add(joint.Position, kinectSensor);
+
+                        circleGestureRecognizer.Add(joint.Position, kinectSensor);
                     }
                     else if (joint.JointType == JointType.HandLeft && controlMouse.IsChecked == true)
                     {
                         MouseController.Current.SetHandPosition(kinectSensor, joint, skeleton);
                     }
-                    else if (joint.JointType == JointType.HandLeft)
-                    {
-                        twoHandsGestureRecognizer.Add(joint.Position, kinectSensor, false);
-                    }
+                    //else if (joint.JointType == JointType.HandLeft)
+                    //{
+                    //    twoHandsGestureRecognizer.Add(joint.Position, kinectSensor);
+                    //}
                 }
 
                 algorithmicPostureRecognizer.TrackPostures(skeleton);
@@ -428,6 +432,8 @@ namespace GesturesViewer
 
             kinectSensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Default;
         }
+
+      
 
      
        

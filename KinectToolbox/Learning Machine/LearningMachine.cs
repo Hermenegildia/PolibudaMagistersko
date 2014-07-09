@@ -83,6 +83,39 @@ namespace Kinect.Toolbox
 
         public void AddPath(RecordedPath path)
         {
+            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\rozmontowane_gesty_przed_packiem_x.txt"))
+            {
+                writer.Write(string.Empty);
+            }
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\rozmontowane_gesty_przed_packiem_y.txt"))
+            {
+                writer.Write(string.Empty);
+            }
+
+
+            StringBuilder sbX = new StringBuilder();
+            StringBuilder sbY = new StringBuilder();
+
+            //sb.AppendLine("next vector " + DateTime.Now.ToString());
+            foreach (Vector2 point in path.Points)
+            {
+                sbX.AppendLine(point.X.ToString(System.Globalization.CultureInfo.InvariantCulture));// + " y: " + point.Y.ToString());
+                sbY.AppendLine(point.Y.ToString(System.Globalization.CultureInfo.InvariantCulture));
+
+            }
+            //sbX.AppendLine();
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\rozmontowane_gesty_przed_packiem_x.txt", true))
+            {
+                writer.Write(sbX.ToString());
+            }
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\rozmontowane_gesty_przed_packiem_y.txt", true))
+            {
+                writer.Write(sbY.ToString());
+            }
+
+
+           
             path.CloseAndPrepare();
             Paths.Add(path);
         }
