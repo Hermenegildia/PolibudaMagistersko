@@ -218,6 +218,9 @@ namespace GesturesViewer
             if (replay != null && !replay.IsFinished)
                 return;
 
+
+          
+
             using (SkeletonFrame frame = e.OpenSkeletonFrame())
             {
                 if (frame == null)
@@ -228,30 +231,71 @@ namespace GesturesViewer
 
                 frame.GetSkeletons(ref skeletons);
 
+                
                 if (skeletons.All(s => s.TrackingState == SkeletonTrackingState.NotTracked))
                     return;
+
+             
 
                 ProcessFrame(frame);
             }
         }
 
+        private int TrackClosestSkeleton(Skeleton[] skeletons)
+        {
+
+            if (!this.kinectSensor.SkeletonStream.AppChoosesSkeletons)
+            {
+                this.kinectSensor.SkeletonStream.AppChoosesSkeletons = true; // Ensure AppChoosesSkeletons is set
+            }
+
+            float closestDistance = 10000f; // Start with a far enough distance
+            int closestID = 0;
+
+            foreach (Skeleton skeleton in skeletons.Where(s => s.TrackingState != SkeletonTrackingState.NotTracked))
+            {
+                if (skeleton.Position.Z < closestDistance)
+                {
+                    closestID = skeleton.TrackingId;
+                    closestDistance = skeleton.Position.Z;
+                }
+            }
+
+            if (closestID > 0)
+            {
+                this.kinectSensor.SkeletonStream.ChooseSkeletons(closestID); // Track this skeleton
+            }
+
+            return closestID;
+        }
+
+
         void ProcessFrame(ReplaySkeletonFrame frame)
         {
             Dictionary<int, string> stabilities = new Dictionary<int, string>();
-            foreach (var skeleton in frame.Skeletons)
+
+            //dopisany wybór najbliższego szkieletora
+            var skeletonId = TrackClosestSkeleton(frame.Skeletons);
+
+            Skeleton closestSkeleton = frame.Skeletons.Where(skel => skel.TrackingId == skeletonId).First();
+            if (closestSkeleton != null && kinectSensor!= null)
             {
-                if (skeleton.TrackingState != SkeletonTrackingState.Tracked)
-                    continue;
+                //foreach (var skeleton in frame.Skeletons)
+                //{
+                if (closestSkeleton.TrackingState != SkeletonTrackingState.Tracked)
+                    return;
+                //    continue;
 
-                contextTracker.Add(skeleton.Position.ToVector3(), skeleton.TrackingId);
-                stabilities.Add(skeleton.TrackingId, contextTracker.IsStableRelativeToCurrentSpeed(skeleton.TrackingId) ? "Stable" : "Non stable");
-                if (!contextTracker.IsStableRelativeToCurrentSpeed(skeleton.TrackingId))
-                    continue;
+                contextTracker.Add(closestSkeleton.Position.ToVector3(), closestSkeleton.TrackingId);
+                stabilities.Add(closestSkeleton.TrackingId, contextTracker.IsStableRelativeToCurrentSpeed(closestSkeleton.TrackingId) ? "Stable" : "Non stable");
+                if (!contextTracker.IsStableRelativeToCurrentSpeed(closestSkeleton.TrackingId))
+                    return;
+                //continue;
 
-                if (skeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && skeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked)
-                    twoHandsGestureRecognizer.Add(skeleton, kinectSensor);
+                if (closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked)
+                    twoHandsGestureRecognizer.Add(closestSkeleton, kinectSensor);
 
-                foreach (Joint joint in skeleton.Joints)
+                foreach (Joint joint in closestSkeleton.Joints)
                 {
                     if (joint.TrackingState != JointTrackingState.Tracked)
                         continue;
@@ -266,28 +310,30 @@ namespace GesturesViewer
                     }
                     else if (joint.JointType == JointType.HandLeft && controlMouse.IsChecked == true)
                     {
-                        MouseController.Current.SetHandPosition(kinectSensor, joint, skeleton);
+                        MouseController.Current.SetHandPosition(kinectSensor, joint, closestSkeleton);
                     }
                     //else if (joint.JointType == JointType.HandLeft)
                     //{
                     //    twoHandsGestureRecognizer.Add(joint.Position, kinectSensor);
                     //}
+                    // }
+
+                    algorithmicPostureRecognizer.TrackPostures(closestSkeleton);
+                    //templatePostureDetector.TrackPostures(skeleton);
+
+                    if (recordNextFrameForPosture)
+                    {
+                        templatePostureDetector.AddTemplate(closestSkeleton);
+                        recordNextFrameForPosture = false;
+                    }
                 }
 
-                algorithmicPostureRecognizer.TrackPostures(skeleton);
-                //templatePostureDetector.TrackPostures(skeleton);
+                skeletonDisplayManager.Draw(frame.Skeletons, seatedMode.IsChecked == true);
 
-                if (recordNextFrameForPosture)
-                {
-                    templatePostureDetector.AddTemplate(skeleton);
-                    recordNextFrameForPosture = false;
-                }
+                stabilitiesList.ItemsSource = stabilities;
             }
-
-            skeletonDisplayManager.Draw(frame.Skeletons, seatedMode.IsChecked == true);
-
-            stabilitiesList.ItemsSource = stabilities;
         }
+        
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
