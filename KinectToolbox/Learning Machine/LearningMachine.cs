@@ -60,7 +60,7 @@ namespace Kinect.Toolbox
 
 
             //}
-            SavePointsToFile(paths, "rozmontowane_gesty");
+            //SavePointsToFile(paths, "rozmontowane_gesty");
 
             //paths = new List<RecordedPath>();
         }

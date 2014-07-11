@@ -74,7 +74,7 @@ namespace Kinect.Toolbox{
 
             BothHandsEntries.AddRange(Entries);
             BothHandsEntries.AddRange(LeftEntries);
-
+        
          
             //foreach (Entry entry in LeftEntries)
             //    BothHandsEntries.Add(entry);
@@ -129,22 +129,47 @@ namespace Kinect.Toolbox{
 
         public new void Add(Skeleton skeleton, KinectSensor sensor)
         {
-            SkeletonPoint rightPosition;
+            SkeletonPoint rightPosition ;
 
             if (skeleton.Joints[JointType.HandRight].TrackingState == JointTrackingState.Tracked)
             {
                 rightPosition = skeleton.Joints[JointType.HandRight].Position;
-                base.Add(rightPosition, sensor);
+                Entry rightEntry = new Entry { Position = rightPosition.ToVector3(), Time = DateTime.Now };
+                Entries.Add(rightEntry);
+
+                rightEntry.DisplayEllipse = new Ellipse
+                {
+                    Width = 4,
+                    Height = 4,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    StrokeThickness = 2.0,
+                    Stroke = new SolidColorBrush(Colors.Blue),
+                    StrokeLineJoin = PenLineJoin.Round
+                };
+
+                Vector2 leftVector2 = Tools.Convert(sensor, rightPosition);
+
+                float xl = (float)(leftVector2.X * DisplayCanvas.ActualWidth);
+                float yl = (float)(leftVector2.Y * DisplayCanvas.ActualHeight);
+
+                Canvas.SetLeft(rightEntry.DisplayEllipse, xl - rightEntry.DisplayEllipse.Width / 2);
+                Canvas.SetTop(rightEntry.DisplayEllipse, yl - rightEntry.DisplayEllipse.Height / 2);
+
+                DisplayCanvas.Children.Add(rightEntry.DisplayEllipse);
+
+                //base.Add(rightPosition, sensor);
 
                 if (path != null)
                 {
                     //path.Points.Add(rightPosition.ToVector2());
-                    path.Points = pathSorter.Add(rightPosition.ToVector2(), true);
+                    pathSorter.Add(rightPosition.ToVector2(), true);
+                    //path.Points = pathSorter.GetPoints();
                 }
             }
             //Entry rightEntry = new Entry { Position = rightPosition.ToVector3(), Time = DateTime.Now };
             //BothHandsEntries.Add(rightEntry);
-            SkeletonPoint leftPosition;
+            SkeletonPoint leftPosition ;
             if (skeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked)
             {
                 leftPosition = skeleton.Joints[JointType.HandLeft].Position;
@@ -175,7 +200,9 @@ namespace Kinect.Toolbox{
                 if (path != null)
                 {
                     //path.Points.Add(leftPosition.ToVector2());
-                    path.Points = pathSorter.Add(leftPosition.ToVector2(), true);
+                    pathSorter.Add(leftPosition.ToVector2(), true);
+            
+                    //path.Points = pathSorter.GetPoints();
                 }
             }
 
@@ -221,7 +248,8 @@ namespace Kinect.Toolbox{
             }
 
             // Look for gestures
-            LookForGesture();
+       
+              LookForGesture();
 
 
             //if (path != null)
@@ -247,6 +275,7 @@ namespace Kinect.Toolbox{
 
         public void EndRecordTemplate()
         {
+            //path.Points = pathSorter.GetPoints();
             LearningMachine.AddPath(path);
             path = null;
         }
