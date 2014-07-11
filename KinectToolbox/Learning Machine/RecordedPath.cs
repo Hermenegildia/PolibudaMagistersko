@@ -17,12 +17,19 @@ namespace Kinect.Toolbox
         readonly int samplesCount;
         [NonSerialized]
         WriteableBitmap displayBitmap;
+        
 
         public List<Vector2> Points
         {
             get { return points; }
             set { points = value; }
         }
+
+        //public List<VecWithHand> PointsWithHand
+        //{
+        //    get { return pointsWithHand; }
+        //    set { pointsWithHand = value; } //todo: Ala tutaj zrobić, ze dodawanie do pointsWithHand będzie dodawało do Points i sortowało też??
+        //}
 
         public WriteableBitmap DisplayBitmap
         {

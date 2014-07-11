@@ -16,7 +16,7 @@ namespace GesturesViewer
                 circleGestureRecognizer = new TemplatedGestureDetector("Circle", recordStream);
                 circleGestureRecognizer.DisplayCanvas = gesturesCanvas;
                 circleGestureRecognizer.OnGestureDetected += OnGestureDetected;
-
+                
                 MouseController.Current.ClickGestureDetector = circleGestureRecognizer;
             }
         }

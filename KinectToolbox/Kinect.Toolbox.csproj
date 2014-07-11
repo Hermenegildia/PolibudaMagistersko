@@ -65,7 +65,9 @@
       <DependentUpon>PresenceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Gestures\CombinedGestureDetector.cs" />
+    <Compile Include="Gestures\PathSorterEntry.cs" />
     <Compile Include="Gestures\ParellelCombinedGestureDetector.cs" />
+    <Compile Include="Gestures\PathSorter.cs" />
     <Compile Include="Gestures\SerialCombinedGestureDetector.cs" />
     <Compile Include="Gestures\TwoHandsTemplatedGestureDetector.cs" />
     <Compile Include="IStreamManager.cs" />

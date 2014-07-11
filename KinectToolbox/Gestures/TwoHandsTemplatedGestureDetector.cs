@@ -18,6 +18,7 @@ namespace Kinect.Toolbox{
         readonly LearningMachine learningMachine;
         RecordedPath path;
         readonly string gestureName;
+        PathSorter pathSorter = new PathSorter();
 
         readonly List<Entry> leftsEntries = new List<Entry>();
         readonly List<Entry> bothHandsEntries = new List<Entry>();
@@ -73,9 +74,8 @@ namespace Kinect.Toolbox{
 
             BothHandsEntries.AddRange(Entries);
             BothHandsEntries.AddRange(LeftEntries);
-            //foreach (Entry entry in Entries)
-            //    BothHandsEntries.Add(entry);
 
+         
             //foreach (Entry entry in LeftEntries)
             //    BothHandsEntries.Add(entry);
         }
@@ -138,7 +138,8 @@ namespace Kinect.Toolbox{
 
                 if (path != null)
                 {
-                    path.Points.Add(rightPosition.ToVector2());
+                    //path.Points.Add(rightPosition.ToVector2());
+                    path.Points = pathSorter.Add(rightPosition.ToVector2(), true);
                 }
             }
             //Entry rightEntry = new Entry { Position = rightPosition.ToVector3(), Time = DateTime.Now };
@@ -173,7 +174,8 @@ namespace Kinect.Toolbox{
 
                 if (path != null)
                 {
-                    path.Points.Add(leftPosition.ToVector2());
+                    //path.Points.Add(leftPosition.ToVector2());
+                    path.Points = pathSorter.Add(leftPosition.ToVector2(), true);
                 }
             }
 
@@ -252,6 +254,39 @@ namespace Kinect.Toolbox{
         public void SaveState(Stream kbStream)
         {
             LearningMachine.Persist(kbStream);
+        }
+
+        private static void SavePointsToFile(List<Vector2> pointsList, string fileName)
+        {
+            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            StringBuilder sbX = new StringBuilder();
+            StringBuilder sbY = new StringBuilder();
+
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_x.txt")) //wyczysc plik
+            {
+                writer.Write(string.Empty);
+            }
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_y.txt"))
+            {
+                writer.Write(string.Empty);
+            }
+
+            //sb.AppendLine("next vector " + DateTime.Now.ToString());
+            foreach (Vector2 point in pointsList)
+            {
+                sbX.AppendLine(point.X.ToString(System.Globalization.CultureInfo.InvariantCulture));// + " y: " + point.Y.ToString());
+                sbY.AppendLine(point.Y.ToString(System.Globalization.CultureInfo.InvariantCulture));
+
+            }
+            //sbX.AppendLine();
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_x.txt", true))
+            {
+                writer.Write(sbX.ToString());
+            }
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_y.txt", true))
+            {
+                writer.Write(sbY.ToString());
+            }
         }
     }
 }
