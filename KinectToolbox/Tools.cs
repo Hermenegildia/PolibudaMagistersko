@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using Microsoft.Kinect;
+using System.Text;
 
 namespace Kinect.Toolbox
 {
@@ -132,6 +133,82 @@ namespace Kinect.Toolbox
             }
 
             return new Vector2(x / width, y / height);
+        }
+
+
+        //moje dopisane do zapisu do pliku
+        public static void SavePointsToFile(List<Vector2> pointsList, string fileName)
+        {
+            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            StringBuilder sbX = new StringBuilder();
+            StringBuilder sbY = new StringBuilder();
+
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_x.txt")) //wyczysc plik
+            {
+                writer.Write(string.Empty);
+            }
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_y.txt"))
+            {
+                writer.Write(string.Empty);
+            }
+
+            //sb.AppendLine("next vector " + DateTime.Now.ToString());
+            foreach (Vector2 point in pointsList)
+            {
+                sbX.AppendLine(point.X.ToString(System.Globalization.CultureInfo.InvariantCulture));// + " y: " + point.Y.ToString());
+                sbY.AppendLine(point.Y.ToString(System.Globalization.CultureInfo.InvariantCulture));
+
+            }
+            //sbX.AppendLine();
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_x.txt", true))
+            {
+                writer.Write(sbX.ToString());
+            }
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_y.txt", true))
+            {
+                writer.Write(sbY.ToString());
+            }
+        }
+
+        public static void SavePointsToFile(List<RecordedPath> recordedPathsList, string fileName)
+        {
+            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_x.txt")) //wyczysc plik
+            {
+                writer.Write(string.Empty);
+            }
+            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_y.txt"))
+            {
+                writer.Write(string.Empty);
+            }
+
+            //sb.AppendLine("next vector " + DateTime.Now.ToString());
+            foreach (RecordedPath path in recordedPathsList)
+            {
+                StringBuilder sbX = new StringBuilder();
+                StringBuilder sbY = new StringBuilder();
+
+                //sb.AppendLine("next vector " + DateTime.Now.ToString());
+                foreach (Vector2 point in path.Points)
+                {
+                    sbX.AppendLine(point.X.ToString(System.Globalization.CultureInfo.InvariantCulture));// + " y: " + point.Y.ToString());
+                    sbY.AppendLine(point.Y.ToString(System.Globalization.CultureInfo.InvariantCulture));
+
+                }
+                //sbX.AppendLine();
+                using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_x.txt", true))
+                {
+                    writer.Write(sbX.ToString());
+                }
+                using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_y.txt", true))
+                {
+                    writer.Write(sbY.ToString());
+                }
+
+
+            }
+
         }
     }
 }

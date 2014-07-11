@@ -45,7 +45,7 @@ namespace Kinect.Toolbox{
             get { return learningMachine; }
         }
 
-        public TwoHandsTemplatedGestureDetector(string gestureName, Stream kbStream, int windowSize = 80)
+        public TwoHandsTemplatedGestureDetector(string gestureName, Stream kbStream, int windowSize = 120)
             : base(windowSize)
         {
             Epsilon = 0.035f;
@@ -200,7 +200,7 @@ namespace Kinect.Toolbox{
                 if (path != null)
                 {
                     //path.Points.Add(leftPosition.ToVector2());
-                    pathSorter.Add(leftPosition.ToVector2(), true);
+                    pathSorter.Add(leftPosition.ToVector2(), false);
             
                     //path.Points = pathSorter.GetPoints();
                 }
@@ -287,6 +287,7 @@ namespace Kinect.Toolbox{
         public void EndRecordTemplate()
         {
             path.Points = pathSorter.GetPoints();
+            //Tools.SavePointsToFile(path.Points, "do_zapisu");
             LearningMachine.AddPath(path);
             path = null;
         }
@@ -296,37 +297,6 @@ namespace Kinect.Toolbox{
             LearningMachine.Persist(kbStream);
         }
 
-        private static void SavePointsToFile(List<Vector2> pointsList, string fileName)
-        {
-            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            StringBuilder sbX = new StringBuilder();
-            StringBuilder sbY = new StringBuilder();
-
-            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_x.txt")) //wyczysc plik
-            {
-                writer.Write(string.Empty);
-            }
-            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_y.txt"))
-            {
-                writer.Write(string.Empty);
-            }
-
-            //sb.AppendLine("next vector " + DateTime.Now.ToString());
-            foreach (Vector2 point in pointsList)
-            {
-                sbX.AppendLine(point.X.ToString(System.Globalization.CultureInfo.InvariantCulture));// + " y: " + point.Y.ToString());
-                sbY.AppendLine(point.Y.ToString(System.Globalization.CultureInfo.InvariantCulture));
-
-            }
-            //sbX.AppendLine();
-            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_x.txt", true))
-            {
-                writer.Write(sbX.ToString());
-            }
-            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_y.txt", true))
-            {
-                writer.Write(sbY.ToString());
-            }
-        }
+      
     }
 }

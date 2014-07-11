@@ -10,9 +10,14 @@ namespace Kinect.Toolbox
     {
         readonly List<PathSorterEntry> rightHandEntries = new List<PathSorterEntry>();
         readonly List<PathSorterEntry> leftHandEntries = new List<PathSorterEntry>();
-
+        List<PathSorterEntry> extendedEntriesList = new List<PathSorterEntry>();
         public List<PathSorterEntry> ExtendedEntriesList
-        { get { return rightHandEntries.Concat(leftHandEntries).ToList<PathSorterEntry>(); } }
+        { get {
+            extendedEntriesList.AddRange(rightHandEntries);
+            extendedEntriesList.AddRange(leftHandEntries);
+            return extendedEntriesList;
+        }
+        }
 
         public PathSorter()
         {
@@ -34,6 +39,7 @@ namespace Kinect.Toolbox
             {
                 result.Add(entry.Position);
             }
+            Tools.SavePointsToFile(result, "path_sorter");
             return result;
         }
     }

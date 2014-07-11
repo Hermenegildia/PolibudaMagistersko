@@ -106,28 +106,6 @@ namespace Kinect.Toolbox
             return score > minimalScore;
         }
 
-        private static void SavePointsToFile(List<Vector2> pointsList, string fileName)
-        {
-            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            StringBuilder sbX = new StringBuilder();
-            StringBuilder sbY = new StringBuilder();
-
-            //sb.AppendLine("next vector " + DateTime.Now.ToString());
-            foreach (Vector2 point in pointsList)
-            {
-                sbX.AppendLine(point.X.ToString(System.Globalization.CultureInfo.InvariantCulture));// + " y: " + point.Y.ToString());
-                sbY.AppendLine(point.Y.ToString(System.Globalization.CultureInfo.InvariantCulture));
-
-            }
-            //sbX.AppendLine();
-            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_x.txt", true))
-            {
-                writer.Write(sbX.ToString());
-            }
-            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName +"_y.txt", true))
-            {
-                writer.Write(sbY.ToString());
-            }
-        }
+      
     }
 }

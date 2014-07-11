@@ -115,50 +115,20 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
         // Resample to required length then rotate to get first point at 0 radians, scale to 1x1 and finally center the path to (0,0)
         public static List<Vector2> Pack(List<Vector2> positions, int samplesCount)
         {
-            //SavePointsToFile(positions, "dane_wej");
+            Tools.SavePointsToFile(positions, "dane_wej");
             List<Vector2> locals = ProjectListToDefinedCount(positions, samplesCount);
-            //SavePointsToFile(locals, "pomnozona_ilosc");
+            Tools.SavePointsToFile(locals, "pomnozona_ilosc");
             float angle = GetAngleBetween(locals.Center(), positions[0]);
             locals = locals.Rotate(-angle);
 
-            //SavePointsToFile(locals, "obrocone");
+            Tools.SavePointsToFile(locals, "obrocone");
             locals.ScaleToReferenceWorld();
             locals.CenterToOrigin();
 
             return locals;
         }
 
-        private static void SavePointsToFile(List<Vector2> pointsList, string fileName)
-        {
-            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            StringBuilder sbX = new StringBuilder();
-            StringBuilder sbY = new StringBuilder();
-
-            //sb.AppendLine("next vector " + DateTime.Now.ToString());
-            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_x.txt", true))
-            {
-                writer.Write("");
-            }
-            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_y.txt", true))
-            {
-                writer.Write("");
-            }
-            foreach (Vector2 point in pointsList)
-            {
-                sbX.AppendLine(point.X.ToString(System.Globalization.CultureInfo.InvariantCulture));// + " y: " + point.Y.ToString());
-                sbY.AppendLine(point.Y.ToString(System.Globalization.CultureInfo.InvariantCulture));
-
-            }
-            //sbX.AppendLine();
-            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_x.txt", true))
-            {
-                writer.Write(sbX.ToString());
-            }
-            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_y.txt", true))
-            {
-                writer.Write(sbY.ToString());
-            }
-        }
+   
     }
 }
 

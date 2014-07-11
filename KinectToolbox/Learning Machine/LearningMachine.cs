@@ -61,7 +61,7 @@ namespace Kinect.Toolbox
 
             //}
             if(((System.IO.FileStream)kbStream).Name.Contains("twoHands"))
-                SavePointsToFile(paths, "rozmontowane_gesty");  
+                Tools.SavePointsToFile(paths, "rozmontowane_gesty");  
 
             //paths = new List<RecordedPath>();
         }
@@ -90,78 +90,6 @@ namespace Kinect.Toolbox
             Paths.Add(path);
         }
 
-        private static void SavePointsToFile(List<Vector2> pointsList, string fileName)
-        {
-            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            StringBuilder sbX = new StringBuilder();
-            StringBuilder sbY = new StringBuilder();
-
-            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_x.txt")) //wyczysc plik
-            {
-                writer.Write(string.Empty);
-            }
-            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_y.txt"))
-            {
-                writer.Write(string.Empty);
-            }
-
-            //sb.AppendLine("next vector " + DateTime.Now.ToString());
-            foreach (Vector2 point in pointsList)
-            {
-                sbX.AppendLine(point.X.ToString(System.Globalization.CultureInfo.InvariantCulture));// + " y: " + point.Y.ToString());
-                sbY.AppendLine(point.Y.ToString(System.Globalization.CultureInfo.InvariantCulture));
-
-            }
-            //sbX.AppendLine();
-            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_x.txt", true))
-            {
-                writer.Write(sbX.ToString());
-            }
-            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_y.txt", true))
-            {
-                writer.Write(sbY.ToString());
-            }
-        }
-
-        private static void SavePointsToFile(List<RecordedPath> recordedPathsList, string fileName)
-        {
-            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-
-            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_x.txt")) //wyczysc plik
-            {
-                writer.Write(string.Empty);
-            }
-            using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_y.txt"))
-            {
-                writer.Write(string.Empty);
-            }
-
-            //sb.AppendLine("next vector " + DateTime.Now.ToString());
-            foreach (RecordedPath path in recordedPathsList)
-            {
-                StringBuilder sbX = new StringBuilder();
-                StringBuilder sbY = new StringBuilder();
-
-                //sb.AppendLine("next vector " + DateTime.Now.ToString());
-                foreach (Vector2 point in path.Points)
-                {
-                    sbX.AppendLine(point.X.ToString(System.Globalization.CultureInfo.InvariantCulture));// + " y: " + point.Y.ToString());
-                    sbY.AppendLine(point.Y.ToString(System.Globalization.CultureInfo.InvariantCulture));
-
-                }
-                //sbX.AppendLine();
-                using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_x.txt", true))
-                {
-                    writer.Write(sbX.ToString());
-                }
-                using (StreamWriter writer = new StreamWriter(mydocpath + @"\" + fileName + "_y.txt", true))
-                {
-                    writer.Write(sbY.ToString());
-                }
-
-
-            }
-
-        }
+      
     }
 }
