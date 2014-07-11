@@ -241,7 +241,7 @@ namespace GesturesViewer
                 ProcessFrame(frame);
             }
             //stopwatch.Stop();
-            Debug.WriteLine("Przetwarzanie " + debugCounter++ + " klatki szkieletowej: " + stopwatch.Elapsed.ToString());
+            //Debug.WriteLine("Przetwarzanie " + debugCounter++ + " klatki szkieletowej: " + stopwatch.Elapsed.ToString());
         }
 
         private int TrackClosestSkeleton(Skeleton[] skeletons)

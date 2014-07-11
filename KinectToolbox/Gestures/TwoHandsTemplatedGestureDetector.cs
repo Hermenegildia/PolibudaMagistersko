@@ -45,7 +45,7 @@ namespace Kinect.Toolbox{
             get { return learningMachine; }
         }
 
-        public TwoHandsTemplatedGestureDetector(string gestureName, Stream kbStream, int windowSize = 120)
+        public TwoHandsTemplatedGestureDetector(string gestureName, Stream kbStream, int windowSize = 80)
             : base(windowSize)
         {
             Epsilon = 0.035f;
@@ -269,13 +269,24 @@ namespace Kinect.Toolbox{
 
         public void StartRecordTemplate()
         {
-            BothHandsEntries.Clear();
+            ClearEntries(Entries);  //nagrywanie czysci stare kropki
+            ClearEntries(LeftEntries);
             path = new RecordedPath(WindowSize);
+        }
+
+        private void ClearEntries(List<Entry> entriesList) //dopisane przeze mnie - czyściciel kropek 
+        {
+            if (DisplayCanvas != null)
+            {
+                DisplayCanvas.Children.Clear();
+            }
+            
+                Entries.Clear();
         }
 
         public void EndRecordTemplate()
         {
-            //path.Points = pathSorter.GetPoints();
+            path.Points = pathSorter.GetPoints();
             LearningMachine.AddPath(path);
             path = null;
         }

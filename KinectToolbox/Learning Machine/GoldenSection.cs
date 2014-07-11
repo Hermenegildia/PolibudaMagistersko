@@ -115,12 +115,13 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
         // Resample to required length then rotate to get first point at 0 radians, scale to 1x1 and finally center the path to (0,0)
         public static List<Vector2> Pack(List<Vector2> positions, int samplesCount)
         {
+            //SavePointsToFile(positions, "dane_wej");
             List<Vector2> locals = ProjectListToDefinedCount(positions, samplesCount);
-            //SavePointsToFile(locals, "rozmontowane_gesty_przed_obrotem");
+            //SavePointsToFile(locals, "pomnozona_ilosc");
             float angle = GetAngleBetween(locals.Center(), positions[0]);
             locals = locals.Rotate(-angle);
 
-            //SavePointsToFile(locals, "rozmontowane_gesty_po_packu");
+            //SavePointsToFile(locals, "obrocone");
             locals.ScaleToReferenceWorld();
             locals.CenterToOrigin();
 

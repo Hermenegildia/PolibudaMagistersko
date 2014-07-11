@@ -60,7 +60,8 @@ namespace Kinect.Toolbox
 
 
             //}
-            //SavePointsToFile(paths, "rozmontowane_gesty");
+            if(((System.IO.FileStream)kbStream).Name.Contains("twoHands"))
+                SavePointsToFile(paths, "rozmontowane_gesty");  
 
             //paths = new List<RecordedPath>();
         }
@@ -78,7 +79,7 @@ namespace Kinect.Toolbox
         public void Persist(Stream kbStream)
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            SavePointsToFile(Paths, "sciezki_do_serializacji");
+            //SavePointsToFile(Paths, "sciezki_do_serializacji");
             formatter.Serialize(kbStream, Paths);
         }
 
