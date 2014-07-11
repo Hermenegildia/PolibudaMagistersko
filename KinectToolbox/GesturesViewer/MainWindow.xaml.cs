@@ -19,11 +19,11 @@ namespace GesturesViewer
     {
         KinectSensor kinectSensor;
 
-        //SwipeGestureDetector swipeGestureRecognizer;
+        SwipeGestureDetector swipeGestureRecognizer;
         TemplatedGestureDetector circleGestureRecognizer;
-        SerialCombinedGestureDetector serialCombinedGestureDetector;
+        //SerialCombinedGestureDetector serialCombinedGestureDetector;
         TwoHandsTemplatedGestureDetector twoHandsGestureRecognizer;
-        TemplatedGestureDetector eightGestureRecognizer;
+        //TemplatedGestureDetector eightGestureRecognizer;
         readonly ColorStreamManager colorManager = new ColorStreamManager();
         readonly DepthStreamManager depthManager = new DepthStreamManager();
         AudioStreamManager audioManager;
@@ -33,9 +33,6 @@ namespace GesturesViewer
         TemplatedPostureDetector templatePostureDetector;
         private bool recordNextFrameForPosture;
         bool displayDepth;
-
-
-        int debugCounter = 0;
 
         string circleKBPath;
         string letterT_KBPath;
@@ -148,8 +145,8 @@ namespace GesturesViewer
                                              });
             kinectSensor.SkeletonFrameReady += kinectRuntime_SkeletonFrameReady;
 
-            //swipeGestureRecognizer = new SwipeGestureDetector();
-            //swipeGestureRecognizer.OnGestureDetected += OnGestureDetected;
+            swipeGestureRecognizer = new SwipeGestureDetector();
+            swipeGestureRecognizer.OnGestureDetected += OnGestureDetected;
 
             skeletonDisplayManager = new SkeletonDisplayManager(kinectSensor, kinectCanvas);
 
@@ -157,8 +154,8 @@ namespace GesturesViewer
 
             LoadCircleGestureDetector();
             LoadLetterTPostureDetector();
-            LoadEightGestureDetector();
-            LoadSerialCombinedGestureDetector();
+            //LoadEightGestureDetector();
+            //LoadSerialCombinedGestureDetector();
             LoadTwoHandsDetector();
 
             nuiCamera = new BindableNUICamera(kinectSensor);
@@ -246,30 +243,34 @@ namespace GesturesViewer
 
         private int TrackClosestSkeleton(Skeleton[] skeletons)
         {
-
-            if (!this.kinectSensor.SkeletonStream.AppChoosesSkeletons)
+            if (this.kinectSensor != null)
             {
-                this.kinectSensor.SkeletonStream.AppChoosesSkeletons = true; // Ensure AppChoosesSkeletons is set
-            }
 
-            float closestDistance = 10000f; // Start with a far enough distance
-            int closestID = 0;
-
-            foreach (Skeleton skeleton in skeletons.Where(s => s.TrackingState != SkeletonTrackingState.NotTracked))
-            {
-                if (skeleton.Position.Z < closestDistance)
+                if (!this.kinectSensor.SkeletonStream.AppChoosesSkeletons)
                 {
-                    closestID = skeleton.TrackingId;
-                    closestDistance = skeleton.Position.Z;
+                    this.kinectSensor.SkeletonStream.AppChoosesSkeletons = true; // Ensure AppChoosesSkeletons is set
                 }
-            }
 
-            if (closestID > 0)
-            {
-                this.kinectSensor.SkeletonStream.ChooseSkeletons(closestID); // Track this skeleton
-            }
+                float closestDistance = 10000f; // Start with a far enough distance
+                int closestID = 0;
 
-            return closestID;
+                foreach (Skeleton skeleton in skeletons.Where(s => s.TrackingState != SkeletonTrackingState.NotTracked))
+                {
+                    if (skeleton.Position.Z < closestDistance)
+                    {
+                        closestID = skeleton.TrackingId;
+                        closestDistance = skeleton.Position.Z;
+                    }
+                }
+
+                if (closestID > 0)
+                {
+                    this.kinectSensor.SkeletonStream.ChooseSkeletons(closestID); // Track this skeleton
+                }
+                return closestID;
+            }
+            else return -1;
+           
         }
 
 
@@ -281,7 +282,7 @@ namespace GesturesViewer
                 //dopisany wybór najbliższego szkieletora
                 var skeletonId = TrackClosestSkeleton(frame.Skeletons);
 
-                Skeleton closestSkeleton = frame.Skeletons.Where(skel => skel.TrackingId == skeletonId).First();
+                Skeleton closestSkeleton = frame.Skeletons.Where(skel => skel.TrackingId == skeletonId).FirstOrDefault();
                 if (closestSkeleton != null && kinectSensor != null)
                 {
                     //foreach (var skeleton in frame.Skeletons)
@@ -307,8 +308,8 @@ namespace GesturesViewer
 
                         if (joint.JointType == JointType.HandRight)
                         {
-                            //swipeGestureRecognizer.Add(joint.Position, kinectSensor);
-                            eightGestureRecognizer.Add(joint.Position, kinectSensor);
+                            swipeGestureRecognizer.Add(joint.Position, kinectSensor);
+                            //eightGestureRecognizer.Add(joint.Position, kinectSensor);
 
                             circleGestureRecognizer.Add(joint.Position, kinectSensor);
                         }
@@ -347,10 +348,10 @@ namespace GesturesViewer
 
         private void Clean()
         {
-            //if (swipeGestureRecognizer != null)
-            //{
-            //    swipeGestureRecognizer.OnGestureDetected -= OnGestureDetected;
-            //}
+            if (swipeGestureRecognizer != null)
+            {
+                swipeGestureRecognizer.OnGestureDetected -= OnGestureDetected;
+            }
 
             if (audioManager != null)
             {

@@ -23,26 +23,26 @@ namespace GesturesViewer
 
     
 
-        void LoadSerialCombinedGestureDetector()
-        {
-            serialCombinedGestureDetector = new SerialCombinedGestureDetector(50000);
-            serialCombinedGestureDetector.Add(circleGestureRecognizer);
-            serialCombinedGestureDetector.Add(eightGestureRecognizer);
+        //void LoadSerialCombinedGestureDetector()
+        //{
+        //    serialCombinedGestureDetector = new SerialCombinedGestureDetector(50000);
+        //    serialCombinedGestureDetector.Add(circleGestureRecognizer);
+        //    serialCombinedGestureDetector.Add(eightGestureRecognizer);
 
-            serialCombinedGestureDetector.OnGestureDetected += OnGestureDetected;
-        }
+        //    serialCombinedGestureDetector.OnGestureDetected += OnGestureDetected;
+        //}
 
-        void LoadEightGestureDetector()
-        {
-            using (Stream recordStream = File.Open(nowy_gest, FileMode.OpenOrCreate))
-            {
-                eightGestureRecognizer = new TemplatedGestureDetector("Ósemeczka!", recordStream);
-                eightGestureRecognizer.DisplayCanvas = gesturesCanvas;
-                eightGestureRecognizer.OnGestureDetected += OnGestureDetected;
+        //void LoadEightGestureDetector()
+        //{
+        //    using (Stream recordStream = File.Open(nowy_gest, FileMode.OpenOrCreate))
+        //    {
+        //        eightGestureRecognizer = new TemplatedGestureDetector("Ósemeczka!", recordStream);
+        //        eightGestureRecognizer.DisplayCanvas = gesturesCanvas;
+        //        eightGestureRecognizer.OnGestureDetected += OnGestureDetected;
 
-                //MouseController.Current.ClickGestureDetector = circleGestureRecognizer;
-            }
-        }
+        //        //MouseController.Current.ClickGestureDetector = circleGestureRecognizer;
+        //    }
+        //}
 
         void LoadTwoHandsDetector()
         {
@@ -90,9 +90,16 @@ namespace GesturesViewer
 
         void OnGestureDetected(string gesture)
         {
-            int pos = detectedGestures.Items.Add(string.Format("{0} : {1}", gesture, DateTime.Now));
-
-            detectedGestures.SelectedIndex = pos;
+            if (gesture.Contains("Swipe"))
+            {
+                //gesturesCanvas.Children.Clear();
+                twoHandsGestureRecognizer.ClearEntries();
+            }
+            else //dla Swipe czysc kropki, a dla innych gestow wyswietl nazwe w listboxie
+            {
+                int pos = detectedGestures.Items.Add(string.Format("{0} : {1}", gesture, DateTime.Now));
+                detectedGestures.SelectedIndex = pos;
+            }
         }
 
         void CloseGestureDetector()
@@ -109,20 +116,20 @@ namespace GesturesViewer
             }
 
             //obsługa mojego gestu ósemeczki
-            if (eightGestureRecognizer != null)
-            {
+            //if (eightGestureRecognizer != null)
+            //{
 
-                using (Stream recordStream = File.Create(nowy_gest))
-                {
-                    eightGestureRecognizer.SaveState(recordStream);
-                }
-                eightGestureRecognizer.OnGestureDetected -= OnGestureDetected;
-            }
+            //    using (Stream recordStream = File.Create(nowy_gest))
+            //    {
+            //        eightGestureRecognizer.SaveState(recordStream);
+            //    }
+            //    eightGestureRecognizer.OnGestureDetected -= OnGestureDetected;
+            //}
 
-            if (serialCombinedGestureDetector != null)
-            {
-                serialCombinedGestureDetector.OnGestureDetected -= OnGestureDetected;
-            }
+            //if (serialCombinedGestureDetector != null)
+            //{
+            //    serialCombinedGestureDetector.OnGestureDetected -= OnGestureDetected;
+            //}
 
             //obsługa mojego gestu dwuręcznego
             if (twoHandsGestureRecognizer != null)

@@ -39,7 +39,7 @@ namespace Kinect.Toolbox
             {
                 result.Add(entry.Position);
             }
-            Tools.SavePointsToFile(result, "path_sorter");
+            //Tools.SavePointsToFile(result, "path_sorter");
             return result;
         }
     }
