@@ -97,6 +97,8 @@ namespace GesturesViewer
             }
             else //dla Swipe czysc kropki, a dla innych gestow wyswietl nazwe w listboxie
             {
+                if (gesture.Contains("dwur"))
+                    detectedGestures.Items.Clear();
                 int pos = detectedGestures.Items.Add(string.Format("{0} : {1}", gesture, DateTime.Now));
                 detectedGestures.SelectedIndex = pos;
             }

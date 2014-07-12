@@ -127,7 +127,7 @@ namespace Kinect.Toolbox{
         //    LookForGesture();
         //}
 
-        public new void Add(Skeleton skeleton, KinectSensor sensor)
+        public void Add(Skeleton skeleton, KinectSensor sensor)
         {
             SkeletonPoint rightPosition ;
 
@@ -144,7 +144,7 @@ namespace Kinect.Toolbox{
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top,
                     StrokeThickness = 2.0,
-                    Stroke = new SolidColorBrush(Colors.Blue),
+                    Stroke = new SolidColorBrush(DisplayColor),
                     StrokeLineJoin = PenLineJoin.Round
                 };
 
@@ -280,8 +280,13 @@ namespace Kinect.Toolbox{
             {
                 DisplayCanvas.Children.Clear();
             }
-            
                 Entries.Clear();
+        }
+
+        public void ClearEntries() //dopisane przeze mnie - czyściciel kropek 
+        {
+            ClearEntries(Entries);  //czysci stare kropki
+            ClearEntries(LeftEntries);
         }
 
         public void EndRecordTemplate()
@@ -290,6 +295,7 @@ namespace Kinect.Toolbox{
             //Tools.SavePointsToFile(path.Points, "do_zapisu");
             LearningMachine.AddPath(path);
             path = null;
+
         }
 
         public void SaveState(Stream kbStream)

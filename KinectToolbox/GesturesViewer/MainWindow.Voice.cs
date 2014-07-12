@@ -5,10 +5,10 @@ namespace GesturesViewer
 {
     partial class MainWindow
     {
-        void StartVoiceCommander()
-        {
-            voiceCommander.Start(kinectSensor);
-        }
+        //void StartVoiceCommander()
+        //{
+        //    voiceCommander.Start(kinectSensor);
+        //}
 
         void voiceCommander_OrderDetected(string order)
         {

@@ -46,7 +46,7 @@ namespace GesturesViewer
 
         private Skeleton[] skeletons;
 
-        VoiceCommander voiceCommander;
+        //VoiceCommander voiceCommander;
 
         public MainWindow()
         {
@@ -162,10 +162,10 @@ namespace GesturesViewer
 
             elevationSlider.DataContext = nuiCamera;
 
-            voiceCommander = new VoiceCommander("record", "stop");
-            voiceCommander.OrderDetected += voiceCommander_OrderDetected;
+            //voiceCommander = new VoiceCommander("record", "stop");
+            //voiceCommander.OrderDetected += voiceCommander_OrderDetected;
 
-            StartVoiceCommander();
+            //StartVoiceCommander();
 
             kinectDisplay.DataContext = colorManager;
         }
@@ -363,12 +363,12 @@ namespace GesturesViewer
 
             ClosePostureDetector();
 
-            if (voiceCommander != null)
-            {
-                voiceCommander.OrderDetected -= voiceCommander_OrderDetected;
-                voiceCommander.Stop();
-                voiceCommander = null;
-            }
+            //if (voiceCommander != null)
+            //{
+            //    voiceCommander.OrderDetected -= voiceCommander_OrderDetected;
+            //    voiceCommander.Stop();
+            //    voiceCommander = null;
+            //}
 
             if (recorder != null)
             {
