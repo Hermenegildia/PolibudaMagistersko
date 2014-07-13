@@ -23,6 +23,7 @@ namespace GesturesViewer
         TemplatedGestureDetector circleGestureRecognizer;
         //SerialCombinedGestureDetector serialCombinedGestureDetector;
         TwoHandsTemplatedGestureDetector twoHandsGestureRecognizer;
+        TwoHandsTemplatedGestureDetector rotationGestureRecognizer;
         //TemplatedGestureDetector eightGestureRecognizer;
         readonly ColorStreamManager colorManager = new ColorStreamManager();
         readonly DepthStreamManager depthManager = new DepthStreamManager();
@@ -38,6 +39,7 @@ namespace GesturesViewer
         string letterT_KBPath;
         string nowy_gest;
         string twoHandsKBPath;
+        string rotationKBPath;
 
         KinectRecorder recorder;
         KinectReplay replay;
@@ -93,6 +95,7 @@ namespace GesturesViewer
             letterT_KBPath = Path.Combine(currentDirectory, @"data\t_KB.save");
             nowy_gest = Path.Combine(currentDirectory, @"data\nowy_gest.save");
             twoHandsKBPath = Path.Combine(currentDirectory, @"data\twoHandsKBPath.save");
+            rotationKBPath = Path.Combine(currentDirectory, @"data\rotationKBPath.save");
 
             try
             {
@@ -113,7 +116,6 @@ namespace GesturesViewer
                     MessageBox.Show("No Kinect found");
                 else
                     Initialize();
-
             }
             catch (Exception ex)
             {
@@ -219,8 +221,6 @@ namespace GesturesViewer
             if (replay != null && !replay.IsFinished)
                 return;
 
-            //Stopwatch stopwatch = new Stopwatch();
-            //stopwatch.Start();
             using (SkeletonFrame frame = e.OpenSkeletonFrame())
             {
                 if (frame == null)
@@ -237,8 +237,7 @@ namespace GesturesViewer
 
                 ProcessFrame(frame);
             }
-            //stopwatch.Stop();
-            //Debug.WriteLine("Przetwarzanie " + debugCounter++ + " klatki szkieletowej: " + stopwatch.Elapsed.ToString());
+           
         }
 
         private int TrackClosestSkeleton(Skeleton[] skeletons)
@@ -298,7 +297,10 @@ namespace GesturesViewer
                     //continue;
 
                     if (closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked)
-                        twoHandsGestureRecognizer.Add(closestSkeleton, kinectSensor);
+                    {
+                        //twoHandsGestureRecognizer.Add(closestSkeleton, kinectSensor);
+                        rotationGestureRecognizer.Add(closestSkeleton, kinectSensor);
+                    }
 
                     foreach (Joint joint in closestSkeleton.Joints)
                     {
@@ -311,7 +313,7 @@ namespace GesturesViewer
                             swipeGestureRecognizer.Add(joint.Position, kinectSensor);
                             //eightGestureRecognizer.Add(joint.Position, kinectSensor);
 
-                            circleGestureRecognizer.Add(joint.Position, kinectSensor);
+                            //circleGestureRecognizer.Add(joint.Position, kinectSensor);
                         }
                         else if (joint.JointType == JointType.HandLeft && controlMouse.IsChecked == true)
                         {

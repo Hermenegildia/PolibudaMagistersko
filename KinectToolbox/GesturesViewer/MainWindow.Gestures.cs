@@ -51,8 +51,13 @@ namespace GesturesViewer
                 twoHandsGestureRecognizer = new TwoHandsTemplatedGestureDetector("Geścik dwuręczniasty!", recordStream);
                 twoHandsGestureRecognizer.DisplayCanvas = gesturesCanvas;
                 twoHandsGestureRecognizer.OnGestureDetected += OnGestureDetected;
+            }
 
-               
+            using (Stream recordStream = File.Open(rotationKBPath, FileMode.OpenOrCreate))
+            {
+                rotationGestureRecognizer = new TwoHandsTemplatedGestureDetector("Rotacja", recordStream);
+                rotationGestureRecognizer.DisplayCanvas = gesturesCanvas;
+                rotationGestureRecognizer.OnGestureDetected += OnGestureDetected;
             }
         }
 
@@ -77,14 +82,25 @@ namespace GesturesViewer
 
             //eightGestureRecognizer.StartRecordTemplate();
 
-            if (twoHandsGestureRecognizer.IsRecordingPath)
+            //if (twoHandsGestureRecognizer.IsRecordingPath)
+            //{
+            //    twoHandsGestureRecognizer.EndRecordTemplate();
+            //    recordGesture.Content = "Record Gesture";
+            //    return;
+            //}
+
+            //twoHandsGestureRecognizer.StartRecordTemplate();
+
+
+            if (rotationGestureRecognizer.IsRecordingPath)
             {
-                twoHandsGestureRecognizer.EndRecordTemplate();
+                rotationGestureRecognizer.EndRecordTemplate();
                 recordGesture.Content = "Record Gesture";
                 return;
             }
 
-            twoHandsGestureRecognizer.StartRecordTemplate();
+            rotationGestureRecognizer.StartRecordTemplate();
+
             recordGesture.Content = "Stop Recording";
         }
 
@@ -142,6 +158,16 @@ namespace GesturesViewer
                     twoHandsGestureRecognizer.SaveState(recordStream);
                 }
                 twoHandsGestureRecognizer.OnGestureDetected -= OnGestureDetected;
+            }
+
+            if (rotationGestureRecognizer != null)
+            {
+
+                using (Stream recordStream = File.Create(rotationKBPath))
+                {
+                    rotationGestureRecognizer.SaveState(recordStream);
+                }
+                rotationGestureRecognizer.OnGestureDetected -= OnGestureDetected;
             }
         }
     }

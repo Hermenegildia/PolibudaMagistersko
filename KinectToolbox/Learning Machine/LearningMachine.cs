@@ -60,8 +60,8 @@ namespace Kinect.Toolbox
 
 
             //}
-            if(((System.IO.FileStream)kbStream).Name.Contains("twoHands"))
-                Tools.SavePointsToFile(paths, "rozmontowane_gesty");  
+            if(((System.IO.FileStream)kbStream).Name.Contains("rotation"))
+                Tools.SavePointsToFile(paths, "rotation");  
 
             //paths = new List<RecordedPath>();
         }
