@@ -63,15 +63,15 @@ namespace GesturesViewer
 
         private void recordGesture_Click(object sender, RoutedEventArgs e)
         {
-            //if (circleGestureRecognizer.IsRecordingPath)
-            //{
-            //    circleGestureRecognizer.EndRecordTemplate();
-            //    recordGesture.Content = "Record Gesture";
-            //    return;
-            //}
+            if (circleGestureRecognizer.IsRecordingPath)
+            {
+                circleGestureRecognizer.EndRecordTemplate();
+                recordGesture.Content = "Record Gesture";
+                return;
+            }
 
-            //circleGestureRecognizer.StartRecordTemplate();
-            //recordGesture.Content = "Stop Recording";
+            circleGestureRecognizer.StartRecordTemplate();
+            recordGesture.Content = "Stop Recording";
 
             //if (eightGestureRecognizer.IsRecordingPath)
             //{
@@ -92,16 +92,16 @@ namespace GesturesViewer
             //twoHandsGestureRecognizer.StartRecordTemplate();
 
 
-            if (rotationGestureRecognizer.IsRecordingPath)
-            {
-                rotationGestureRecognizer.EndRecordTemplate();
-                recordGesture.Content = "Record Gesture";
-                return;
-            }
+            //if (rotationGestureRecognizer.IsRecordingPath)
+            //{
+            //    rotationGestureRecognizer.EndRecordTemplate();
+            //    recordGesture.Content = "Record Gesture";
+            //    return;
+            //}
 
-            rotationGestureRecognizer.StartRecordTemplate();
+            //rotationGestureRecognizer.StartRecordTemplate();
 
-            recordGesture.Content = "Stop Recording";
+            //recordGesture.Content = "Stop Recording";
         }
 
         void OnGestureDetected(string gesture)

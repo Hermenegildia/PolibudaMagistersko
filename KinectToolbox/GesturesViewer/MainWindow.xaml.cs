@@ -313,7 +313,7 @@ namespace GesturesViewer
                             swipeGestureRecognizer.Add(joint.Position, kinectSensor);
                             //eightGestureRecognizer.Add(joint.Position, kinectSensor);
 
-                            //circleGestureRecognizer.Add(joint.Position, kinectSensor);
+                            circleGestureRecognizer.Add(joint.Position, kinectSensor);
                         }
                         else if (joint.JointType == JointType.HandLeft && controlMouse.IsChecked == true)
                         {
