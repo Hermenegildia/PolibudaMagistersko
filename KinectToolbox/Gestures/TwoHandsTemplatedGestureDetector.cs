@@ -149,7 +149,7 @@ namespace Kinect.Toolbox{
                 };
 
                 Vector2 leftVector2 = Tools.Convert(sensor, rightPosition);
-
+                
                 float xl = (float)(leftVector2.X * DisplayCanvas.ActualWidth);
                 float yl = (float)(leftVector2.Y * DisplayCanvas.ActualHeight);
 
@@ -293,7 +293,8 @@ namespace Kinect.Toolbox{
         {
             path.Points = pathSorter.GetPoints();
             //Tools.SavePointsToFile(path.Points, "do_zapisu");
-            LearningMachine.AddPath(path);
+            //LearningMachine.AddPath(path);
+            LearningMachine.AddPath(
             path = null;
 
         }

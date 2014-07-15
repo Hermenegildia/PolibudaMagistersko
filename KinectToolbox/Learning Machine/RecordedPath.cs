@@ -13,10 +13,10 @@ namespace Kinect.Toolbox
     [Serializable]
     public class RecordedPath //szablon, template
     {
-        List<Vector2> points;
-        readonly int samplesCount;
+        protected List<Vector2> points;
+        protected readonly int samplesCount;
         [NonSerialized]
-        WriteableBitmap displayBitmap;
+        protected WriteableBitmap displayBitmap;
         
 
         public List<Vector2> Points
@@ -35,45 +35,50 @@ namespace Kinect.Toolbox
         {
             get
             {
-                if (displayBitmap == null)
+                return GetDisplayBitmap();
+            }
+        }
+
+        protected WriteableBitmap GetDisplayBitmap()
+        {
+            if (displayBitmap == null)
+            {
+                displayBitmap = new WriteableBitmap(200, 140, 96.0, 96.0, PixelFormats.Bgra32, null);
+
+                byte[] buffer = new byte[displayBitmap.PixelWidth * displayBitmap.PixelHeight * 4];
+
+                foreach (Vector2 point in points)
                 {
-                    displayBitmap = new WriteableBitmap(200, 140, 96.0, 96.0, PixelFormats.Bgra32, null);
+                    int scaleX = (int)((point.X + 0.5f) * displayBitmap.PixelWidth);
+                    int scaleY = (int)((point.Y + 0.5f) * displayBitmap.PixelHeight);
 
-                    byte[] buffer = new byte[displayBitmap.PixelWidth * displayBitmap.PixelHeight * 4];
-
-                    foreach (Vector2 point in points)
+                    for (int x = scaleX - 2; x <= scaleX + 2; x++)
                     {
-                        int scaleX = (int)((point.X + 0.5f) * displayBitmap.PixelWidth);
-                        int scaleY = (int)((point.Y + 0.5f) * displayBitmap.PixelHeight);
-
-                        for (int x = scaleX - 2; x <= scaleX + 2; x++)
+                        for (int y = scaleY - 2; y <= scaleY + 2; y++)
                         {
-                            for (int y = scaleY - 2; y <= scaleY + 2; y++)
-                            {
-                                int clipX = Math.Max(0, Math.Min(displayBitmap.PixelWidth - 1, x));
-                                int clipY = Math.Max(0, Math.Min(displayBitmap.PixelHeight - 1, y));
-                                int index = (clipX + clipY * displayBitmap.PixelWidth) * 4;
+                            int clipX = Math.Max(0, Math.Min(displayBitmap.PixelWidth - 1, x));
+                            int clipY = Math.Max(0, Math.Min(displayBitmap.PixelHeight - 1, y));
+                            int index = (clipX + clipY * displayBitmap.PixelWidth) * 4;
 
-                                buffer[index] = 255;
-                                buffer[index + 1] = 0;
-                                buffer[index + 2] = 0;
-                                buffer[index + 3] = 255;
-                            }
+                            buffer[index] = 255;
+                            buffer[index + 1] = 0;
+                            buffer[index + 2] = 0;
+                            buffer[index + 3] = 255;
                         }
                     }
-
-                    displayBitmap.Lock();
-
-                    int stride = displayBitmap.PixelWidth * displayBitmap.Format.BitsPerPixel / 8;
-                    Int32Rect dirtyRect = new Int32Rect(0, 0, displayBitmap.PixelWidth, displayBitmap.PixelHeight);
-                    displayBitmap.WritePixels(dirtyRect, buffer, stride, 0);
-                    //displayBitmap.AddDirtyRect(dirtyRect);
-
-                    displayBitmap.Unlock();
                 }
 
-                return displayBitmap;
+                displayBitmap.Lock();
+
+                int stride = displayBitmap.PixelWidth * displayBitmap.Format.BitsPerPixel / 8;
+                Int32Rect dirtyRect = new Int32Rect(0, 0, displayBitmap.PixelWidth, displayBitmap.PixelHeight);
+                displayBitmap.WritePixels(dirtyRect, buffer, stride, 0);
+                //displayBitmap.AddDirtyRect(dirtyRect);
+
+                displayBitmap.Unlock();
             }
+
+            return displayBitmap;
         }
 
         public RecordedPath(int samplesCount)

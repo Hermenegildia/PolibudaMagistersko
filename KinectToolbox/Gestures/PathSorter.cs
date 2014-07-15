@@ -19,6 +19,16 @@ namespace Kinect.Toolbox
         }
         }
 
+        public List<Vector2> RightHandEntries
+        {
+            get { return rightHandEntries.Select(x => x.Position).ToList<Vector2>(); }
+        }
+
+        public List<Vector2> LeftHandEntries
+        {
+            get { return leftHandEntries.Select(x => x.Position).ToList<Vector2>(); }
+        }
+
         public PathSorter()
         {
         }
