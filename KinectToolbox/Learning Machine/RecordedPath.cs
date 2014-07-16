@@ -97,6 +97,25 @@ namespace Kinect.Toolbox
             points = GoldenSection.Pack(leftPoints, rightPoints, samplesCount);
         }
 
+        public bool Match(List<Vector2> leftPositions, List<Vector2> rightPositions, float threshold, float minimalScore, float minSize)
+        {
+            if (leftPositions.Count < samplesCount || rightPositions.Count<samplesCount)
+                return false;
+
+            if (!leftPositions.IsLargeEnough(minSize) || !rightPositions.IsLargeEnough(minSize))
+                return false;
+
+            List<Vector2> locals = GoldenSection.Pack(leftPositions, rightPositions, samplesCount);
+
+            //Tools.SavePointsToFile(locals, "z_ekranu");
+            //Tools.SavePointsToFile(points, "z_bazy");
+
+
+            float score = GoldenSection.Search(locals, points, -MathHelper.PiOver4, MathHelper.PiOver4, threshold);
+
+            return score > minimalScore;
+        }
+
         public bool Match(List<Vector2> positions, float threshold, float minimalScore, float minSize)
         {
             if (positions.Count < samplesCount)
@@ -107,8 +126,8 @@ namespace Kinect.Toolbox
 
             List<Vector2> locals = GoldenSection.Pack(positions, samplesCount);
 
-            //SavePointsToFile(locals, "locals");
-            //SavePointsToFile(points, "current");
+            //Tools.SavePointsToFile(locals, "locals");
+            //Tools.SavePointsToFile(points, "current");
 
 
             float score = GoldenSection.Search(locals, points, -MathHelper.PiOver4, MathHelper.PiOver4, threshold);

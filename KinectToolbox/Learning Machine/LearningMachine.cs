@@ -76,6 +76,12 @@ namespace Kinect.Toolbox
             return Paths.Any(path => path.Match(entries, threshold, minimalScore, minSize));
         }
 
+        public bool Match(List<Vector2> leftEntries, List<Vector2> rightEntries, float threshold, float minimalScore, float minSize)
+        {
+            return Paths.Any(path => path.Match(leftEntries, rightEntries, threshold, minimalScore, minSize));
+             
+        }
+
         public void Persist(Stream kbStream)
         {
             BinaryFormatter formatter = new BinaryFormatter();

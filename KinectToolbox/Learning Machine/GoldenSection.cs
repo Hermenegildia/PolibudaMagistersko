@@ -43,8 +43,7 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
                     x2 = (1 - ReductionFactor) * a + ReductionFactor * b;   //xR = a + k*(b-a)
                     rotatedList = current.Rotate(x2);
                     //SavePointsToFile(current, "before_rotation");
-                    //SavePointsToFile(rotatedList, "after_rotation");
-                    //SavePointsToFile(target, "target");
+                   
                     fx2 = rotatedList.DistanceTo(target);
                 }
             }
@@ -52,6 +51,8 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
 
             float min = Math.Min(fx1, fx2);
 
+            //Tools.SavePointsToFile(rotatedList, "after_rotation");
+            //Tools.SavePointsToFile(target, "target");
             return 1.0f - 2.0f * min / Diagonal;
         }
 

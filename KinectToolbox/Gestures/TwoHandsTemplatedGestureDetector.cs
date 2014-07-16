@@ -20,13 +20,13 @@ namespace Kinect.Toolbox{
         readonly string gestureName;
         PathSorter pathSorter = new PathSorter();
 
-        readonly List<Entry> leftsEntries = new List<Entry>();
+        readonly List<Entry> leftEntries = new List<Entry>();
         readonly List<Entry> bothHandsEntries = new List<Entry>();
 
 
         protected List<Entry> LeftEntries
         {
-            get { return leftsEntries; }
+            get { return leftEntries; }
         }
 
         protected List<Entry> BothHandsEntries
@@ -56,16 +56,7 @@ namespace Kinect.Toolbox{
         }
 
         public override void Add(SkeletonPoint position, KinectSensor sensor)
-        {
-            //if (isRightHand)
-            //    base.Add(position, sensor);
-            //else
-            //    AddLeft(position, sensor);
-
-            //if (path != null)
-            //{
-            //    path.Points.Add(position.ToVector2());
-            //}
+        {  
         }
 
         private void JoinEntriesFromTwoHands()
@@ -75,57 +66,9 @@ namespace Kinect.Toolbox{
             BothHandsEntries.AddRange(Entries);
             BothHandsEntries.AddRange(LeftEntries);
         
-         
-            //foreach (Entry entry in LeftEntries)
-            //    BothHandsEntries.Add(entry);
         }
 
-        //private void AddLeft(SkeletonPoint position, KinectSensor sensor) //obsługa lewej reki
-        //{
-        //    Entry newEntry = new Entry { Position = position.ToVector3(), Time = DateTime.Now };
-        //    LeftEntries.Add(newEntry);
-
-        //    // Drawing
-        //    if (DisplayCanvas != null)
-        //    {
-        //        newEntry.DisplayEllipse = new Ellipse
-        //        {
-        //            Width = 4,
-        //            Height = 4,
-        //            HorizontalAlignment = HorizontalAlignment.Left,
-        //            VerticalAlignment = VerticalAlignment.Top,
-        //            StrokeThickness = 2.0,
-        //            Stroke = new SolidColorBrush(DisplayColor),
-        //            StrokeLineJoin = PenLineJoin.Round
-        //        };
-
-        //        Vector2 vector2 = Tools.Convert(sensor, position);
-
-        //        float x = (float)(vector2.X * DisplayCanvas.ActualWidth);
-        //        float y = (float)(vector2.Y * DisplayCanvas.ActualHeight);
-
-        //        Canvas.SetLeft(newEntry.DisplayEllipse, x - newEntry.DisplayEllipse.Width / 2);
-        //        Canvas.SetTop(newEntry.DisplayEllipse, y - newEntry.DisplayEllipse.Height / 2);
-
-        //        DisplayCanvas.Children.Add(newEntry.DisplayEllipse);
-        //    }
-
-        //    // Remove too old positions
-        //    if (LeftEntries.Count > WindowSize)
-        //    {
-        //        Entry entryToRemove = Entries[0];
-
-        //        if (DisplayCanvas != null)
-        //        {
-        //            DisplayCanvas.Children.Remove(entryToRemove.DisplayEllipse);
-        //        }
-
-        //        LeftEntries.Remove(entryToRemove);
-        //    }
-
-        //    // Look for gestures
-        //    LookForGesture();
-        //}
+     
 
         public void Add(Skeleton skeleton, KinectSensor sensor)
         {
@@ -158,17 +101,12 @@ namespace Kinect.Toolbox{
 
                 DisplayCanvas.Children.Add(rightEntry.DisplayEllipse);
 
-                //base.Add(rightPosition, sensor);
-
                 if (path != null)
                 {
-                    //path.Points.Add(rightPosition.ToVector2());
                     pathSorter.Add(rightPosition.ToVector2(), true);
-                    //path.Points = pathSorter.GetPoints();
                 }
             }
-            //Entry rightEntry = new Entry { Position = rightPosition.ToVector3(), Time = DateTime.Now };
-            //BothHandsEntries.Add(rightEntry);
+        
             SkeletonPoint leftPosition ;
             if (skeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked)
             {
@@ -183,7 +121,7 @@ namespace Kinect.Toolbox{
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top,
                     StrokeThickness = 2.0,
-                    Stroke = new SolidColorBrush(Colors.Blue),
+                    Stroke = new SolidColorBrush(Colors.Yellow),
                     StrokeLineJoin = PenLineJoin.Round
                 };
 
@@ -199,43 +137,25 @@ namespace Kinect.Toolbox{
 
                 if (path != null)
                 {
-                    //path.Points.Add(leftPosition.ToVector2());
                     pathSorter.Add(leftPosition.ToVector2(), false);
-            
-                    //path.Points = pathSorter.GetPoints();
                 }
             }
 
-            // Drawing
-            //if (DisplayCanvas != null)
-            //{
-            //    rightEntry.DisplayEllipse = new Ellipse
-            //    {
-            //        Width = 4,
-            //        Height = 4,
-            //        HorizontalAlignment = HorizontalAlignment.Left,
-            //        VerticalAlignment = VerticalAlignment.Top,
-            //        StrokeThickness = 2.0,
-            //        Stroke = new SolidColorBrush(DisplayColor),
-            //        StrokeLineJoin = PenLineJoin.Round
-            //    };
-
-            
-
-            //Vector2 rightVector2 = Tools.Convert(sensor, rightPosition);
-
-            //float xr = (float)(rightVector2.X * DisplayCanvas.ActualWidth);
-            //float yr = (float)(rightVector2.Y * DisplayCanvas.ActualHeight);
-
-            //Canvas.SetLeft(rightEntry.DisplayEllipse, xr - rightEntry.DisplayEllipse.Width / 2);
-            //Canvas.SetTop(rightEntry.DisplayEllipse, yr - rightEntry.DisplayEllipse.Height / 2);
-
-            //DisplayCanvas.Children.Add(rightEntry.DisplayEllipse);
-
-            
 
             // Remove too old positions
-            if (LeftEntries.Count > WindowSize / 2)
+            if (Entries.Count > WindowSize)
+            {
+                Entry entryToRemove = LeftEntries[0];
+
+                if (DisplayCanvas != null)
+                {
+                    DisplayCanvas.Children.Remove(entryToRemove.DisplayEllipse);
+                }
+
+                Entries.Remove(entryToRemove);
+            }
+            
+            if (LeftEntries.Count > WindowSize )
             {
                 Entry entryToRemove = LeftEntries[0];
 
@@ -247,23 +167,18 @@ namespace Kinect.Toolbox{
                 LeftEntries.Remove(entryToRemove);
             }
 
-            // Look for gestures
-       
+          
               LookForGesture();
 
-
-            //if (path != null)
-            //{
-            //    path.Points.Add(rightPosition.ToVector2());
-            //    path.Points.Add(leftPosition.ToVector2());
-            //}
         }
         
 
         protected override void LookForGesture()
         {
-            JoinEntriesFromTwoHands();
-            if (LearningMachine.Match(BothHandsEntries.Select(e => new Vector2(e.Position.X, e.Position.Y)).ToList(), Epsilon, MinimalScore, MinimalSize))
+            //JoinEntriesFromTwoHands();
+            //if (LearningMachine.Match(BothHandsEntries.Select(e => new Vector2(e.Position.X, e.Position.Y)).ToList(), Epsilon, MinimalScore, MinimalSize))
+            //if (LearningMachine.Match(pathSorter.LeftHandPositions, pathSorter.RightHandPositions, Epsilon, MinimalScore, MinimalSize))
+            if (LearningMachine.Match(LeftEntries.Select(e => new Vector2(e.Position.X, e.Position.Y)).ToList(), Entries.Select(e => new Vector2(e.Position.X, e.Position.Y)).ToList(), Epsilon, MinimalScore, MinimalSize))
                 RaiseGestureDetected(gestureName);
         }
 
