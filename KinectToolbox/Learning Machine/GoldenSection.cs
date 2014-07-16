@@ -128,7 +128,31 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
             return locals;
         }
 
-   
+
+        public static List<Vector2> Pack(List<Vector2> leftPoints, List<Vector2> rightPoints, int samplesCount)
+        {
+            List<Vector2> positions = new List<Vector2>(leftPoints);
+            positions.AddRange(rightPoints);
+            
+            List<Vector2> localsL = ProjectListToDefinedCount(leftPoints, samplesCount);
+            //Tools.SavePointsToFile(leftPoints, "leftPoints");
+            //Tools.SavePointsToFile(localsL, "leftPointsProjected");
+            List<Vector2> localsR = ProjectListToDefinedCount(rightPoints, samplesCount);
+            //Tools.SavePointsToFile(rightPoints, "rightPoints");
+            //Tools.SavePointsToFile(localsR, "rightPointsProjected");
+            List<Vector2> locals = new List<Vector2>(localsL);
+            locals.AddRange(localsR);
+            //Tools.SavePointsToFile(locals, "razemProjected");
+            float angle = GetAngleBetween(locals.Center(), positions[0]);
+            locals = locals.Rotate(-angle);
+
+            //Tools.SavePointsToFile(locals, "obrocone");
+            locals.ScaleToReferenceWorld();
+            locals.CenterToOrigin();
+
+            return locals;
+        }
+
     }
 }
 

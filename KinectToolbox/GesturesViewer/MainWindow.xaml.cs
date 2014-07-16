@@ -489,9 +489,5 @@ namespace GesturesViewer
             kinectSensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Default;
         }
 
-      
-
-     
-       
     }
 }

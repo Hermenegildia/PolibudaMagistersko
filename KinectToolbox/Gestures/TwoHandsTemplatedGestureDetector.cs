@@ -45,7 +45,7 @@ namespace Kinect.Toolbox{
             get { return learningMachine; }
         }
 
-        public TwoHandsTemplatedGestureDetector(string gestureName, Stream kbStream, int windowSize = 120)
+        public TwoHandsTemplatedGestureDetector(string gestureName, Stream kbStream, int windowSize = 60)
             : base(windowSize)
         {
             Epsilon = 0.035f;
@@ -294,7 +294,7 @@ namespace Kinect.Toolbox{
             path.Points = pathSorter.GetPoints();
             //Tools.SavePointsToFile(path.Points, "do_zapisu");
             //LearningMachine.AddPath(path);
-            LearningMachine.AddPath(
+            LearningMachine.AddPath(pathSorter.LeftHandPositions, pathSorter.RightHandPositions, path);
             path = null;
 
         }

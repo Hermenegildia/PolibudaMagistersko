@@ -92,6 +92,11 @@ namespace Kinect.Toolbox
             points = GoldenSection.Pack(points, samplesCount);
         }
 
+        public void CloseAndPrepare(List<Vector2> leftPoints, List<Vector2> rightPoints)
+        {
+            points = GoldenSection.Pack(leftPoints, rightPoints, samplesCount);
+        }
+
         public bool Match(List<Vector2> positions, float threshold, float minimalScore, float minSize)
         {
             if (positions.Count < samplesCount)

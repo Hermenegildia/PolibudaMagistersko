@@ -60,7 +60,7 @@ namespace Kinect.Toolbox
 
 
             //}
-            if(((System.IO.FileStream)kbStream).Name.Contains("circle"))
+            if(((System.IO.FileStream)kbStream).Name.Contains("rotation"))
                 Tools.SavePointsToFile(paths, "rotation");  
 
             //paths = new List<RecordedPath>();
@@ -90,6 +90,10 @@ namespace Kinect.Toolbox
             Paths.Add(path);
         }
 
-      
+        public void AddPath(List<Vector2> leftPoints, List<Vector2> rightPoints,RecordedPath path)
+        {
+            path.CloseAndPrepare(leftPoints, rightPoints);
+            Paths.Add(path);
+        }
     }
 }
