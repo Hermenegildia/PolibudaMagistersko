@@ -23,23 +23,25 @@ namespace GesturesViewer
         //TemplatedGestureDetector circleGestureRecognizer;
         //SerialCombinedGestureDetector serialCombinedGestureDetector;
         //TwoHandsTemplatedGestureDetector twoHandsGestureRecognizer;
-        TwoHandsTemplatedGestureDetector rotationGestureRecognizer;
+        TwoHandsTemplatedGestureDetector leftRotationGestureRecognizer;
+        TwoHandsTemplatedGestureDetector rightRotationGestureRecognizer;
         //TemplatedGestureDetector eightGestureRecognizer;
         readonly ColorStreamManager colorManager = new ColorStreamManager();
         readonly DepthStreamManager depthManager = new DepthStreamManager();
         AudioStreamManager audioManager;
         SkeletonDisplayManager skeletonDisplayManager;
         readonly ContextTracker contextTracker = new ContextTracker();
-        readonly AlgorithmicPostureDetector algorithmicPostureRecognizer = new AlgorithmicPostureDetector();
-        TemplatedPostureDetector templatePostureDetector;
+        //readonly AlgorithmicPostureDetector algorithmicPostureRecognizer = new AlgorithmicPostureDetector();
+        //TemplatedPostureDetector templatePostureDetector;
         private bool recordNextFrameForPosture;
         bool displayDepth;
 
-        string circleKBPath;
-        string letterT_KBPath;
-        string nowy_gest;
-        string twoHandsKBPath;
-        string rotationKBPath;
+        //string circleKBPath;
+        //string letterT_KBPath;
+        //string nowy_gest;
+        //string twoHandsKBPath;
+        string leftRotationKBPath;
+        string rightRotationKBPath;
 
         KinectRecorder recorder;
         KinectReplay replay;
@@ -91,11 +93,12 @@ namespace GesturesViewer
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             string currentDirectory = @"F:\MyRepo\PolibudaMagistersko\KinectToolbox\GesturesViewer";
-            circleKBPath = Path.Combine(currentDirectory, @"data\circleKB.save");
-            letterT_KBPath = Path.Combine(currentDirectory, @"data\t_KB.save");
-            nowy_gest = Path.Combine(currentDirectory, @"data\nowy_gest.save");
-            twoHandsKBPath = Path.Combine(currentDirectory, @"data\twoHandsKBPath.save");
-            rotationKBPath = Path.Combine(currentDirectory, @"data\rotationKBPath.save");
+            //circleKBPath = Path.Combine(currentDirectory, @"data\circleKB.save");
+            //letterT_KBPath = Path.Combine(currentDirectory, @"data\t_KB.save");
+            //nowy_gest = Path.Combine(currentDirectory, @"data\nowy_gest.save");
+            //twoHandsKBPath = Path.Combine(currentDirectory, @"data\twoHandsKBPath.save");
+            leftRotationKBPath = Path.Combine(currentDirectory, @"data\leftRotationKBPath.save");
+            rightRotationKBPath = Path.Combine(currentDirectory, @"data\rightRotationKBPath.save");
 
             try
             {
@@ -155,10 +158,12 @@ namespace GesturesViewer
             kinectSensor.Start();
 
             //LoadCircleGestureDetector();
-            LoadLetterTPostureDetector();
+            //LoadLetterTPostureDetector();
             //LoadEightGestureDetector();
             //LoadSerialCombinedGestureDetector();
             LoadTwoHandsDetector();
+
+            //algorithmicPostureRecognizer.PostureDetected += postureDetector_PostureDetected;
 
             nuiCamera = new BindableNUICamera(kinectSensor);
 
@@ -299,7 +304,8 @@ namespace GesturesViewer
                     if (closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked)
                     {
                         //twoHandsGestureRecognizer.Add(closestSkeleton, kinectSensor);
-                        rotationGestureRecognizer.Add(closestSkeleton, kinectSensor);
+                        rightRotationGestureRecognizer.Add(closestSkeleton, kinectSensor);
+                        leftRotationGestureRecognizer.Add(closestSkeleton, kinectSensor);
                     }
 
                     foreach (Joint joint in closestSkeleton.Joints)
@@ -325,14 +331,14 @@ namespace GesturesViewer
                         //}
                         // }
 
-                        algorithmicPostureRecognizer.TrackPostures(closestSkeleton);
+                        //algorithmicPostureRecognizer.TrackPostures(closestSkeleton);
                         //templatePostureDetector.TrackPostures(skeleton);
 
-                        if (recordNextFrameForPosture)
-                        {
-                            templatePostureDetector.AddTemplate(closestSkeleton);
-                            recordNextFrameForPosture = false;
-                        }
+                        //if (recordNextFrameForPosture)
+                        //{
+                        //    templatePostureDetector.AddTemplate(closestSkeleton);
+                        //    recordNextFrameForPosture = false;
+                        //}
                     }
 
                     skeletonDisplayManager.Draw(frame.Skeletons, seatedMode.IsChecked == true);
@@ -363,7 +369,7 @@ namespace GesturesViewer
 
             CloseGestureDetector();
 
-            ClosePostureDetector();
+            //ClosePostureDetector();
 
             //if (voiceCommander != null)
             //{

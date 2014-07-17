@@ -59,14 +59,14 @@ namespace Kinect.Toolbox{
         {  
         }
 
-        private void JoinEntriesFromTwoHands()
-        {
-            BothHandsEntries.Clear();
+        //private void JoinEntriesFromTwoHands()
+        //{
+        //    BothHandsEntries.Clear();
 
-            BothHandsEntries.AddRange(Entries);
-            BothHandsEntries.AddRange(LeftEntries);
+        //    BothHandsEntries.AddRange(Entries);
+        //    BothHandsEntries.AddRange(LeftEntries);
         
-        }
+        //}
 
      
 
@@ -145,7 +145,7 @@ namespace Kinect.Toolbox{
             // Remove too old positions
             if (Entries.Count > WindowSize)
             {
-                Entry entryToRemove = LeftEntries[0];
+                Entry entryToRemove = Entries[0];
 
                 if (DisplayCanvas != null)
                 {
@@ -184,7 +184,7 @@ namespace Kinect.Toolbox{
 
         public void StartRecordTemplate()
         {
-            ClearEntries(Entries);  //nagrywanie czysci stare kropki
+            ClearEntries(Entries);  //nagrywanie czysci stare kropki tego gestu
             ClearEntries(LeftEntries);
             path = new RecordedPath(WindowSize);
         }

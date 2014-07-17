@@ -53,11 +53,18 @@ namespace GesturesViewer
             //    twoHandsGestureRecognizer.OnGestureDetected += OnGestureDetected;
             //}
 
-            using (Stream recordStream = File.Open(rotationKBPath, FileMode.OpenOrCreate))
+            using (Stream recordStream = File.Open(leftRotationKBPath, FileMode.OpenOrCreate))
             {
-                rotationGestureRecognizer = new TwoHandsTemplatedGestureDetector("Rotacja", recordStream);
-                rotationGestureRecognizer.DisplayCanvas = gesturesCanvas;
-                rotationGestureRecognizer.OnGestureDetected += OnGestureDetected;
+                leftRotationGestureRecognizer = new TwoHandsTemplatedGestureDetector("RotacjaLewo", recordStream);
+                leftRotationGestureRecognizer.DisplayCanvas = gesturesCanvas;
+                leftRotationGestureRecognizer.OnGestureDetected += OnGestureDetected;
+            }
+
+            using (Stream recordStream = File.Open(rightRotationKBPath, FileMode.OpenOrCreate))
+            {
+                rightRotationGestureRecognizer = new TwoHandsTemplatedGestureDetector("RotacjaPrawo", recordStream);
+                rightRotationGestureRecognizer.DisplayCanvas = gesturesCanvas;
+                rightRotationGestureRecognizer.OnGestureDetected += OnGestureDetected;
             }
         }
 
@@ -92,14 +99,14 @@ namespace GesturesViewer
             //twoHandsGestureRecognizer.StartRecordTemplate();
 
 
-            if (rotationGestureRecognizer.IsRecordingPath)
+            if (leftRotationGestureRecognizer.IsRecordingPath)
             {
-                rotationGestureRecognizer.EndRecordTemplate();
+                leftRotationGestureRecognizer.EndRecordTemplate();
                 recordGesture.Content = "Record Gesture";
                 return;
             }
 
-            rotationGestureRecognizer.StartRecordTemplate();
+            leftRotationGestureRecognizer.StartRecordTemplate();
 
             recordGesture.Content = "Stop Recording";
         }
@@ -110,14 +117,16 @@ namespace GesturesViewer
             {
                 //gesturesCanvas.Children.Clear();
                 //twoHandsGestureRecognizer.ClearEntries();
-                rotationGestureRecognizer.ClearEntries();
+                rightRotationGestureRecognizer.ClearEntries();
+                leftRotationGestureRecognizer.ClearEntries();
             }
-             //dla Swipe czysc kropki,
+            //dla Swipe czysc kropki,
             //wyswietl nazwe gestu w listboxie
-           
+            else
+            {
                 int pos = detectedGestures.Items.Add(string.Format("{0} : {1}", gesture, DateTime.Now));
                 detectedGestures.SelectedIndex = pos;
-           
+            }
         }
 
         void CloseGestureDetector()
@@ -160,14 +169,22 @@ namespace GesturesViewer
             //    twoHandsGestureRecognizer.OnGestureDetected -= OnGestureDetected;
             //}
 
-            if (rotationGestureRecognizer != null)
+            if (leftRotationGestureRecognizer != null)
             {
-
-                using (Stream recordStream = File.Create(rotationKBPath))
+                using (Stream recordStream = File.Create(leftRotationKBPath))
                 {
-                    rotationGestureRecognizer.SaveState(recordStream);
+                    leftRotationGestureRecognizer.SaveState(recordStream);
                 }
-                rotationGestureRecognizer.OnGestureDetected -= OnGestureDetected;
+                leftRotationGestureRecognizer.OnGestureDetected -= OnGestureDetected;
+            }
+
+            if (rightRotationGestureRecognizer != null)
+            {
+                using (Stream recordStream = File.Create(rightRotationKBPath))
+                {
+                    rightRotationGestureRecognizer.SaveState(recordStream);
+                }
+                rightRotationGestureRecognizer.OnGestureDetected -= OnGestureDetected;
             }
         }
     }

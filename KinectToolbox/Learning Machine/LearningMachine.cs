@@ -60,8 +60,8 @@ namespace Kinect.Toolbox
 
 
             //}
-            if(((System.IO.FileStream)kbStream).Name.Contains("rotation"))
-                Tools.SavePointsToFile(paths, "rotation");  
+            if (((System.IO.FileStream)kbStream).Name.Contains("left"))
+                Tools.SavePointsToFile(paths, "leftRotation");  
 
             //paths = new List<RecordedPath>();
         }
