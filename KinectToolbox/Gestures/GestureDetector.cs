@@ -56,39 +56,39 @@ namespace Kinect.Toolbox
             Entries.Add(newEntry);
 
             // Drawing
-            if (DisplayCanvas != null)
-            {
-                newEntry.DisplayEllipse = new Ellipse
-                {
-                    Width = 4,
-                    Height = 4,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    StrokeThickness = 2.0,
-                    Stroke = new SolidColorBrush(DisplayColor),
-                    StrokeLineJoin = PenLineJoin.Round
-                };
+            //if (DisplayCanvas != null)
+            //{
+            //    newEntry.DisplayEllipse = new Ellipse
+            //    {
+            //        Width = 4,
+            //        Height = 4,
+            //        HorizontalAlignment = HorizontalAlignment.Left,
+            //        VerticalAlignment = VerticalAlignment.Top,
+            //        StrokeThickness = 2.0,
+            //        Stroke = new SolidColorBrush(DisplayColor),
+            //        StrokeLineJoin = PenLineJoin.Round
+            //    };
 
-                Vector2 vector2 = Tools.Convert(sensor, position);
+            //    Vector2 vector2 = Tools.Convert(sensor, position);
 
-                float x = (float)(vector2.X * DisplayCanvas.ActualWidth);
-                float y = (float)(vector2.Y * DisplayCanvas.ActualHeight);
+            //    float x = (float)(vector2.X * DisplayCanvas.ActualWidth);
+            //    float y = (float)(vector2.Y * DisplayCanvas.ActualHeight);
 
-                Canvas.SetLeft(newEntry.DisplayEllipse, x - newEntry.DisplayEllipse.Width / 2);
-                Canvas.SetTop(newEntry.DisplayEllipse, y - newEntry.DisplayEllipse.Height / 2);
+            //    Canvas.SetLeft(newEntry.DisplayEllipse, x - newEntry.DisplayEllipse.Width / 2);
+            //    Canvas.SetTop(newEntry.DisplayEllipse, y - newEntry.DisplayEllipse.Height / 2);
 
-                DisplayCanvas.Children.Add(newEntry.DisplayEllipse);
-            }
+            //    DisplayCanvas.Children.Add(newEntry.DisplayEllipse);
+            //}
 
             // Remove too old positions
             if (Entries.Count > WindowSize)
             {
                 Entry entryToRemove = Entries[0];
 
-                if (DisplayCanvas != null)
-                {
-                    DisplayCanvas.Children.Remove(entryToRemove.DisplayEllipse);
-                }
+                //if (DisplayCanvas != null)
+                //{
+                //    DisplayCanvas.Children.Remove(entryToRemove.DisplayEllipse);
+                //}
 
                 Entries.Remove(entryToRemove);
             }

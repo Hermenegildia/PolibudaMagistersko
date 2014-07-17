@@ -45,7 +45,7 @@ namespace Kinect.Toolbox{
             get { return learningMachine; }
         }
 
-        public TwoHandsTemplatedGestureDetector(string gestureName, Stream kbStream, int windowSize = 60)
+        public TwoHandsTemplatedGestureDetector(string gestureName, Stream kbStream, int windowSize = 20)
             : base(windowSize)
         {
             Epsilon = 0.035f;
