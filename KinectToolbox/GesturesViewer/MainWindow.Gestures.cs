@@ -108,6 +108,15 @@ namespace GesturesViewer
 
             leftRotationGestureRecognizer.StartRecordTemplate();
 
+            //if (rightRotationGestureRecognizer.IsRecordingPath)
+            //{
+            //    rightRotationGestureRecognizer.EndRecordTemplate();
+            //    recordGesture.Content = "Record Gesture";
+            //    return;
+            //}
+
+            //rightRotationGestureRecognizer.StartRecordTemplate();
+
             recordGesture.Content = "Stop Recording";
         }
 

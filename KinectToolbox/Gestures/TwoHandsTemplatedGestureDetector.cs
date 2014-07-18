@@ -45,11 +45,11 @@ namespace Kinect.Toolbox{
             get { return learningMachine; }
         }
 
-        public TwoHandsTemplatedGestureDetector(string gestureName, Stream kbStream, int windowSize = 35)
+        public TwoHandsTemplatedGestureDetector(string gestureName, Stream kbStream, int windowSize = 20)
             : base(windowSize)
         {
             Epsilon = 0.035f;
-            MinimalScore = 0.80f;
+            MinimalScore = 0.70f;
             MinimalSize = 0.1f;
             this.gestureName = gestureName;
             learningMachine = new LearningMachine(kbStream);
@@ -80,26 +80,26 @@ namespace Kinect.Toolbox{
                 Entry rightEntry = new Entry { Position = rightPosition.ToVector3(), Time = DateTime.Now };
                 Entries.Add(rightEntry);
 
-                rightEntry.DisplayEllipse = new Ellipse
-                {
-                    Width = 4,
-                    Height = 4,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    StrokeThickness = 2.0,
-                    Stroke = new SolidColorBrush(DisplayColor),
-                    StrokeLineJoin = PenLineJoin.Round
-                };
+                //rightEntry.DisplayEllipse = new Ellipse
+                //{
+                //    Width = 4,
+                //    Height = 4,
+                //    HorizontalAlignment = HorizontalAlignment.Left,
+                //    VerticalAlignment = VerticalAlignment.Top,
+                //    StrokeThickness = 2.0,
+                //    Stroke = new SolidColorBrush(DisplayColor),
+                //    StrokeLineJoin = PenLineJoin.Round
+                //};
 
-                Vector2 leftVector2 = Tools.Convert(sensor, rightPosition);
+                //Vector2 leftVector2 = Tools.Convert(sensor, rightPosition);
                 
-                float xl = (float)(leftVector2.X * DisplayCanvas.ActualWidth);
-                float yl = (float)(leftVector2.Y * DisplayCanvas.ActualHeight);
+                //float xl = (float)(leftVector2.X * DisplayCanvas.ActualWidth);
+                //float yl = (float)(leftVector2.Y * DisplayCanvas.ActualHeight);
 
-                Canvas.SetLeft(rightEntry.DisplayEllipse, xl - rightEntry.DisplayEllipse.Width / 2);
-                Canvas.SetTop(rightEntry.DisplayEllipse, yl - rightEntry.DisplayEllipse.Height / 2);
+                //Canvas.SetLeft(rightEntry.DisplayEllipse, xl - rightEntry.DisplayEllipse.Width / 2);
+                //Canvas.SetTop(rightEntry.DisplayEllipse, yl - rightEntry.DisplayEllipse.Height / 2);
 
-                DisplayCanvas.Children.Add(rightEntry.DisplayEllipse);
+                //DisplayCanvas.Children.Add(rightEntry.DisplayEllipse);
 
                 //if (path != null)
                 if(pathSorter != null)
@@ -115,26 +115,26 @@ namespace Kinect.Toolbox{
                 Entry leftEntry = new Entry { Position = leftPosition.ToVector3(), Time = DateTime.Now };
                 LeftEntries.Add(leftEntry);
 
-                leftEntry.DisplayEllipse = new Ellipse
-                {
-                    Width = 4,
-                    Height = 4,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    StrokeThickness = 2.0,
-                    Stroke = new SolidColorBrush(Colors.Yellow),
-                    StrokeLineJoin = PenLineJoin.Round
-                };
+                //leftEntry.DisplayEllipse = new Ellipse
+                //{
+                //    Width = 4,
+                //    Height = 4,
+                //    HorizontalAlignment = HorizontalAlignment.Left,
+                //    VerticalAlignment = VerticalAlignment.Top,
+                //    StrokeThickness = 2.0,
+                //    Stroke = new SolidColorBrush(Colors.Yellow),
+                //    StrokeLineJoin = PenLineJoin.Round
+                //};
 
-                Vector2 leftVector2 = Tools.Convert(sensor, leftPosition);
+                //Vector2 leftVector2 = Tools.Convert(sensor, leftPosition);
 
-                float xl = (float)(leftVector2.X * DisplayCanvas.ActualWidth);
-                float yl = (float)(leftVector2.Y * DisplayCanvas.ActualHeight);
+                //float xl = (float)(leftVector2.X * DisplayCanvas.ActualWidth);
+                //float yl = (float)(leftVector2.Y * DisplayCanvas.ActualHeight);
 
-                Canvas.SetLeft(leftEntry.DisplayEllipse, xl - leftEntry.DisplayEllipse.Width / 2);
-                Canvas.SetTop(leftEntry.DisplayEllipse, yl - leftEntry.DisplayEllipse.Height / 2);
+                //Canvas.SetLeft(leftEntry.DisplayEllipse, xl - leftEntry.DisplayEllipse.Width / 2);
+                //Canvas.SetTop(leftEntry.DisplayEllipse, yl - leftEntry.DisplayEllipse.Height / 2);
 
-                DisplayCanvas.Children.Add(leftEntry.DisplayEllipse);
+                //DisplayCanvas.Children.Add(leftEntry.DisplayEllipse);
 
                 //if (path != null)
                 if (pathSorter!= null)

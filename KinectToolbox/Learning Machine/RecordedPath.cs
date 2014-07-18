@@ -111,7 +111,7 @@ namespace Kinect.Toolbox
             //Tools.SavePointsToFile(points, "z_bazy");
 
 
-            float score = GoldenSection.Search(locals, points, -MathHelper.PiOver4, MathHelper.PiOver4, threshold);
+            float score = GoldenSection.Search(locals, points, -MathHelper.PiOver2, MathHelper.PiOver2, threshold);
 
             return score > minimalScore;
         }
