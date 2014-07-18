@@ -98,6 +98,7 @@ namespace Kinect.Toolbox
 
         public void AddPath(List<Vector2> leftPoints, List<Vector2> rightPoints,RecordedPath path)
         {
+            //Tools.SavePointsToFile(leftPoints, "spr");
             path.CloseAndPrepare(leftPoints, rightPoints);
             Paths.Add(path);
         }

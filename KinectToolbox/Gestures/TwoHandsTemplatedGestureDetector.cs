@@ -45,7 +45,7 @@ namespace Kinect.Toolbox{
             get { return learningMachine; }
         }
 
-        public TwoHandsTemplatedGestureDetector(string gestureName, Stream kbStream, int windowSize = 20)
+        public TwoHandsTemplatedGestureDetector(string gestureName, Stream kbStream, int windowSize = 35)
             : base(windowSize)
         {
             Epsilon = 0.035f;
@@ -101,7 +101,8 @@ namespace Kinect.Toolbox{
 
                 DisplayCanvas.Children.Add(rightEntry.DisplayEllipse);
 
-                if (path != null)
+                //if (path != null)
+                if(pathSorter != null)
                 {
                     pathSorter.Add(rightPosition.ToVector2(), true);
                 }
@@ -135,7 +136,8 @@ namespace Kinect.Toolbox{
 
                 DisplayCanvas.Children.Add(leftEntry.DisplayEllipse);
 
-                if (path != null)
+                //if (path != null)
+                if (pathSorter!= null)
                 {
                     pathSorter.Add(leftPosition.ToVector2(), false);
                 }
@@ -186,6 +188,7 @@ namespace Kinect.Toolbox{
         {
             ClearEntries(Entries);  //nagrywanie czysci stare kropki tego gestu
             ClearEntries(LeftEntries);
+            pathSorter = new PathSorter();
             path = new RecordedPath(WindowSize);
         }
 
@@ -211,6 +214,7 @@ namespace Kinect.Toolbox{
             //LearningMachine.AddPath(path);
             LearningMachine.AddPath(pathSorter.LeftHandPositions, pathSorter.RightHandPositions, path);
             path = null;
+            pathSorter = null;
 
         }
 

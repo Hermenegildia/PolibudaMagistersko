@@ -20,7 +20,7 @@ namespace GesturesViewer
         KinectSensor kinectSensor;
 
         SwipeGestureDetector swipeGestureRecognizer;
-        //TemplatedGestureDetector circleGestureRecognizer;
+        TemplatedGestureDetector circleGestureRecognizer;
         //SerialCombinedGestureDetector serialCombinedGestureDetector;
         //TwoHandsTemplatedGestureDetector twoHandsGestureRecognizer;
         TwoHandsTemplatedGestureDetector leftRotationGestureRecognizer;
@@ -36,7 +36,7 @@ namespace GesturesViewer
         private bool recordNextFrameForPosture;
         bool displayDepth;
 
-        //string circleKBPath;
+        string circleKBPath;
         //string letterT_KBPath;
         //string nowy_gest;
         //string twoHandsKBPath;
@@ -93,7 +93,7 @@ namespace GesturesViewer
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             string currentDirectory = @"F:\MyRepo\PolibudaMagistersko\KinectToolbox\GesturesViewer";
-            //circleKBPath = Path.Combine(currentDirectory, @"data\circleKB.save");
+            circleKBPath = Path.Combine(currentDirectory, @"data\circleKB.save");
             //letterT_KBPath = Path.Combine(currentDirectory, @"data\t_KB.save");
             //nowy_gest = Path.Combine(currentDirectory, @"data\nowy_gest.save");
             //twoHandsKBPath = Path.Combine(currentDirectory, @"data\twoHandsKBPath.save");
@@ -157,7 +157,7 @@ namespace GesturesViewer
 
             kinectSensor.Start();
 
-            //LoadCircleGestureDetector();
+            LoadCircleGestureDetector();
             //LoadLetterTPostureDetector();
             //LoadEightGestureDetector();
             //LoadSerialCombinedGestureDetector();
@@ -319,7 +319,7 @@ namespace GesturesViewer
                             swipeGestureRecognizer.Add(joint.Position, kinectSensor);
                             //eightGestureRecognizer.Add(joint.Position, kinectSensor);
 
-                            //circleGestureRecognizer.Add(joint.Position, kinectSensor);
+                            circleGestureRecognizer.Add(joint.Position, kinectSensor);
                         }
                         else if (joint.JointType == JointType.HandLeft && controlMouse.IsChecked == true)
                         {
