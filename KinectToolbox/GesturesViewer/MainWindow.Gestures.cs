@@ -133,7 +133,7 @@ namespace GesturesViewer
             //wyswietl nazwe gestu w listboxie
             else
             {
-                int pos = detectedGestures.Items.Add(string.Format("{0} : {1}", gesture, DateTime.Now));
+                int pos = detectedGestures.Items.Add(string.Format("{0} : {1}", gesture, DateTime.Now.TimeOfDay));
                 detectedGestures.SelectedIndex = pos;
             }
         }

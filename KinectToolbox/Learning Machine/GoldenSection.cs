@@ -113,6 +113,20 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
             return -MathHelper.PiOver2;
         }
 
+        // A bit of trigonometry for twoHanded
+        public static float GetLimitedAngleBetween(Vector2 start, Vector2 end)
+        {
+            if (start.X != end.X)
+            {
+                return (float)Math.Atan2(end.Y - start.Y, end.X - start.X);
+            }
+            else return 0;
+            //if (end.Y > start.Y)
+            //    return MathHelper.PiOver2;
+
+            //return -MathHelper.PiOver2;
+        }
+
         // Resample to required length then rotate to get first point at 0 radians, scale to 1x1 and finally center the path to (0,0)
         public static List<Vector2> Pack(List<Vector2> positions, int samplesCount)
         {
@@ -134,7 +148,7 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
         {
             List<Vector2> positions = new List<Vector2>(leftPoints);
             positions.AddRange(rightPoints);
-            
+
             List<Vector2> localsL = ProjectListToDefinedCount(leftPoints, samplesCount);
             //Tools.SavePointsToFile(leftPoints, "leftPoints");
             //Tools.SavePointsToFile(localsL, "leftPointsProjected");
@@ -145,6 +159,7 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
             locals.AddRange(localsR);
             //Tools.SavePointsToFile(locals, "razemProjected");
             float angle = GetAngleBetween(locals.Center(), positions[0]);
+            //float angle = GetLimitedAngleBetween(locals.Center(), positions[0]);
             locals = locals.Rotate(-angle);
 
             //Tools.SavePointsToFile(locals, "obrocone");

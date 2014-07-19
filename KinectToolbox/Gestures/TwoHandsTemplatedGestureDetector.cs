@@ -49,8 +49,8 @@ namespace Kinect.Toolbox{
             : base(windowSize)
         {
             Epsilon = 0.035f;
-            MinimalScore = 0.70f;
-            MinimalSize = 0.1f;
+            MinimalScore = 0.80f;   //dobór eksperymentalny
+            MinimalSize = 0.05f;
             this.gestureName = gestureName;
             learningMachine = new LearningMachine(kbStream);
         }
@@ -92,7 +92,7 @@ namespace Kinect.Toolbox{
                 //};
 
                 //Vector2 leftVector2 = Tools.Convert(sensor, rightPosition);
-                
+
                 //float xl = (float)(leftVector2.X * DisplayCanvas.ActualWidth);
                 //float yl = (float)(leftVector2.Y * DisplayCanvas.ActualHeight);
 
@@ -149,10 +149,10 @@ namespace Kinect.Toolbox{
             {
                 Entry entryToRemove = Entries[0];
 
-                if (DisplayCanvas != null)
-                {
-                    DisplayCanvas.Children.Remove(entryToRemove.DisplayEllipse);
-                }
+                //if (DisplayCanvas != null)
+                //{
+                //    DisplayCanvas.Children.Remove(entryToRemove.DisplayEllipse);
+                //}
 
                 Entries.Remove(entryToRemove);
             }
@@ -161,10 +161,10 @@ namespace Kinect.Toolbox{
             {
                 Entry entryToRemove = LeftEntries[0];
 
-                if (DisplayCanvas != null)
-                {
-                    DisplayCanvas.Children.Remove(entryToRemove.DisplayEllipse);
-                }
+                //if (DisplayCanvas != null)
+                //{
+                //    DisplayCanvas.Children.Remove(entryToRemove.DisplayEllipse);
+                //}
 
                 LeftEntries.Remove(entryToRemove);
             }
