@@ -25,6 +25,7 @@ namespace GesturesViewer
         //TwoHandsTemplatedGestureDetector twoHandsGestureRecognizer;
         TwoHandsTemplatedGestureDetector leftRotationGestureRecognizer;
         TwoHandsTemplatedGestureDetector rightRotationGestureRecognizer;
+        StretchGestureDetector stretchGestureRecognizer;
         //TemplatedGestureDetector eightGestureRecognizer;
         readonly ColorStreamManager colorManager = new ColorStreamManager();
         readonly DepthStreamManager depthManager = new DepthStreamManager();
@@ -152,6 +153,10 @@ namespace GesturesViewer
 
             swipeGestureRecognizer = new SwipeGestureDetector();
             swipeGestureRecognizer.OnGestureDetected += OnGestureDetected;
+
+            stretchGestureRecognizer = new StretchGestureDetector();
+            stretchGestureRecognizer.OnGestureDetected += OnGestureDetected;
+
 
             skeletonDisplayManager = new SkeletonDisplayManager(kinectSensor, kinectCanvas);
 
@@ -306,6 +311,7 @@ namespace GesturesViewer
                         //twoHandsGestureRecognizer.Add(closestSkeleton, kinectSensor);
                         rightRotationGestureRecognizer.Add(closestSkeleton, kinectSensor);
                         leftRotationGestureRecognizer.Add(closestSkeleton, kinectSensor);
+                        stretchGestureRecognizer.Add(closestSkeleton, kinectSensor);
                     }
 
                     foreach (Joint joint in closestSkeleton.Joints)

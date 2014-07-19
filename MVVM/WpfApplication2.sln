@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApplication2", "WpfApplication2\WpfApplication2.csproj", "{59CA8DC9-995E-4AC1-8FAA-AC5E203A2776}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanvasPositioningProject", "CanvasPositioningProject\CanvasPositioningProject.csproj", "{69EC923E-A4EA-406E-8F21-F0C1C7C10CE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{59CA8DC9-995E-4AC1-8FAA-AC5E203A2776}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59CA8DC9-995E-4AC1-8FAA-AC5E203A2776}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59CA8DC9-995E-4AC1-8FAA-AC5E203A2776}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69EC923E-A4EA-406E-8F21-F0C1C7C10CE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69EC923E-A4EA-406E-8F21-F0C1C7C10CE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69EC923E-A4EA-406E-8F21-F0C1C7C10CE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69EC923E-A4EA-406E-8F21-F0C1C7C10CE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

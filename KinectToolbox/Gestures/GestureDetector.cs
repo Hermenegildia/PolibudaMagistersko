@@ -13,7 +13,7 @@ namespace Kinect.Toolbox
         public int MinimalPeriodBetweenGestures { get; set; }
 
         readonly List<Entry> entries = new List<Entry>();
-
+      
         public event Action<string> OnGestureDetected;
 
         DateTime lastGestureDate = DateTime.Now;

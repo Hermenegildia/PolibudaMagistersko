@@ -9,7 +9,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace Kinect.Toolbox{
+namespace Kinect.Toolbox
+{
     public class TwoHandsTemplatedGestureDetector: GestureDetector
     {
         public float Epsilon { get; set; }
@@ -91,10 +92,10 @@ namespace Kinect.Toolbox{
                     StrokeLineJoin = PenLineJoin.Round
                 };
 
-                Vector2 leftVector2 = Tools.Convert(sensor, rightPosition);
+                Vector2 rightVector = Tools.Convert(sensor, rightPosition);
 
-                float xl = (float)(leftVector2.X * DisplayCanvas.ActualWidth);
-                float yl = (float)(leftVector2.Y * DisplayCanvas.ActualHeight);
+                float xl = (float)(rightVector.X * DisplayCanvas.ActualWidth);
+                float yl = (float)(rightVector.Y * DisplayCanvas.ActualHeight);
 
                 Canvas.SetLeft(rightEntry.DisplayEllipse, xl - rightEntry.DisplayEllipse.Width / 2);
                 Canvas.SetTop(rightEntry.DisplayEllipse, yl - rightEntry.DisplayEllipse.Height / 2);
@@ -126,10 +127,10 @@ namespace Kinect.Toolbox{
                     StrokeLineJoin = PenLineJoin.Round
                 };
 
-                Vector2 leftVector2 = Tools.Convert(sensor, leftPosition);
+                Vector2 leftVector = Tools.Convert(sensor, leftPosition);
 
-                float xl = (float)(leftVector2.X * DisplayCanvas.ActualWidth);
-                float yl = (float)(leftVector2.Y * DisplayCanvas.ActualHeight);
+                float xl = (float)(leftVector.X * DisplayCanvas.ActualWidth);
+                float yl = (float)(leftVector.Y * DisplayCanvas.ActualHeight);
 
                 Canvas.SetLeft(leftEntry.DisplayEllipse, xl - leftEntry.DisplayEllipse.Width / 2);
                 Canvas.SetTop(leftEntry.DisplayEllipse, yl - leftEntry.DisplayEllipse.Height / 2);
