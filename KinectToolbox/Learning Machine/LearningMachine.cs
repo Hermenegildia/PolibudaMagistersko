@@ -24,7 +24,7 @@ namespace Kinect.Toolbox
 
 
             paths = (List<RecordedPath>)formatter.Deserialize(kbStream);
-
+            
 
             //string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             //using (StreamWriter writer = new StreamWriter(mydocpath + @"\rozmontowane_gesty_x.txt"))
@@ -60,9 +60,12 @@ namespace Kinect.Toolbox
 
 
             //}
-            if (((System.IO.FileStream)kbStream).Name.Contains("left"))
-                Tools.SavePointsToFile(paths, "leftRotation");  
+            if (((System.IO.FileStream)kbStream).Name.Contains("right"))
+            {
+                //paths.RemoveAt(7);
+                Tools.SavePointsToFile(paths, "rightRotation");
 
+            }
             //paths = new List<RecordedPath>();
         }
 
