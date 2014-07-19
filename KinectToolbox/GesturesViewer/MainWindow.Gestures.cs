@@ -99,23 +99,23 @@ namespace GesturesViewer
             //twoHandsGestureRecognizer.StartRecordTemplate();
 
 
-            if (leftRotationGestureRecognizer.IsRecordingPath)
-            {
-                leftRotationGestureRecognizer.EndRecordTemplate();
-                recordGesture.Content = "Record Gesture";
-                return;
-            }
-
-            leftRotationGestureRecognizer.StartRecordTemplate();
-
-            //if (rightRotationGestureRecognizer.IsRecordingPath)
+            //if (leftRotationGestureRecognizer.IsRecordingPath)
             //{
-            //    rightRotationGestureRecognizer.EndRecordTemplate();
+            //    leftRotationGestureRecognizer.EndRecordTemplate();
             //    recordGesture.Content = "Record Gesture";
             //    return;
             //}
 
-            //rightRotationGestureRecognizer.StartRecordTemplate();
+            //leftRotationGestureRecognizer.StartRecordTemplate();
+
+            if (rightRotationGestureRecognizer.IsRecordingPath)
+            {
+                rightRotationGestureRecognizer.EndRecordTemplate();
+                recordGesture.Content = "Record Gesture";
+                return;
+            }
+
+            rightRotationGestureRecognizer.StartRecordTemplate();
 
             recordGesture.Content = "Stop Recording";
         }
