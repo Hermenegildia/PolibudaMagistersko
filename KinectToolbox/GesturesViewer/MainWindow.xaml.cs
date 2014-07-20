@@ -154,8 +154,7 @@ namespace GesturesViewer
             swipeGestureRecognizer = new SwipeGestureDetector();
             swipeGestureRecognizer.OnGestureDetected += OnGestureDetected;
 
-            stretchGestureRecognizer = new StretchGestureDetector();
-            stretchGestureRecognizer.OnGestureDetected += OnGestureDetected;
+         
 
 
             skeletonDisplayManager = new SkeletonDisplayManager(kinectSensor, kinectCanvas);
@@ -167,6 +166,9 @@ namespace GesturesViewer
             //LoadEightGestureDetector();
             //LoadSerialCombinedGestureDetector();
             LoadTwoHandsDetector();
+            
+            stretchGestureRecognizer = new StretchGestureDetector(kinectSensor);
+            stretchGestureRecognizer.OnGestureDetected += OnGestureDetected;
 
             //algorithmicPostureRecognizer.PostureDetected += postureDetector_PostureDetected;
 
@@ -311,7 +313,7 @@ namespace GesturesViewer
                         //twoHandsGestureRecognizer.Add(closestSkeleton, kinectSensor);
                         rightRotationGestureRecognizer.Add(closestSkeleton, kinectSensor);
                         leftRotationGestureRecognizer.Add(closestSkeleton, kinectSensor);
-                        stretchGestureRecognizer.Add(closestSkeleton, kinectSensor);
+                        stretchGestureRecognizer.Add(closestSkeleton);
                     }
 
                     foreach (Joint joint in closestSkeleton.Joints)

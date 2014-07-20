@@ -27,8 +27,9 @@ namespace Kinect.Toolbox
         {
             if (Entries.Count > 0 && LeftEntries.Count > 0)
             {
-                Vector2 start = Entries[0].Position - LeftEntries[0].Position;
-                angle = GoldenSection.GetAngleBetween(
+                var vec1 = Tools.Convert(Sensor, ((EntryKinect)Entries[0]).SkeletonPosition);
+                var vec2 = Tools.Convert(Sensor, ((EntryKinect)LeftEntries[0]).SkeletonPosition);
+                angle = GoldenSection.GetAngleBetween(Vector2.Zero, vec2 - vec1);
                 return true;
             }
             else
