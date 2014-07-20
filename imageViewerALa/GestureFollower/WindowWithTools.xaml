@@ -14,7 +14,7 @@
             <Setter Property="SnapsToDevicePixels" Value="True"/>
         </Style>
     </Window.Resources>
-    
+    <k:KinectRegion Name="kinectRegion" KinectSensor="{Binding Kinect}">
     <Grid  Margin="10 0 10 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -26,7 +26,8 @@
         <DockPanel Grid.Row="0" Margin="0 0 0 20" VerticalAlignment="Top">
             <Image DockPanel.Dock="Left" Source="Images\Logo.png" Height="32" Width="81" Margin="0 10 0 5"/>
             <TextBlock x:Name="gestureStateTB" DockPanel.Dock="Right" Margin="0 0 0 0" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18"><Run Text="Skeleton Basics"/></TextBlock>
-            <kin:KinectSensorChooserUI x:Name="kinectSensorChooserUI" Width="320" HorizontalAlignment="Center"  />
+                <kin:KinectSensorChooserUI x:Name="kinectSensorChooserUI" Width="320" HorizontalAlignment="Center" KinectSensorChooser="{Binding kinectSensorChooser}"/>
+            <!--<k:KinectUserViewer />-->
         </DockPanel>
 
         <DockPanel  Grid.Row="1" LastChildFill="True" Margin="5">
@@ -39,8 +40,8 @@
                 </Grid>
             </Viewbox>
         </DockPanel>
-
-            <ListBox Name="stabilitiesList"  Grid.Row="3" Height="150">
+         
+            <!--<ListBox Name="stabilitiesList"  Grid.Row="3" Height="150">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -50,7 +51,8 @@
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-        </ListBox>
+        </ListBox>-->
       
-    </Grid>
+        </Grid>
+    </k:KinectRegion>
 </Window>

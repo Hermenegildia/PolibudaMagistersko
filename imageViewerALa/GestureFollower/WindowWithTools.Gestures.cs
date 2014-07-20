@@ -52,7 +52,7 @@ namespace GestureFollower
 
             skeletonManager.Draw(frame.Skeletons);
 
-            stabilitiesList.ItemsSource = stabilities;
+            //stabilitiesList.ItemsSource = stabilities;
         }
     }
 }

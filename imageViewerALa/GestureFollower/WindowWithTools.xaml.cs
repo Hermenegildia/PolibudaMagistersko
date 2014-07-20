@@ -35,20 +35,24 @@ namespace GestureFollower
 
         readonly ContextTracker contextTracker = new ContextTracker();
 
+        //public KinectSensor Sensor
+        //{
+        //    get { return kinectSensorChooser.Kinect; }
+        //}
 
         public WindowWithTools()
         {
             InitializeComponent();
          
             InitializeKinect();
-         
+            this.DataContext = kinectSensorChooser;
         }
 
         private void InitializeKinect()
         {
             kinectSensorChooser = new KinectSensorChooser();
             kinectSensorChooser.KinectChanged += kinectSencorChooser_KinectChanged;
-            kinectSensorChooserUI.KinectSensorChooser = this.kinectSensorChooser;
+            //kinectSensorChooserUI.KinectSensorChooser = this.kinectSensorChooser;
             kinectSensorChooser.Start();
          
         }
@@ -115,6 +119,8 @@ namespace GestureFollower
                 this.sensor.Start();
 
                 kinectDisplay.DataContext = colorManager;
+                //kinectRegion.KinectSensor = sensor;
+                
                 skeletonManager = new SkeletonDisplayManager(this.sensor, kinectCanvas);
               
             }
