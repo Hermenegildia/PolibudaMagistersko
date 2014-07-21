@@ -56,6 +56,7 @@ namespace InteractionStreamTest
 
                 //_sensor.DepthStream.Range = DepthRange.Near;
                 _sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
+                
 
                 _sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated;
                 _sensor.SkeletonStream.EnableTrackingInNearRange = true;
@@ -75,6 +76,38 @@ namespace InteractionStreamTest
         }
 
 
+        private int TrackClosestSkeleton(Skeleton[] skeletons)
+        {
+            if (this._sensor != null)
+            {
+
+                if (!this._sensor.SkeletonStream.AppChoosesSkeletons)
+                {
+                    this._sensor.SkeletonStream.AppChoosesSkeletons = true; // Ensure AppChoosesSkeletons is set
+                }
+
+                float closestDistance = 10000f; // Start with a far enough distance
+                int closestID = 0;
+
+                foreach (Skeleton skeleton in skeletons.Where(s => s.TrackingState != SkeletonTrackingState.NotTracked))
+                {
+                    if (skeleton.Position.Z < closestDistance)
+                    {
+                        closestID = skeleton.TrackingId;
+                        closestDistance = skeleton.Position.Z;
+                    }
+                }
+
+                if (closestID > 0)
+                {
+                    this._sensor.SkeletonStream.ChooseSkeletons(closestID); // Track this skeleton
+                }
+                return closestID;
+            }
+            else return -1;
+
+        }
+
 
         private void SensorOnSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs skeletonFrameReadyEventArgs)
         {
@@ -83,9 +116,14 @@ namespace InteractionStreamTest
                 if (skeletonFrame == null)
                     return;
 
+                
+                
+
                 try
                 {
                     skeletonFrame.CopySkeletonDataTo(_skeletons);
+                    var skeletonId = TrackClosestSkeleton(_skeletons);
+                    _skeletons = SetTrackedSkeleton(_skeletons, skeletonId);
                     var accelerometerReading = _sensor.AccelerometerGetCurrentReading();
                     _interactionStream.ProcessSkeleton(_skeletons, accelerometerReading, skeletonFrame.Timestamp);
                 }
@@ -95,6 +133,24 @@ namespace InteractionStreamTest
                     // into a bad state.  Ignore the frame in that case.
                 }
             }
+        }
+
+        private Skeleton[] SetTrackedSkeleton(Skeleton[] skeletons, int id)
+        {
+            if (id <0)
+                return skeletons;
+
+            Skeleton tracked = skeletons.Where(x => x.TrackingId == id).FirstOrDefault();
+            Skeleton[] result = new Skeleton[6];
+            for (int i = 0; i < skeletons.Length; i++)
+            {
+                if (skeletons[i].TrackingId == id)
+                    result[i] = skeletons[i];
+                else
+                    result[i] = new Skeleton();
+            }
+
+            return result;
         }
 
         private void SensorOnDepthFrameReady(object sender, DepthImageFrameReadyEventArgs depthImageFrameReadyEventArgs)
