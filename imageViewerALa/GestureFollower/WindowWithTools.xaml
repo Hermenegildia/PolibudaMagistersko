@@ -33,7 +33,9 @@
         <DockPanel  Grid.Row="1" LastChildFill="True" Margin="5">
             <Viewbox Margin="5"  >
                 <Grid ClipToBounds="True"  >
-                    <Image x:Name="kinectDisplay" Source="{Binding Bitmap}"/>
+                        <Image x:Name="kinectDisplay" Source="C:\Users\alA\Pictures\Fig1.jpg">
+                          
+                        </Image>
                     <Canvas x:Name="kinectCanvas"/>
                     <Canvas x:Name="gesturesCanvas"/>
                     <!--<Rectangle Stroke="Black" StrokeThickness="1"/>-->
