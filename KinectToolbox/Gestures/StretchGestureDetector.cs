@@ -42,8 +42,8 @@ namespace Kinect.Toolbox
        {
            if (ScanPositions())
            {
-               //RaiseGestureDetected(gestureName + " " + distance.ToString());
-               Debug.WriteLine("stretch: " + distance.ToString());
+               RaiseGestureDetected(gestureName + " " + distance.ToString());
+               //Debug.WriteLine("stretch: " + distance.ToString());
            }
        }
     }

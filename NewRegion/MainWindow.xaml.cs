@@ -1,4 +1,5 @@
-﻿using Microsoft.Kinect;
+﻿using Kinect.Toolbox;
+using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit;
 using System;
 using System.Collections.Generic;
@@ -24,14 +25,26 @@ namespace NewRegion
     {
         private KinectSensor sensor;
         private KinectSensorChooser kinectSensorChooser;
-
+        StretchGestureDetector stretchGestureRecognizer;
 
         public MainWindow()
         {
             InitializeComponent();
-        
             InitializeSensorChooser();
             this.DataContext = kinectSensorChooser;
+         
+        }
+
+        private void InitializeGestureDetectors()
+        {
+            stretchGestureRecognizer = new StretchGestureDetector(sensor);
+            stretchGestureRecognizer.OnGestureDetected += OnGestureDetected;
+        }
+
+        private void OnGestureDetected(string gesture)
+        {
+            gestureStateTB.Text = (string.Format("{0} : {1}", gesture, DateTime.Now.TimeOfDay));
+            
         }
 
         private void InitializeSensorChooser()
@@ -105,7 +118,7 @@ namespace NewRegion
                 }
                 this.sensor.Start();
                 kinectRegion.KinectSensor = sensor;
-
+              
             }
         }
 
@@ -133,15 +146,76 @@ namespace NewRegion
             {
                 if (frame == null)
                     return;
+
+                Skeleton[] skeletons = new Skeleton[6];
+                frame.CopySkeletonDataTo(skeletons);
+
+                if (skeletons.All(s => s.TrackingState == SkeletonTrackingState.NotTracked))
+                    return;
+
+                int skeletonId = TrackClosestSkeleton(skeletons);
+                   Skeleton closestSkeleton = skeletons.Where(skel => skel.TrackingId == skeletonId).FirstOrDefault();
+                   if (closestSkeleton != null && sensor != null)
+                   {
+                       if (closestSkeleton.TrackingState != SkeletonTrackingState.Tracked)
+                           return;
+                       if (closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked)
+                       {
+                           stretchGestureRecognizer.Add(closestSkeleton);
+                       }
+                   }
             }
+        }
+
+        private int TrackClosestSkeleton(Skeleton[] skeletons)
+        {
+            if (this.sensor != null)
+            {
+
+                if (!this.sensor.SkeletonStream.AppChoosesSkeletons)
+                {
+                    this.sensor.SkeletonStream.AppChoosesSkeletons = true; // Ensure AppChoosesSkeletons is set
+                }
+
+                float closestDistance = 10000f; // Start with a far enough distance
+                int closestID = 0;
+
+                foreach (Skeleton skeleton in skeletons.Where(s => s.TrackingState != SkeletonTrackingState.NotTracked))
+                {
+                    if (skeleton.Position.Z < closestDistance)
+                    {
+                        closestID = skeleton.TrackingId;
+                        closestDistance = skeleton.Position.Z;
+                    }
+                }
+
+                if (closestID > 0)
+                {
+                    this.sensor.SkeletonStream.ChooseSkeletons(closestID); // Track this skeleton
+                }
+                return closestID;
+            }
+            else return -1;
+
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (null != this.sensor)
             {
+                sensor.DepthFrameReady -= sensor_DepthFrameReady;
+                sensor.SkeletonFrameReady -= sensor_SkeletonFrameReady;
+                sensor.ColorFrameReady -= sensor_ColorFrameReady;
                 this.sensor.Stop();
+                sensor = null;
             }
+
+            
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            InitializeGestureDetectors();
         }
 
       

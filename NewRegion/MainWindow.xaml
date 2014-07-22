@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:k="http://schemas.microsoft.com/kinect/2013"
         xmlns:tk="clr-namespace:Microsoft.Kinect.Toolkit;assembly=Microsoft.Kinect.Toolkit"
-        Title="MainWindow" Height="350" Width="525" Closing="Window_Closing" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+        Title="MainWindow" Height="350" Width="525" Closing="Window_Closing" WindowStartupLocation="CenterScreen" WindowState="Maximized"
+        Loaded="Window_Loaded">
 
   
         <Grid>
