@@ -15,6 +15,7 @@ namespace Microsoft.Kinect.Toolkit.Controls
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Media;
+    using System.Linq;
 
     using Microsoft.Kinect.Toolkit.Interaction;
 
@@ -883,7 +884,8 @@ namespace Microsoft.Kinect.Toolkit.Controls
                         skeletonFrame.CopySkeletonDataTo(this.skeletons);
 
                         var accelerometerReading = this.KinectSensor.AccelerometerGetCurrentReading();
-
+                        var skeletonId = TrackClosestSkeleton(skeletons);
+                        skeletons = SetTrackedSkeleton(skeletons, skeletonId);
                         // Hand data to Interaction framework to be processed
                         this.interactionStream.ProcessSkeleton(this.skeletons, accelerometerReading, skeletonFrame.Timestamp);
                     }
@@ -894,6 +896,56 @@ namespace Microsoft.Kinect.Toolkit.Controls
                     }
                 }
             }
+        }
+
+        private int TrackClosestSkeleton(Skeleton[] skeletons)
+        {
+            if (this.KinectSensor != null)
+            {
+
+                if (!this.KinectSensor.SkeletonStream.AppChoosesSkeletons)
+                {
+                    this.KinectSensor.SkeletonStream.AppChoosesSkeletons = true; // Ensure AppChoosesSkeletons is set
+                }
+
+                float closestDistance = 10000f; // Start with a far enough distance
+                int closestID = 0;
+
+                foreach (Skeleton skeleton in skeletons.Where(s => s.TrackingState != SkeletonTrackingState.NotTracked))
+                {
+                    if (skeleton.Position.Z < closestDistance)
+                    {
+                        closestID = skeleton.TrackingId;
+                        closestDistance = skeleton.Position.Z;
+                    }
+                }
+
+                if (closestID > 0)
+                {
+                    this.KinectSensor.SkeletonStream.ChooseSkeletons(closestID); // Track this skeleton
+                }
+                return closestID;
+            }
+            else return -1;
+
+        }
+
+        private Skeleton[] SetTrackedSkeleton(Skeleton[] skeletons, int id) //todo: added by Ala
+        {
+            if (id < 0)
+                return skeletons;
+
+            Skeleton tracked = skeletons.Where(x => x.TrackingId == id).FirstOrDefault();
+            Skeleton[] result = new Skeleton[6];
+            for (int i = 0; i < skeletons.Length; i++)
+            {
+                if (skeletons[i].TrackingId == id)
+                    result[i] = skeletons[i];
+                else
+                    result[i] = new Skeleton();
+            }
+
+            return result;
         }
 
         /// <summary>
