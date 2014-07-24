@@ -46,7 +46,7 @@ namespace connectionChecker
         {
             //LoadDataFromDatabase();
 
-            var wpfwindow = new MyDllWindow();
+            var wpfwindow = new KiMageViewer();//new MyDllWindow();
             ElementHost.EnableModelessKeyboardInterop(wpfwindow);
             wpfwindow.ShowWindow();
             //MainWindow mw = new MainWindow();

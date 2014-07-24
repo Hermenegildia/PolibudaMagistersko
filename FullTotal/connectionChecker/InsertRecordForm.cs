@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DBConnection;
 using System.Collections;
+using Models;
 
 namespace connectionChecker
 {
@@ -26,25 +27,25 @@ namespace connectionChecker
             myConnection = conn;
         }
 
-        private DataTable InsertDataToDatabase(string name, string last_name, string PESEL)
-        {
-            try
-            {
-                Hashtable param = new Hashtable();
-                param["name"] = name;
-                param["last_name"] = last_name;
-                param["PESEL"] = PESEL;
-                myConnection.OpenConnection();
-                DataTable result = myConnection.ExecuteQuery("INSERT INTO patients (name, last_name, PESEL) VALUES (@name, @last_name, @PESEL)", param);
-                myConnection.CloseConnection();
-                return result;
-            }
-            catch
-            {
-                MessageBox.Show("Ups! Coś się nie powiodło!");
-                return new DataTable();
-            }
-        }
+        //private DataTable InsertDataToDatabase(string name, string last_name, string PESEL)
+        //{
+        //    try
+        //    {
+        //        Hashtable param = new Hashtable();
+        //        param["name"] = name;
+        //        param["last_name"] = last_name;
+        //        param["PESEL"] = PESEL;
+        //        myConnection.OpenConnection();
+        //        DataTable result = myConnection.ExecuteQuery("INSERT INTO patients (name, last_name, PESEL) VALUES (@name, @last_name, @PESEL)", param);
+        //        myConnection.CloseConnection();
+        //        return result;
+        //    }
+        //    catch
+        //    {
+        //        MessageBox.Show("Ups! Coś się nie powiodło!");
+        //        return new DataTable();
+        //    }
+        //}
 
         private void btOK_Click(object sender, EventArgs e)
         {
@@ -55,7 +56,9 @@ namespace connectionChecker
                 ep3.SetError(tbPESEL, String.Empty);
                 if (tbName.Text != string.Empty && tbLastName.Text != string.Empty && tbPESEL.Text != string.Empty)
                 {
-                    myTable = InsertDataToDatabase(tbName.Text, tbLastName.Text, tbPESEL.Text);
+                    PatientLogic PL = new PatientLogic(myConnection);
+
+                    myTable = PL.InsertDataToDatabase(new Patient(tbName.Text, tbLastName.Text, Int32.Parse(tbPESEL.Text)));
                     DialogResult = System.Windows.Forms.DialogResult.OK;
                 }
                 else

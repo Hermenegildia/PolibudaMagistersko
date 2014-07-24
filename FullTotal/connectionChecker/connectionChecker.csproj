@@ -150,9 +150,9 @@
     <None Include="Resources\accept.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FullTotal\FullTotal.csproj">
-      <Project>{d1b0cf8d-e4c0-4818-89a9-0bbea13d4973}</Project>
-      <Name>FullTotal</Name>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{522e2a9c-c5dd-41e7-b3c1-b169fe6be59b}</Project>
+      <Name>Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\WinFormControls\WinFormControls.csproj">
       <Project>{a0e3a994-07ca-4ee8-b343-ba144f4a1fca}</Project>

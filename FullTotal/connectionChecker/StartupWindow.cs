@@ -71,8 +71,6 @@ namespace connectionChecker
 
         private void mainWindow_Closed(object sender, FormClosedEventArgs e)
         {
-            //todo: waitform zrobić i dodać
-            myConnection.CloseConnection();
             this.Close();
         }
 

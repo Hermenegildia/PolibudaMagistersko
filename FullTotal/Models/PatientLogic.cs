@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Models
 {
@@ -32,7 +33,7 @@ namespace Models
                 return result;
             }
             catch
-            {
+            {   
                 MessageBox.Show("Ups! Coś się nie powiodło!");
                 return new DataTable();
             }
