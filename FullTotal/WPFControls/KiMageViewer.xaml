@@ -15,6 +15,9 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         
+        <Viewbox Grid.Column="0">
+            
+        </Viewbox>
         <Viewbox Grid.Column="1" Stretch="Uniform">
             <local:ZoomBorder x:Name="border" ClipToBounds="True" Background="Gray">
                 <Image Source="C:\Users\alA\Downloads\MultiSizeImageSample\Resources\Fig1.jpg"/>
