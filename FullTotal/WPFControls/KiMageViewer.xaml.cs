@@ -111,10 +111,15 @@ namespace WPFControls
                     // KinectSensor might enter an invalid state while enabling/disabling streams or stream features.
                     // E.g.: sensor might be abruptly unplugged.
                 }
-                this.sensor.Start();
+                if (this.sensor != null) //w miedzyczasie ktos mogl odlaczyc kinecta
+                {
+                    this.sensor.Start();
+                    this.medicalImage.Visibility = Visibility.Visible;
+                }
+
             }
-            //else
-            //    this.statusBarText.Text = Properties.Resources.NoKinectReady;
+            else
+                this.statusBarText.Text = Properties.Resources.NoKinectReady;
         }
 
         private void sensor_DepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
@@ -130,6 +135,14 @@ namespace WPFControls
         private void sensor_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
           
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (null != this.sensor)
+            {
+                this.sensor.Stop();
+            }
         }
 
     }

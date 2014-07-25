@@ -9,9 +9,17 @@
         mc:Ignorable="d" 
         xmlns:local="clr-namespace:WPFControls.ImageTransformations"
         Title="KiMageViewer" d:DesignHight="600" d:DesignWidth="750" WindowStartupLocation="CenterScreen"
-        WindowState="Maximized" Loaded="Window_Loaded">
-    
-    
+        WindowState="Maximized" Loaded="Window_Loaded" Closing="Window_Closing">
+    <!--kradzione z microsoftowego-->
+    <Window.Resources>
+        <SolidColorBrush x:Key="MediumGreyBrush" Color="#ff6e6e6e"/>
+        <SolidColorBrush x:Key="KinectPurpleBrush" Color="#ff52318f"/>
+        <SolidColorBrush x:Key="KinectBlueBrush" Color="#ff00BCF2"/>
+        <Style TargetType="{x:Type Image}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+        </Style>
+    </Window.Resources> 
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -23,9 +31,11 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <DockPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="0 0 0 20" VerticalAlignment="Top">
-            <k:KinectSensorChooserUI x:Name="kinectSensorChooserUI" Width="320" HorizontalAlignment="Center"  />
-        </DockPanel>
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" Margin="0 0 0 20" VerticalAlignment="Top">
+            <TextBlock x:Name="NameTextBlock" DockPanel.Dock="Right" Margin="200 0 10 0" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18" TextAlignment="Right"><Run Text="KiMedi"/></TextBlock>
+            <k:KinectSensorChooserUI x:Name="kinectSensorChooserUI" IsListening="False" Width="320" HorizontalAlignment="Center" />
+         
+        </Grid>
         <k:KinectRegion Grid.Column="0" Grid.Row="1"  Name="kinectRegion">
             <Grid>
                 <Grid.RowDefinitions>
@@ -36,10 +46,13 @@
             </Grid>
         </k:KinectRegion>
         <Viewbox Grid.Column="1" Grid.Row="1" Stretch="Uniform">
-            <local:ZoomBorder x:Name="border" ClipToBounds="True" Background="Gray">
-                <Image Source="C:\Users\alA\Downloads\MultiSizeImageSample\Resources\Fig1.jpg"/>
+                <local:ZoomBorder x:Name="border" ClipToBounds="True" Background="Gray">
+                    <Image Name="medicalImage" Source="C:\Users\alA\Downloads\MultiSizeImageSample\Resources\Fig1.jpg" Visibility="Hidden"/>
             </local:ZoomBorder>
-   
-    </Viewbox>
+            
+        </Viewbox>
+        <DockPanel Grid.Row="2" Grid.ColumnSpan="2">
+            <TextBlock x:Name="statusBarText" DockPanel.Dock="Left" Margin="0 0 10 0" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18"><Run Text="Status"/></TextBlock>
+        </DockPanel>
     </Grid>
 </Window>
