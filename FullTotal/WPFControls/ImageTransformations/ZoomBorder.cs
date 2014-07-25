@@ -51,6 +51,7 @@ namespace WPFControls.ImageTransformations
                 group.Children.Add(tt);
                 child.RenderTransform = group;
                 child.RenderTransformOrigin = new Point(0.0, 0.0);
+              
                 this.MouseWheel += child_MouseWheel;
                 this.MouseLeftButtonDown += child_MouseLeftButtonDown;
                 this.MouseLeftButtonUp += child_MouseLeftButtonUp;
@@ -59,6 +60,8 @@ namespace WPFControls.ImageTransformations
                   child_PreviewMouseRightButtonDown);
             }
         }
+
+        
 
         public void Reset()
         {

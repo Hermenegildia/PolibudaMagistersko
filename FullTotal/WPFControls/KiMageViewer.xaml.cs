@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Microsoft.Kinect.Toolkit;
 using Microsoft.Kinect;
+using WPFControls.ViewModels;
 
 namespace WPFControls
 {
@@ -24,10 +25,18 @@ namespace WPFControls
         TransformSmoothParameters parameters;
         KinectSensorChooser kinectSensorChooser;
         KinectSensor sensor;
+        KinectController controller;
 
-        public KiMageViewer()
+        public KiMageViewer(KinectController controller)
         {
             InitializeComponent();
+            if (controller == null)
+            {
+                throw new ArgumentNullException("controller", Properties.Resources.KinectControllerInvalid);
+            }
+
+            this.controller = controller;
+
             parameters = new TransformSmoothParameters
             {
                 Smoothing = 0.75f,
@@ -115,6 +124,7 @@ namespace WPFControls
                 {
                     this.sensor.Start();
                     this.medicalImage.Visibility = Visibility.Visible;
+                    this.statusBarText.Text = Properties.Resources.KinectReady;
                 }
 
             }

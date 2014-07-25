@@ -61,7 +61,16 @@ namespace WPFControls.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Connect a device first!.
+        ///   Looks up a localized string similar to Type {0} does not support event: {1}.
+        /// </summary>
+        internal static string CommandOnEventException {
+            get {
+                return ResourceManager.GetString("CommandOnEventException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Najpierw podłącz urządzenie Kinect!.
         /// </summary>
         internal static string ConnectDeviceFirst {
             get {
@@ -70,7 +79,72 @@ namespace WPFControls.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No ready Kinect found!.
+        ///   Looks up a localized string similar to To get started
+        ///Lift your hand.
+        /// </summary>
+        internal static string EngagementHandoffGetStarted {
+            get {
+                return ResourceManager.GetString("EngagementHandoffGetStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lift your hand
+        ///to keep control.
+        /// </summary>
+        internal static string EngagementHandoffKeepControl {
+            get {
+                return ResourceManager.GetString("EngagementHandoffKeepControl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected experience is invalid.
+        /// </summary>
+        internal static string HomeScreenInvalidExperienceSelected {
+            get {
+                return ResourceManager.GetString("HomeScreenInvalidExperienceSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The supplied Uri {0} points to an invalid article model.
+        /// </summary>
+        internal static string InvalidArticle {
+            get {
+                return ResourceManager.GetString("InvalidArticle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The supplied Uri {0} points to a invalid content.
+        /// </summary>
+        internal static string InvalidPanningContent {
+            get {
+                return ResourceManager.GetString("InvalidPanningContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kinect Controller is invalid.
+        /// </summary>
+        internal static string KinectControllerInvalid {
+            get {
+                return ResourceManager.GetString("KinectControllerInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kinect gotów!.
+        /// </summary>
+        internal static string KinectReady {
+            get {
+                return ResourceManager.GetString("KinectReady", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nie wykryto podłączonego urządzenia Kinect!.
         /// </summary>
         internal static string NoKinectReady {
             get {
@@ -93,6 +167,33 @@ namespace WPFControls.Properties {
         internal static string ScreenshotWriteSuccess {
             get {
                 return ResourceManager.GetString("ScreenshotWriteSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have selected {0}.
+        /// </summary>
+        internal static string ScrollingListSelectionMessage {
+            get {
+                return ResourceManager.GetString("ScrollingListSelectionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This sample was designed 1920 x 1080 screen resolution. Running it in a lower resolution may result in incorrect layout and reduced functionality. Do you wish to continue?.
+        /// </summary>
+        internal static string SuboptimalScreenResolutionMessage {
+            get {
+                return ResourceManager.GetString("SuboptimalScreenResolutionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suboptimal Screen Resolution.
+        /// </summary>
+        internal static string SuboptimalScreenResolutionTitle {
+            get {
+                return ResourceManager.GetString("SuboptimalScreenResolutionTitle", resourceCulture);
             }
         }
     }

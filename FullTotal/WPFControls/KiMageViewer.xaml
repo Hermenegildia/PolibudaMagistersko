@@ -52,7 +52,7 @@
             
         </Viewbox>
         <DockPanel Grid.Row="2" Grid.ColumnSpan="2">
-            <TextBlock x:Name="statusBarText" DockPanel.Dock="Left" Margin="0 0 10 0" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18"><Run Text="Status"/></TextBlock>
+            <TextBlock x:Name="statusBarText" DockPanel.Dock="Left" Margin="0 0 10 0" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18"><Run Text="Kinect status"/></TextBlock>
         </DockPanel>
     </Grid>
 </Window>

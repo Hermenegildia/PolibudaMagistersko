@@ -150,6 +150,10 @@
     <None Include="Resources\accept.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FullTotal\FullTotal.csproj">
+      <Project>{e5410ffc-4c6d-4fbb-b18d-0c5e95210711}</Project>
+      <Name>FullTotal</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{522e2a9c-c5dd-41e7-b3c1-b169fe6be59b}</Project>
       <Name>Models</Name>
@@ -157,10 +161,6 @@
     <ProjectReference Include="..\WinFormControls\WinFormControls.csproj">
       <Project>{a0e3a994-07ca-4ee8-b343-ba144f4a1fca}</Project>
       <Name>WinFormControls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WPFControls\WPFControls.csproj">
-      <Project>{4f56c1a8-f0f0-46b1-978c-2d461310bb1d}</Project>
-      <Name>WPFControls</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

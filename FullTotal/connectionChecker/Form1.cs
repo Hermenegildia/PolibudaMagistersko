@@ -9,9 +9,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration; 
 using DBConnection;
-using WPFControls;
+using FullTotal;
 using System.Xaml;
 using System.Collections;
+using FullTotal.ViewModels;
+
 
 namespace connectionChecker
 {
@@ -50,13 +52,18 @@ namespace connectionChecker
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //LoadDataFromDatabase();
+            LoadDataFromDatabase();
+            //KinectController controller = PrepareKinectController();
+            //var wpfwindow = new KiMageViewer(new KinectController());//new MyDllWindow();
+            //ElementHost.EnableModelessKeyboardInterop(wpfwindow);
+            //wpfwindow.ShowWindow();
+            MainWindow mw = new MainWindow();
+            mw.Show();
+        }
 
-            var wpfwindow = new KiMageViewer();//new MyDllWindow();
-            ElementHost.EnableModelessKeyboardInterop(wpfwindow);
-            wpfwindow.ShowWindow();
-            //MainWindow mw = new MainWindow();
-            //mw.Show();
+        private KinectController PrepareKinectController()
+        {
+            return new KinectController();
         }
 
         private void btAdd_Click(object sender, EventArgs e)
