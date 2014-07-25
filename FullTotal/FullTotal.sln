@@ -5,18 +5,29 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBConnection", "DBConnectio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "connectionChecker", "connectionChecker\connectionChecker.csproj", "{AA43D1A7-0F28-4864-8AB9-314E910B1BF7}"
 	ProjectSection(ProjectDependencies) = postProject
+		{C6F9C31B-6130-4443-A5CC-EF0664552ECD} = {C6F9C31B-6130-4443-A5CC-EF0664552ECD}
 		{2C84CE43-CDAB-4541-A55A-7F849E8AC247} = {2C84CE43-CDAB-4541-A55A-7F849E8AC247}
 		{7BB95258-7BA8-4D6E-8D97-F7231FFA57D4} = {7BB95258-7BA8-4D6E-8D97-F7231FFA57D4}
 		{522E2A9C-C5DD-41E7-B3C1-B169FE6BE59B} = {522E2A9C-C5DD-41E7-B3C1-B169FE6BE59B}
+		{4508C4D1-85BB-4F3F-9E3B-CC93D231C65D} = {4508C4D1-85BB-4F3F-9E3B-CC93D231C65D}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFControls", "WPFControls\WPFControls.csproj", "{4F56C1A8-F0F0-46B1-978C-2D461310BB1D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C6F9C31B-6130-4443-A5CC-EF0664552ECD} = {C6F9C31B-6130-4443-A5CC-EF0664552ECD}
+		{2C84CE43-CDAB-4541-A55A-7F849E8AC247} = {2C84CE43-CDAB-4541-A55A-7F849E8AC247}
+		{4508C4D1-85BB-4F3F-9E3B-CC93D231C65D} = {4508C4D1-85BB-4F3F-9E3B-CC93D231C65D}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormControls", "WinFormControls\WinFormControls.csproj", "{A0E3A994-07CA-4EE8-B343-BA144F4A1FCA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{522E2A9C-C5DD-41E7-B3C1-B169FE6BE59B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinect.Toolbox", "Kinect.Toolbox\Kinect.Toolbox.csproj", "{2C84CE43-CDAB-4541-A55A-7F849E8AC247}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Kinect.Toolkit", "Microsoft.Kinect.Toolkit\Microsoft.Kinect.Toolkit.csproj", "{C6F9C31B-6130-4443-A5CC-EF0664552ECD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Kinect.Toolkit.Controls", "Microsoft.Kinect.Toolkit.Controls\Microsoft.Kinect.Toolkit.Controls.csproj", "{4508C4D1-85BB-4F3F-9E3B-CC93D231C65D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +59,14 @@ Global
 		{2C84CE43-CDAB-4541-A55A-7F849E8AC247}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C84CE43-CDAB-4541-A55A-7F849E8AC247}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C84CE43-CDAB-4541-A55A-7F849E8AC247}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6F9C31B-6130-4443-A5CC-EF0664552ECD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6F9C31B-6130-4443-A5CC-EF0664552ECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6F9C31B-6130-4443-A5CC-EF0664552ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6F9C31B-6130-4443-A5CC-EF0664552ECD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4508C4D1-85BB-4F3F-9E3B-CC93D231C65D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4508C4D1-85BB-4F3F-9E3B-CC93D231C65D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4508C4D1-85BB-4F3F-9E3B-CC93D231C65D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4508C4D1-85BB-4F3F-9E3B-CC93D231C65D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

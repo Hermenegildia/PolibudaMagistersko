@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinFormControls;
 
+
 namespace connectionChecker
 {
     public partial class StartupWindow : Form
@@ -28,29 +29,31 @@ namespace connectionChecker
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ReadLoginParams();
-            ShowHideLabels();
-            try
-            {
-                myConnection = new Connection(Properties.Settings.Default.dbLogin, Properties.Settings.Default.dbPssword);
-                int i = 0;
-                while (i < 10000)
-                {
-                    progressBar1.PerformStep();
-                    i++;
-                }
-                Form1 mainWindow = new Form1(myConnection);
+            //ReadLoginParams();
+            //ShowHideLabels();
+            //try
+            //{
+            //    myConnection = new Connection(Properties.Settings.Default.dbLogin, Properties.Settings.Default.dbPssword);
+            //    int i = 0;
+            //    while (i < 10000)
+            //    {
+            //        progressBar1.PerformStep();
+            //        i++;
+            //    }
+                //Form1 mainWindow = new Form1(myConnection);
+            Form1 mainWindow = new Form1(); //bez bazy, żeby było szybciej
+
                 progressBar1.PerformStep();
                 mainWindow.FormClosed += new FormClosedEventHandler(mainWindow_Closed);
 
                 this.Hide();
                 mainWindow.Show();
-            }
-            catch (Exception ex)
-            {
-                Error er = new Error("Wystąpił błąd! Spradź poprawność loginu i hasła do bazy danych \n" + ex);
-                er.ShowDialog();
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Error er = new Error("Wystąpił błąd! Spradź poprawność loginu i hasła do bazy danych \n" + ex);
+            //    er.ShowDialog();
+            //}
         }
 
         private void ReadLoginParams()

@@ -25,6 +25,12 @@ namespace connectionChecker
             LoadDataFromDatabase();
         }
 
+        public Form1() //na razie bez bazy, bo niepotrzebna
+        {
+            InitializeComponent();
+         
+        }
+
         private void LoadDataFromDatabase()
         {
             try

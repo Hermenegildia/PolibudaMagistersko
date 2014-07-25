@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Microsoft.Kinect.Toolkit;
+using Microsoft.Kinect;
 
 namespace WPFControls
 {
@@ -19,14 +21,115 @@ namespace WPFControls
     /// </summary>
     public partial class KiMageViewer : Window
     {
+        TransformSmoothParameters parameters;
+        KinectSensorChooser kinectSensorChooser;
+        KinectSensor sensor;
+
         public KiMageViewer()
         {
             InitializeComponent();
+            parameters = new TransformSmoothParameters
+            {
+                Smoothing = 0.75f,
+                Correction = 0.07f,
+                Prediction = 0.08f,
+                JitterRadius = 0.08f,
+                MaxDeviationRadius = 0.07f
+            };
+           
         }
 
         public void ShowWindow()
         {
             this.Show();
+            
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            kinectSensorChooser = new KinectSensorChooser();
+            kinectSensorChooser.KinectChanged += kinectSencorChooser_KinectChanged;
+            kinectSensorChooserUI.KinectSensorChooser = this.kinectSensorChooser;
+            kinectSensorChooser.Start();
+        }
+
+        private void kinectSencorChooser_KinectChanged(object sender, KinectChangedEventArgs e)
+        {
+            if (e.OldSensor != null)
+            {
+                try
+                {
+                    e.OldSensor.DepthStream.Range = DepthRange.Default;
+                    e.OldSensor.SkeletonStream.EnableTrackingInNearRange = false;
+                    e.OldSensor.DepthStream.Disable();
+                    e.OldSensor.SkeletonStream.Disable();
+                    e.OldSensor.SkeletonFrameReady -= sensor_SkeletonFrameReady;
+                    e.OldSensor.ColorFrameReady -= sensor_ColorFrameReady;
+                    e.OldSensor.DepthFrameReady -= sensor_DepthFrameReady;
+                    //e.OldSensor.AllFramesReady -= sensor_AllFramesReady;
+                    //this.SkeletonViewerControl.KinectDevice = null;
+                    this.kinectRegion.KinectSensor = null;
+
+                }
+                catch (InvalidOperationException)
+                {
+                    // KinectSensor might enter an invalid state while enabling/disabling streams or stream features.
+                    // E.g.: sensor might be abruptly unplugged.
+                }
+            }
+
+            if (e.NewSensor != null)
+            {
+                try
+                {
+                    this.sensor = e.NewSensor;
+                    this.sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
+                    this.sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
+                    //this.SkeletonViewerControl.KinectDevice = this.sensor;
+                    this.sensor.SkeletonStream.Enable(parameters); //
+
+                    this.sensor.SkeletonFrameReady += sensor_SkeletonFrameReady;
+                    this.sensor.ColorFrameReady += sensor_ColorFrameReady;
+                    this.sensor.DepthFrameReady += sensor_DepthFrameReady;
+                    //this.sensor.AllFramesReady += sensor_AllFramesReady;
+                    this.kinectRegion.KinectSensor = this.sensor;
+
+                    try
+                    {
+                        this.sensor.DepthStream.Range = DepthRange.Near;
+                        this.sensor.SkeletonStream.EnableTrackingInNearRange = true;
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // Non Kinect for Windows devices do not support Near mode, so reset back to default mode.
+                        this.sensor.DepthStream.Range = DepthRange.Default;
+                        this.sensor.SkeletonStream.EnableTrackingInNearRange = false;
+                    }
+                }
+                catch (InvalidOperationException)
+                {
+                    // KinectSensor might enter an invalid state while enabling/disabling streams or stream features.
+                    // E.g.: sensor might be abruptly unplugged.
+                }
+                this.sensor.Start();
+            }
+            //else
+            //    this.statusBarText.Text = Properties.Resources.NoKinectReady;
+        }
+
+        private void sensor_DepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
+        {
+           
+        }
+
+        private void sensor_ColorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
+        {
+            
+        }
+
+        private void sensor_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
+        {
+          
         }
 
     }
