@@ -1,0 +1,5 @@
+﻿<PannableContentModel xmlns="clr-namespace:FullTotal.Models" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <PannableContentModel.ImageUri>
+        <x:Uri>pack://application:,,,/Content/PannableContentScreen/PannableMapImage.jpg</x:Uri>
+    </PannableContentModel.ImageUri>
+</PannableContentModel>

@@ -12,9 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using FullTotal.ViewModels;
 using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit;
+using Microsoft.Kinect.Toolkit.Controls;
 
 namespace FullTotal
 {
@@ -22,31 +22,15 @@ namespace FullTotal
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
-        KinectController controller;
+    {   
         TransformSmoothParameters parameters;
         KinectSensorChooser kinectSensorChooser;
         KinectSensor sensor;
 
-        public MainWindow(KinectController controller)
+        public MainWindow()
         {
             InitializeComponent();
 
-            //if (controller == null)
-            //{
-            //    throw new ArgumentNullException("controller", Properties.Resources.KinectControllerInvalid);
-            //}
-
-            //this.controller = controller;
-
-            //controller.EngagedUserColor = (Color)this.Resources["EngagedUserColor"];
-            //controller.TrackedUserColor = (Color)this.Resources["TrackedUserColor"];
-            //controller.EngagedUserMessageBrush = (Brush)this.Resources["EngagedUserMessageBrush"];
-            //controller.TrackedUserMessageBrush = (Brush)this.Resources["TrackedUserMessageBrush"];
-
-            //this.kinectRegion.HandPointersUpdated += (sender, args) => controller.OnHandPointersUpdated(this.kinectRegion.HandPointers);
-
-            //this.DataContext = controller;
 
             parameters = new TransformSmoothParameters
             {
@@ -64,6 +48,9 @@ namespace FullTotal
             kinectSensorChooser.KinectChanged += kinectSencorChooser_KinectChanged;
             kinectSensorChooserUI.KinectSensorChooser = this.kinectSensorChooser;
             kinectSensorChooser.Start();
+
+            var regionSensorBinding = new Binding("Kinect") { Source = this.kinectSensorChooser };
+            BindingOperations.SetBinding(this.kinectRegion, KinectRegion.KinectSensorProperty, regionSensorBinding);
         }
 
         private void kinectSencorChooser_KinectChanged(object sender, KinectChangedEventArgs e)
@@ -155,7 +142,11 @@ namespace FullTotal
         {
             if (null != this.sensor)
             {
+                sensor.DepthFrameReady -= sensor_DepthFrameReady;
+                sensor.SkeletonFrameReady -= sensor_SkeletonFrameReady;
+                sensor.ColorFrameReady -= sensor_ColorFrameReady;
                 this.sensor.Stop();
+                sensor = null;
             }
         }
     }
