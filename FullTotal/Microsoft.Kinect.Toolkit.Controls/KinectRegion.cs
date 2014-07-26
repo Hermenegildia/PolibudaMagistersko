@@ -898,6 +898,7 @@ namespace Microsoft.Kinect.Toolkit.Controls
             }
         }
 
+        //todo: added by Ala
         private int TrackClosestSkeleton(Skeleton[] skeletons)
         {
             if (this.KinectSensor != null)
@@ -1036,6 +1037,8 @@ namespace Microsoft.Kinect.Toolkit.Controls
                 }
             }
         }
+
+
 
         private void HandleHandPointerData(long timeStamp, UserInfo userInfo, int userIndex, InteractionHandPointer handPointer)
         {

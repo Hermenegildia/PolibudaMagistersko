@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit;
 using Microsoft.Kinect.Toolkit.Controls;
+using System.Diagnostics;
 
 namespace FullTotal
 {
@@ -26,6 +27,8 @@ namespace FullTotal
         TransformSmoothParameters parameters;
         KinectSensorChooser kinectSensorChooser;
         KinectSensor sensor;
+        bool isRightGripInteraction = false;
+        bool isLeftGripInteraction = false;
 
         public MainWindow()
         {
@@ -51,6 +54,58 @@ namespace FullTotal
 
             var regionSensorBinding = new Binding("Kinect") { Source = this.kinectSensorChooser };
             BindingOperations.SetBinding(this.kinectRegion, KinectRegion.KinectSensorProperty, regionSensorBinding);
+
+            KinectRegion.AddQueryInteractionStatusHandler(this.medicalImage, OnQuery); //obsluga medicalImage przez kinectRegion
+            KinectRegion.AddQueryInteractionStatusHandler(this.border, OnQuery); //obsluga zoomborder przez kinectRegion
+        }
+
+        private void OnQuery(object sender, QueryInteractionStatusEventArgs e)
+        {
+            //If a grip detected change the cursor image to grip
+            if (e.HandPointer.HandEventType == HandEventType.Grip && e.HandPointer.HandType == HandType.Right)
+            {
+                isRightGripInteraction = true;
+                e.IsInGripInteraction = true;
+            }
+
+            //If Grip Release detected change the cursor image to open
+            else if (e.HandPointer.HandEventType == HandEventType.GripRelease && e.HandPointer.HandType == HandType.Right)
+            {
+                isRightGripInteraction = false;
+                e.IsInGripInteraction = false;
+            }
+
+            //If no change in state do not change the cursor
+            else if (e.HandPointer.HandEventType == HandEventType.None && e.HandPointer.HandType == HandType.Right)
+            {
+                e.IsInGripInteraction = isRightGripInteraction;
+            }
+
+            if (e.HandPointer.HandEventType == HandEventType.Grip && e.HandPointer.HandType == HandType.Left)
+            {
+                isLeftGripInteraction = true;
+                e.IsInGripInteraction = true;
+
+            }
+
+            //If Grip Release detected change the cursor image to open
+            else if (e.HandPointer.HandEventType == HandEventType.GripRelease && e.HandPointer.HandType == HandType.Left)
+            {
+                isLeftGripInteraction = false;
+                e.IsInGripInteraction = false;
+                Debug.WriteLine("original source: " + e.OriginalSource);
+                Debug.WriteLine("source (object): " + e.Source.ToString());
+            }
+
+            //If no change in state do not change the cursor
+            else if (e.HandPointer.HandEventType == HandEventType.None && e.HandPointer.HandType == HandType.Left)
+            {
+                e.IsInGripInteraction = isLeftGripInteraction;
+            }
+
+            
+            
+            e.Handled = true;
         }
 
         private void kinectSencorChooser_KinectChanged(object sender, KinectChangedEventArgs e)
@@ -86,7 +141,7 @@ namespace FullTotal
                     this.sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
                     this.sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
                     //this.SkeletonViewerControl.KinectDevice = this.sensor;
-                    this.sensor.SkeletonStream.Enable(parameters); //
+                    this.sensor.SkeletonStream.Enable(parameters);
 
                     this.sensor.SkeletonFrameReady += sensor_SkeletonFrameReady;
                     this.sensor.ColorFrameReady += sensor_ColorFrameReady;
@@ -148,6 +203,12 @@ namespace FullTotal
                 this.sensor.Stop();
                 sensor = null;
             }
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+                this.Close();
         }
     }
 }
