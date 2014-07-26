@@ -28,6 +28,12 @@ namespace FullTotal.ImageTransformations
               .Children.First(tr => tr is ScaleTransform);
         }
 
+        private RotateTransform GetRotateTransform(UIElement element)
+        {
+            return (RotateTransform)((TransformGroup)element.RenderTransform)
+                .Children.First(tr => tr is RotateTransform);
+        }
+
         public override UIElement Child
         {
             get { return base.Child; }
@@ -49,6 +55,10 @@ namespace FullTotal.ImageTransformations
                 group.Children.Add(st);
                 TranslateTransform tt = new TranslateTransform();
                 group.Children.Add(tt);
+                //added by Ala
+                RotateTransform rt = new RotateTransform();
+                group.Children.Add(rt);
+                //
                 child.RenderTransform = group;
                 child.RenderTransformOrigin = new Point(0.0, 0.0);
               
@@ -56,11 +66,12 @@ namespace FullTotal.ImageTransformations
                 this.MouseLeftButtonDown += child_MouseLeftButtonDown;
                 this.MouseLeftButtonUp += child_MouseLeftButtonUp;
                 this.MouseMove += child_MouseMove;
-                this.PreviewMouseRightButtonDown += new MouseButtonEventHandler(
-                  child_PreviewMouseRightButtonDown);
+                this.PreviewMouseRightButtonDown += new MouseButtonEventHandler(child_PreviewMouseRightButtonDown);
+                
             }
         }
 
+    
         
 
         public void Reset()
@@ -131,6 +142,13 @@ namespace FullTotal.ImageTransformations
         void child_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             this.Reset();
+            if (child != null)
+            {
+                var rt = GetRotateTransform(child);
+                rt.CenterX = 
+                rt.CenterY = e.GetPosition(this).Y;
+                rt.Angle += 5;
+            }
         }
 
         private void child_MouseMove(object sender, MouseEventArgs e)
@@ -144,6 +162,17 @@ namespace FullTotal.ImageTransformations
                     tt.X = origin.X - v.X;
                     tt.Y = origin.Y - v.Y;
                 }
+            }
+        }
+
+        public void RotateLeft(double angle, double centerX, double centerY)
+        {
+            if (child != null)
+            {
+                var rt = GetRotateTransform(child);
+                rt.CenterX = centerX;
+                rt.CenterY = centerY;
+                rt.Angle += angle;
             }
         }
 

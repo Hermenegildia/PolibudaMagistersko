@@ -16,6 +16,7 @@ using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit;
 using Microsoft.Kinect.Toolkit.Controls;
 using System.Diagnostics;
+using FullTotal.ImageTransformations;
 
 namespace FullTotal
 {
@@ -27,8 +28,16 @@ namespace FullTotal
         TransformSmoothParameters parameters;
         KinectSensorChooser kinectSensorChooser;
         KinectSensor sensor;
+
+        //kinectRegion properties
         bool isRightGripInteraction = false;
         bool isLeftGripInteraction = false;
+        object lastLeftControl;
+        object lastRightControl;
+
+        delegate void HandGripHandler(HandPointer handPointer);
+        event HandGripHandler OnHandGripRelease;
+        event HandGripHandler OnHandGrip;
 
         public MainWindow()
         {
@@ -57,54 +66,101 @@ namespace FullTotal
 
             KinectRegion.AddQueryInteractionStatusHandler(this.medicalImage, OnQuery); //obsluga medicalImage przez kinectRegion
             KinectRegion.AddQueryInteractionStatusHandler(this.border, OnQuery); //obsluga zoomborder przez kinectRegion
+
+            this.OnHandGripRelease +=MainWindow_OnHandGripRelease; //zapis na moje zdarzenie, ze puszczona reka
+            this.OnHandGrip +=MainWindow_OnHandGrip;
+            //KinectRegion.AddHandPointerLeaveHandler(this.medicalImage, OnPointerLeave); 
+        }
+
+        private void MainWindow_OnHandGrip(HandPointer handPointer)
+        {
+            if (handPointer.HandType == HandType.Right)
+            {
+                //this.medicalImage.CaptureMouse();
+                
+            }
+        }
+
+
+        //gdy reka wyjezdza za obrazek
+        //private void OnPointerLeave(object sender, HandPointerEventArgs e)
+        //{
+        //    if (e.HandPointer.HandType == HandType.Left)
+        //        isLeftGripInteraction = false;
+        //    else if (e.HandPointer.HandType == HandType.Right)
+        //        isRightGripInteraction = false;
+        //}
+
+        private void MainWindow_OnHandGripRelease(HandPointer handPointer)
+        {
+            if (handPointer.HandType == HandType.Left)
+            {
+                var position = handPointer.GetPosition(this);
+                this.border.RotateLeft(-5, position.X, position.Y);
+            }
+                //this.border.Reset();
+            //else if (handType == HandType.Right)
+                //this.medicalImage.ReleaseMouseCapture();
         }
 
         private void OnQuery(object sender, QueryInteractionStatusEventArgs e)
         {
-            //If a grip detected change the cursor image to grip
-            if (e.HandPointer.HandEventType == HandEventType.Grip && e.HandPointer.HandType == HandType.Right)
+            if (e.HandPointer.HandType == HandType.Right)
             {
-                isRightGripInteraction = true;
-                e.IsInGripInteraction = true;
-            }
 
-            //If Grip Release detected change the cursor image to open
-            else if (e.HandPointer.HandEventType == HandEventType.GripRelease && e.HandPointer.HandType == HandType.Right)
+                //If a grip detected change the cursor image to grip
+                if (e.HandPointer.HandEventType == HandEventType.Grip)
+                {
+                    isRightGripInteraction = true;
+                    e.IsInGripInteraction = true;
+
+                    if (OnHandGrip != null)
+                        OnHandGrip(e.HandPointer);
+                }
+
+                //If Grip Release detected change the cursor image to open
+                else if (e.HandPointer.HandEventType == HandEventType.GripRelease)
+                {
+                    isRightGripInteraction = false;
+                    e.IsInGripInteraction = false;
+                }
+
+                //If no change in state do not change the cursor
+                else if (e.HandPointer.HandEventType == HandEventType.None)
+                {
+                    e.IsInGripInteraction = isRightGripInteraction;
+                }
+
+                lastRightControl = e.Source;
+            }
+            else if (e.HandPointer.HandType == HandType.Left)
             {
-                isRightGripInteraction = false;
-                e.IsInGripInteraction = false;
+
+                if (e.HandPointer.HandEventType == HandEventType.Grip)
+                {
+                    isLeftGripInteraction = true;
+                    e.IsInGripInteraction = true;
+                }
+
+                //If Grip Release detected change the cursor image to open
+                else if (e.HandPointer.HandEventType == HandEventType.GripRelease)
+                {
+                    isLeftGripInteraction = false;
+                    e.IsInGripInteraction = false;
+
+                    if (e.Source.GetType() == typeof(ZoomBorder) || e.Source.GetType()==typeof(Image))
+                    {  
+                            if (OnHandGripRelease != null)
+                                OnHandGripRelease(e.HandPointer);
+                    }
+                }
+                //If no change in state do not change the cursor
+                else if (e.HandPointer.HandEventType == HandEventType.None)
+                {
+                    e.IsInGripInteraction = isLeftGripInteraction;
+                }
             }
-
-            //If no change in state do not change the cursor
-            else if (e.HandPointer.HandEventType == HandEventType.None && e.HandPointer.HandType == HandType.Right)
-            {
-                e.IsInGripInteraction = isRightGripInteraction;
-            }
-
-            if (e.HandPointer.HandEventType == HandEventType.Grip && e.HandPointer.HandType == HandType.Left)
-            {
-                isLeftGripInteraction = true;
-                e.IsInGripInteraction = true;
-
-            }
-
-            //If Grip Release detected change the cursor image to open
-            else if (e.HandPointer.HandEventType == HandEventType.GripRelease && e.HandPointer.HandType == HandType.Left)
-            {
-                isLeftGripInteraction = false;
-                e.IsInGripInteraction = false;
-                Debug.WriteLine("original source: " + e.OriginalSource);
-                Debug.WriteLine("source (object): " + e.Source.ToString());
-            }
-
-            //If no change in state do not change the cursor
-            else if (e.HandPointer.HandEventType == HandEventType.None && e.HandPointer.HandType == HandType.Left)
-            {
-                e.IsInGripInteraction = isLeftGripInteraction;
-            }
-
-            
-            
+            //this.statusBarText.Text = (e.HandPointer.GetPosition(this.medicalImage)).Y.ToString();
             e.Handled = true;
         }
 
