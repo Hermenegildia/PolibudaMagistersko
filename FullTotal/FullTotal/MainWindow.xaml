@@ -61,7 +61,7 @@
             
         <Viewbox Stretch="Uniform" Grid.Column="1" Grid.Row="0">
             <Grid>
-                <local:ZoomBorder Grid.RowSpan="2" x:Name="border" ClipToBounds="True" Background="Gray">
+                <local:ZoomBorder Grid.RowSpan="2" x:Name="border" ClipToBounds="False" Background="AliceBlue">
                     <Image Name="medicalImage" Source="C:\Users\alA\Downloads\MultiSizeImageSample\Resources\Fig1.jpg" Visibility="Hidden"/>
                 </local:ZoomBorder>
             </Grid>

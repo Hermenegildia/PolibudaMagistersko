@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Kinect.Toolkit.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,32 @@ namespace FullTotal.ImageTransformations
         private UIElement child = null;
         private Point origin;
         private Point start;
+        KinectRegion kinectRegion;
+        bool isRightGripInteraction = false;
+        bool isLeftGripInteraction = false;
+
+        public void AssignKinectRegion(KinectRegion kinectRegion)
+        {
+            this.kinectRegion = kinectRegion;
+
+            if (kinectRegion != null)
+            {
+                KinectRegion.RemoveQueryInteractionStatusHandler(this.child, OnQuery); //usuń stare powiązania
+                KinectRegion.AddQueryInteractionStatusHandler(this.child, OnQuery); //obsluga medicalImage przez kinectRegion
+                KinectRegion.RemoveQueryInteractionStatusHandler(this, OnQuery); //usuń stare powiązania
+                KinectRegion.AddQueryInteractionStatusHandler(this, OnQuery); //obsluga ZoomBorder przez kinectRegion
+                KinectRegion.RemoveHandPointerGripHandler(this.child, OnPointerGrip); //usuń stare powiązania
+                KinectRegion.AddHandPointerGripHandler(this.child, OnPointerGrip);
+                KinectRegion.RemoveHandPointerMoveHandler(this.child, OnPointerMove); //usuń stare powiązania
+                KinectRegion.AddHandPointerMoveHandler(this.child, OnPointerMove);
+                KinectRegion.RemoveHandPointerGripReleaseHandler(this.child, OnPointerGripRelease); //usuń stare powiązania
+                KinectRegion.AddHandPointerGripReleaseHandler(this.child, OnPointerGripRelease);
+                KinectRegion.AddHandPointerLeaveHandler(this.child, OnPointerLeave); //usuń stare powiązania
+                KinectRegion.AddHandPointerLeaveHandler(this.child, OnPointerLeave); ////uwolnij uścisk gdy łapka schodzi z image
+            }
+        }
+
+
 
         private TranslateTransform GetTranslateTransform(UIElement element)
         {
@@ -67,8 +94,133 @@ namespace FullTotal.ImageTransformations
                 this.MouseLeftButtonUp += child_MouseLeftButtonUp;
                 this.MouseMove += child_MouseMove;
                 this.PreviewMouseRightButtonDown += new MouseButtonEventHandler(child_PreviewMouseRightButtonDown);
-                
+
+                if (kinectRegion != null)
+            {
+                KinectRegion.RemoveQueryInteractionStatusHandler(this.child, OnQuery); //usuń stare powiązania
+                KinectRegion.AddQueryInteractionStatusHandler(this.child, OnQuery); //obsluga medicalImage przez kinectRegion
+                KinectRegion.RemoveHandPointerGripHandler(this.child, OnPointerGrip); //usuń stare powiązania
+                KinectRegion.AddHandPointerGripHandler(this.child, OnPointerGrip);
+                KinectRegion.RemoveHandPointerMoveHandler(this.child, OnPointerMove); //usuń stare powiązania
+                KinectRegion.AddHandPointerMoveHandler(this.child, OnPointerMove);
+                KinectRegion.RemoveHandPointerGripReleaseHandler(this.child, OnPointerGripRelease); //usuń stare powiązania
+                KinectRegion.AddHandPointerGripReleaseHandler(this.child, OnPointerGripRelease);
+                KinectRegion.AddHandPointerLeaveHandler(this.child, OnPointerLeave); //usuń stare powiązania
+                KinectRegion.AddHandPointerLeaveHandler(this.child, OnPointerLeave); ////uwolnij uścisk gdy łapka schodzi z image
+                   
+                }
             }
+        }
+
+        private void OnPointerLeave(object sender, HandPointerEventArgs e)
+        {
+            if (e.HandPointer.HandType == HandType.Right)
+                isRightGripInteraction = false;
+            else
+                isLeftGripInteraction = false;
+            e.HandPointer.IsInGripInteraction = false;
+        }
+
+       
+
+     
+        private void OnPointerGrip(object sender, HandPointerEventArgs e)
+        {
+            if (e.HandPointer.HandType == HandType.Right)
+            {
+                isRightGripInteraction = true;
+                var tt = GetTranslateTransform(child);
+                start = e.HandPointer.GetPosition(this);
+                origin = new Point(tt.X, tt.Y);
+                this.Cursor = Cursors.Hand;
+                e.HandPointer.Capture(child);
+            }
+        }
+
+        private void OnPointerMove(object sender, HandPointerEventArgs e)
+        {
+            if (e.HandPointer.HandType == HandType.Right)
+            {
+                if (child != null)
+                {
+                    if (e.HandPointer.Captured == child)
+                    {
+                        var tt = GetTranslateTransform(child);
+                        Vector v = start - e.HandPointer.GetPosition(this);
+                        tt.X = origin.X - v.X;
+                        tt.Y = origin.Y - v.Y;
+                    }
+                }
+            }
+        }
+
+        private void OnPointerGripRelease(object sender, HandPointerEventArgs e)
+        {
+            if (child != null)
+            {
+                e.HandPointer.Capture(null);
+                e.HandPointer.IsInGripInteraction = false;
+            }
+        }
+
+        private void OnQuery(object sender, QueryInteractionStatusEventArgs e)
+        {
+            if (e.HandPointer.HandType == HandType.Right)
+            {
+                //If a grip detected change the cursor image to grip
+                if (e.HandPointer.HandEventType == HandEventType.Grip)
+                {
+                    isRightGripInteraction = true;
+                    e.IsInGripInteraction = true;
+
+                    //if (OnRightHandGrip != null)
+                    //    OnRightHandGrip(e.HandPointer);
+                }
+
+                //If Grip Release detected change the cursor image to open
+                else if (e.HandPointer.HandEventType == HandEventType.GripRelease)
+                {
+                    isRightGripInteraction = false;
+                    e.IsInGripInteraction = false;
+                }
+
+                //If no change in state do not change the cursor
+                else if (e.HandPointer.HandEventType == HandEventType.None)
+                {
+                    e.IsInGripInteraction = isRightGripInteraction;
+
+                }
+
+            }
+            else if (e.HandPointer.HandType == HandType.Left)
+            {
+                if (e.HandPointer.HandEventType == HandEventType.Grip)
+                {
+                    isLeftGripInteraction = true;
+                    e.IsInGripInteraction = true;
+                }
+
+                //If Grip Release detected change the cursor image to open
+                else if (e.HandPointer.HandEventType == HandEventType.GripRelease)
+                {
+                    isLeftGripInteraction = false;
+                    e.IsInGripInteraction = false;
+
+                    //if (e.Source.GetType() == typeof(ZoomBorder) || e.Source.GetType() == this.Child.GetType())
+                    //{
+                    //    //if (OnHandGripRelease != null)
+                    //    //    OnHandGripRelease(e.HandPointer);
+                    //}
+                }
+                //If no change in state do not change the cursor
+                else if (e.HandPointer.HandEventType == HandEventType.None)
+                {
+                    e.IsInGripInteraction = isLeftGripInteraction;
+
+                }
+            }
+            //this.statusBarText.Text = (e.HandPointer.GetPosition(this.medicalImage)).Y.ToString();
+            e.Handled = true;
         }
 
     
