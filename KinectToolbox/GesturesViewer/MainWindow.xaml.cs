@@ -169,6 +169,7 @@ namespace GesturesViewer
             
             stretchGestureRecognizer = new StretchGestureDetector(kinectSensor);
             stretchGestureRecognizer.OnGestureDetected += OnGestureDetected;
+ 
 
             //algorithmicPostureRecognizer.PostureDetected += postureDetector_PostureDetected;
 

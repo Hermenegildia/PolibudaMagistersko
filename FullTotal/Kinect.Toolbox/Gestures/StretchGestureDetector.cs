@@ -10,6 +10,9 @@ namespace Kinect.Toolbox
    public class StretchGestureDetector: TwoHandsAlgorithmicGessureDetector
     {
        float distance = 0.0f;
+       
+       public delegate void GestureDetection(string gestureName, float distance);
+       public event GestureDetection OnGestureWithDistanceDetected;
 
 
        public StretchGestureDetector(KinectSensor sensor, string gestureName = "stretch", int windowSize = 1) :
@@ -43,8 +46,11 @@ namespace Kinect.Toolbox
            // Too close?
            if (DateTime.Now.Subtract(lastGestureDate).TotalMilliseconds > MinimalPeriodBetweenGestures)
            {
-               if (OnGestureDetected != null)
-                   OnGestureDetected(gesture);
+               //if (OnGestureDetected != null)
+               //    OnGestureDetected(gesture);
+
+               if (OnGestureWithDistanceDetected != null)
+                   OnGestureWithDistanceDetected(gesture, distance);
 
                lastGestureDate = DateTime.Now;
            }
@@ -61,7 +67,7 @@ namespace Kinect.Toolbox
        {
            if (ScanPositions())
            {
-               RaiseGestureDetected(gestureName + " " + distance.ToString());
+               RaiseGestureDetected(gestureName , distance);
                //Debug.WriteLine("stretch: " + distance.ToString());
            }
        }

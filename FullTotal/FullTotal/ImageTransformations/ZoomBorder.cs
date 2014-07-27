@@ -21,7 +21,7 @@ namespace FullTotal.ImageTransformations
         bool isRightGripInteraction = false;
         bool isLeftGripInteraction = false;
        
-        delegate void GestureDelegate(string gestureName);
+        public delegate void GestureDelegate(string gestureName);
         public event GestureDelegate StartStretchGestureFollowing;
         public event GestureDelegate EndStretchGestureFollowing;
         

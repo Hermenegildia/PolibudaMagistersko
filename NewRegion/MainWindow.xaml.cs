@@ -38,7 +38,13 @@ namespace NewRegion
         private void InitializeGestureDetectors()
         {
             stretchGestureRecognizer = new StretchGestureDetector(sensor);
-            stretchGestureRecognizer.OnGestureDetected += OnGestureDetected;
+            //stretchGestureRecognizer.OnGestureDetected += OnGestureDetected;
+            stretchGestureRecognizer.OnGestureWithDistanceDetected +=stretchGestureRecognizer_OnGestureWithDistanceDetected;
+        }
+
+        private void stretchGestureRecognizer_OnGestureWithDistanceDetected(string gestureName, float distance)
+        {
+            gestureStateTB.Text = (string.Format("{0} : {1}", gestureName + " " + distance, DateTime.Now.TimeOfDay));
         }
 
         private void OnGestureDetected(string gesture)
@@ -161,6 +167,7 @@ namespace NewRegion
                            return;
                        if (closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked)
                        {
+                           //if (closestSkeleton.Joints[JointType.HandLeft].Position.X < closestSkeleton.Joints[JointType.HandRight].Position.X)
                            stretchGestureRecognizer.Add(closestSkeleton);
                        }
                    }

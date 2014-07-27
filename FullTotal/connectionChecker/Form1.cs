@@ -12,7 +12,7 @@ using DBConnection;
 using FullTotal;
 using System.Xaml;
 using System.Collections;
-using FullTotal.ViewModels;
+
 
 
 namespace connectionChecker
@@ -61,10 +61,10 @@ namespace connectionChecker
             mw.Show();
         }
 
-        private KinectController PrepareKinectController()
-        {
-            return new KinectController();
-        }
+        //private KinectController PrepareKinectController()
+        //{
+        //    return new KinectController();
+        //}
 
         private void btAdd_Click(object sender, EventArgs e)
         {

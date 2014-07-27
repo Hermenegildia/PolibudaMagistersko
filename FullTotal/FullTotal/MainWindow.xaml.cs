@@ -55,14 +55,15 @@ namespace FullTotal
         private void InitializeGestures()
         {
             stretchGestureDetector = new StretchGestureDetector(sensor);
-            stretchGestureDetector.OnGestureDetected +=stretchGestureDetector_OnGestureDetected;
+            stretchGestureDetector.OnGestureWithDistanceDetected += stretchGestureDetector_OnGestureWithDistanceDetected;
         }
 
-        private void stretchGestureDetector_OnGestureDetected(string gestureName)
+        private void stretchGestureDetector_OnGestureWithDistanceDetected(string gestureName, float distance)
         {
             
         }
 
+      
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             kinectSensorChooser = new KinectSensorChooser();
