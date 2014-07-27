@@ -38,6 +38,25 @@ namespace Kinect.Toolbox
 
        }
 
+       protected void RaiseGestureDetected(string gesture, float distance)
+       {
+           // Too close?
+           if (DateTime.Now.Subtract(lastGestureDate).TotalMilliseconds > MinimalPeriodBetweenGestures)
+           {
+               if (OnGestureDetected != null)
+                   OnGestureDetected(gesture);
+
+               lastGestureDate = DateTime.Now;
+           }
+
+           Entries.ForEach(e =>
+           {
+               if (DisplayCanvas != null)
+                   DisplayCanvas.Children.Remove(e.DisplayEllipse);
+           });
+           Entries.Clear();
+       }
+
        protected override void LookForGesture()
        {
            if (ScanPositions())

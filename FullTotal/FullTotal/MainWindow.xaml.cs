@@ -17,6 +17,7 @@ using Microsoft.Kinect.Toolkit;
 using Microsoft.Kinect.Toolkit.Controls;
 using System.Diagnostics;
 using FullTotal.ImageTransformations;
+using Kinect.Toolbox;
 
 namespace FullTotal
 {
@@ -29,20 +30,18 @@ namespace FullTotal
         KinectSensorChooser kinectSensorChooser;
         KinectSensor sensor;
 
-        //kinectRegion properties
-        bool isRightGripInteraction = false;
-        bool isLeftGripInteraction = false;
+        //gestures and postures
+        readonly ContextTracker contextTracker = new ContextTracker();
+        StretchGestureDetector stretchGestureDetector; 
+        bool isStretchGestureActive;
        
 
-        //delegate void HandGripHandler(HandPointer handPointer);
-        //event HandGripHandler OnHandGripRelease;
-        //event HandGripHandler OnRightHandGrip;
 
         public MainWindow()
         {
             InitializeComponent();
-
-
+            isStretchGestureActive = false;
+            InitializeGestures();
             parameters = new TransformSmoothParameters
             {
                 Smoothing = 0.75f,
@@ -51,6 +50,17 @@ namespace FullTotal
                 JitterRadius = 0.08f,
                 MaxDeviationRadius = 0.07f
             };
+        }
+
+        private void InitializeGestures()
+        {
+            stretchGestureDetector = new StretchGestureDetector(sensor);
+            stretchGestureDetector.OnGestureDetected +=stretchGestureDetector_OnGestureDetected;
+        }
+
+        private void stretchGestureDetector_OnGestureDetected(string gestureName)
+        {
+            
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -64,125 +74,17 @@ namespace FullTotal
             BindingOperations.SetBinding(this.kinectRegion, KinectRegion.KinectSensorProperty, regionSensorBinding);
 
             this.border.AssignKinectRegion(this.kinectRegion);
-
-            //kinectRegion events
+            this.border.StartStretchGestureFollowing += border_StartStretchGestureFollowing;
            
-            //KinectRegion.AddHandPointerLeaveHandler(this.medicalImage, OnPointerLeave);
-            //this.OnHandGripRelease +=MainWindow_OnHandGripRelease; //zapis na moje zdarzenie, ze puszczona reka
-            //this.OnRightHandGrip +=MainWindow_OnHRightandGrip;
-            //KinectRegion.AddHandPointerMoveHandler(this.medicalImage, OnPointerMove);
-
         }
 
-        private void OnPointerMove(object sender, HandPointerEventArgs e)
+        private void border_StartStretchGestureFollowing(string gestureName)
         {
-            
+            isStretchGestureActive = true;
         }
 
-        private void OnPointerLeave(object sender, HandPointerEventArgs e) //uwolnij uścisk gdy łapka schodzi z image
-        {
-            if (e.HandPointer.HandType == HandType.Right)
-                isRightGripInteraction = false;
-            else
-                isLeftGripInteraction = false;
-            e.HandPointer.IsInGripInteraction = false;
-        }
-
-        private void OnImagePointerCapture(object sender, HandPointerEventArgs e)
-        {
-           
-               
-        }
-
-        private void MainWindow_OnHRightandGrip(HandPointer handPointer)
-        {
-            if (handPointer.HandType == HandType.Right)
-            {
-                //this.medicalImage.CaptureMouse();
-                
-            }
-        }
-
-
-        //gdy reka wyjezdza za obrazek
-        //private void OnPointerLeave(object sender, HandPointerEventArgs e)
-        //{
-        //    if (e.HandPointer.HandType == HandType.Left)
-        //        isLeftGripInteraction = false;
-        //    else if (e.HandPointer.HandType == HandType.Right)
-        //        isRightGripInteraction = false;
-        //}
-
-        private void MainWindow_OnHandGripRelease(HandPointer handPointer)
-        {
-            //if (handPointer.HandType == HandType.Left)
-            //{
-            //    var position = handPointer.GetPosition(this);
-            //    this.border.RotateLeft(-5, position.X, position.Y);
-            //}
-              
-        }
-
-        //private void OnQuery(object sender, QueryInteractionStatusEventArgs e)
-        //{
-        //    if (e.HandPointer.HandType == HandType.Right)
-        //    {
-        //        //If a grip detected change the cursor image to grip
-        //        if (e.HandPointer.HandEventType == HandEventType.Grip)
-        //        {
-        //            isRightGripInteraction = true;
-        //            e.IsInGripInteraction = true;
-
-        //            if (OnRightHandGrip != null)
-        //                OnRightHandGrip(e.HandPointer);
-        //        }
-
-        //        //If Grip Release detected change the cursor image to open
-        //        else if (e.HandPointer.HandEventType == HandEventType.GripRelease)
-        //        {
-        //            isRightGripInteraction = false;
-        //            e.IsInGripInteraction = false;
-        //        }
-
-        //        //If no change in state do not change the cursor
-        //        else if (e.HandPointer.HandEventType == HandEventType.None)
-        //        {
-        //            e.IsInGripInteraction = isRightGripInteraction;
-                  
-        //        }
-
-        //    }
-        //    else if (e.HandPointer.HandType == HandType.Left)
-        //    {
-
-        //        if (e.HandPointer.HandEventType == HandEventType.Grip)
-        //        {
-        //            isLeftGripInteraction = true;
-        //            e.IsInGripInteraction = true;
-        //        }
-
-        //        //If Grip Release detected change the cursor image to open
-        //        else if (e.HandPointer.HandEventType == HandEventType.GripRelease)
-        //        {
-        //            isLeftGripInteraction = false;
-        //            e.IsInGripInteraction = false;
-
-        //            if (e.Source.GetType() == typeof(ZoomBorder) || e.Source.GetType()==typeof(Image))
-        //            {  
-        //                    if (OnHandGripRelease != null)
-        //                        OnHandGripRelease(e.HandPointer);
-        //            }
-        //        }
-        //        //If no change in state do not change the cursor
-        //        else if (e.HandPointer.HandEventType == HandEventType.None)
-        //        {
-        //            e.IsInGripInteraction = isLeftGripInteraction;
-                   
-        //        }
-        //    }
-        //    //this.statusBarText.Text = (e.HandPointer.GetPosition(this.medicalImage)).Y.ToString();
-        //    e.Handled = true;
-        //}
+       
+      
 
         private void kinectSencorChooser_KinectChanged(object sender, KinectChangedEventArgs e)
         {
@@ -266,7 +168,67 @@ namespace FullTotal
 
         private void sensor_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
-            
+            using (SkeletonFrame frame = e.OpenSkeletonFrame())
+            {
+                if (frame == null)
+                    return;
+                Skeleton[] skeletons= new Skeleton[6];
+                if (skeletons == null || skeletons.Length != frame.SkeletonArrayLength)
+                {
+                    skeletons = new Skeleton[frame.SkeletonArrayLength];
+                }
+                frame.CopySkeletonDataTo(skeletons);
+
+                if (skeletons.All(s => s.TrackingState == SkeletonTrackingState.NotTracked))
+                    return;
+
+                ProcessFrame(frame, skeletons);
+              
+            }
+        }
+
+        private void ProcessFrame(SkeletonFrame frame, Skeleton[] skeletons)
+        {
+            var skeletonId = TrackClosestSkeleton(skeletons);
+
+                Skeleton closestSkeleton = skeletons.Where(skel => skel.TrackingId == skeletonId).FirstOrDefault();
+                if (closestSkeleton != null && sensor != null)
+                {
+                    if (closestSkeleton.TrackingState != SkeletonTrackingState.Tracked)
+                        return;
+                }
+        }
+
+        private int TrackClosestSkeleton(Skeleton[] skeletons)
+        {
+            if (this.sensor != null)
+            {
+
+                if (!this.sensor.SkeletonStream.AppChoosesSkeletons)
+                {
+                    this.sensor.SkeletonStream.AppChoosesSkeletons = true; // Ensure AppChoosesSkeletons is set
+                }
+
+                float closestDistance = 10000f; // Start with a far enough distance
+                int closestID = 0;
+
+                foreach (Skeleton skeleton in skeletons.Where(s => s.TrackingState != SkeletonTrackingState.NotTracked))
+                {
+                    if (skeleton.Position.Z < closestDistance)
+                    {
+                        closestID = skeleton.TrackingId;
+                        closestDistance = skeleton.Position.Z;
+                    }
+                }
+
+                if (closestID > 0)
+                {
+                    this.sensor.SkeletonStream.ChooseSkeletons(closestID); // Track this skeleton
+                }
+                return closestID;
+            }
+            else return -1;
+
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

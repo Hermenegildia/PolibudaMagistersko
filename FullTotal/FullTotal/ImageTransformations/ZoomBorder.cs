@@ -1,4 +1,5 @@
-﻿using Microsoft.Kinect.Toolkit.Controls;
+﻿using Kinect.Toolbox;
+using Microsoft.Kinect.Toolkit.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,11 @@ namespace FullTotal.ImageTransformations
         KinectRegion kinectRegion;
         bool isRightGripInteraction = false;
         bool isLeftGripInteraction = false;
+       
+        delegate void GestureDelegate(string gestureName);
+        public event GestureDelegate StartStretchGestureFollowing;
+        public event GestureDelegate EndStretchGestureFollowing;
+        
 
         public void AssignKinectRegion(KinectRegion kinectRegion)
         {
@@ -36,7 +42,7 @@ namespace FullTotal.ImageTransformations
                 KinectRegion.AddHandPointerMoveHandler(this.child, OnPointerMove);
                 KinectRegion.RemoveHandPointerGripReleaseHandler(this.child, OnPointerGripRelease); //usuń stare powiązania
                 KinectRegion.AddHandPointerGripReleaseHandler(this.child, OnPointerGripRelease);
-                KinectRegion.AddHandPointerLeaveHandler(this.child, OnPointerLeave); //usuń stare powiązania
+                KinectRegion.RemoveHandPointerLeaveHandler(this.child, OnPointerLeave); //usuń stare powiązania
                 KinectRegion.AddHandPointerLeaveHandler(this.child, OnPointerLeave); ////uwolnij uścisk gdy łapka schodzi z image
             }
         }
@@ -105,13 +111,38 @@ namespace FullTotal.ImageTransformations
                 KinectRegion.AddHandPointerMoveHandler(this.child, OnPointerMove);
                 KinectRegion.RemoveHandPointerGripReleaseHandler(this.child, OnPointerGripRelease); //usuń stare powiązania
                 KinectRegion.AddHandPointerGripReleaseHandler(this.child, OnPointerGripRelease);
-                KinectRegion.AddHandPointerLeaveHandler(this.child, OnPointerLeave); //usuń stare powiązania
-                KinectRegion.AddHandPointerLeaveHandler(this.child, OnPointerLeave); ////uwolnij uścisk gdy łapka schodzi z image
-                   
+                KinectRegion.RemoveHandPointerLeaveHandler(this.child, OnPointerLeave); //usuń stare powiązania
+                KinectRegion.AddHandPointerLeaveHandler(this.child, OnPointerLeave); //uwolnij uścisk gdy łapka schodzi z image
                 }
             }
         }
+        
+        public void Reset()
+        {
+            if (child != null)
+            {
+                // reset zoom
+                var st = GetScaleTransform(child);
+                st.ScaleX = 1.0;
+                st.ScaleY = 1.0;
 
+                // reset pan
+                var tt = GetTranslateTransform(child);
+                tt.X = 0.0;
+                tt.Y = 0.0;
+
+                //reset rotation
+                var rt = GetRotateTransform(child);
+                rt.CenterX = 0.0;
+                rt.CenterY = 0.0;
+                rt.Angle = 0;
+            }
+        }
+
+
+        #region Kinect events
+      
+        //rozluźnij łapkę, gdy wyjazd za foto
         private void OnPointerLeave(object sender, HandPointerEventArgs e)
         {
             if (e.HandPointer.HandType == HandType.Right)
@@ -121,14 +152,12 @@ namespace FullTotal.ImageTransformations
             e.HandPointer.IsInGripInteraction = false;
         }
 
-       
 
-     
+        //grip -> move -> release = przesuwanie
         private void OnPointerGrip(object sender, HandPointerEventArgs e)
         {
             if (e.HandPointer.HandType == HandType.Right)
-            {
-                isRightGripInteraction = true;
+            {   
                 var tt = GetTranslateTransform(child);
                 start = e.HandPointer.GetPosition(this);
                 origin = new Point(tt.X, tt.Y);
@@ -139,7 +168,7 @@ namespace FullTotal.ImageTransformations
 
         private void OnPointerMove(object sender, HandPointerEventArgs e)
         {
-            if (e.HandPointer.HandType == HandType.Right)
+            if (e.HandPointer.HandType == HandType.Right && !isLeftGripInteraction)
             {
                 if (child != null)
                 {
@@ -152,6 +181,17 @@ namespace FullTotal.ImageTransformations
                     }
                 }
             }
+            else if (isRightGripInteraction && isLeftGripInteraction)
+            {
+                if (child != null)
+                {
+                    if (e.HandPointer.Captured == null)
+                    {
+                        if (StartStretchGestureFollowing != null)
+                            StartStretchGestureFollowing("StretchGesture");
+                    }
+                }
+            }
         }
 
         private void OnPointerGripRelease(object sender, HandPointerEventArgs e)
@@ -159,7 +199,8 @@ namespace FullTotal.ImageTransformations
             if (child != null)
             {
                 e.HandPointer.Capture(null);
-                e.HandPointer.IsInGripInteraction = false;
+                if (EndStretchGestureFollowing != null)
+                    EndStretchGestureFollowing("StretchGesture");
             }
         }
 
@@ -172,9 +213,6 @@ namespace FullTotal.ImageTransformations
                 {
                     isRightGripInteraction = true;
                     e.IsInGripInteraction = true;
-
-                    //if (OnRightHandGrip != null)
-                    //    OnRightHandGrip(e.HandPointer);
                 }
 
                 //If Grip Release detected change the cursor image to open
@@ -206,11 +244,6 @@ namespace FullTotal.ImageTransformations
                     isLeftGripInteraction = false;
                     e.IsInGripInteraction = false;
 
-                    //if (e.Source.GetType() == typeof(ZoomBorder) || e.Source.GetType() == this.Child.GetType())
-                    //{
-                    //    //if (OnHandGripRelease != null)
-                    //    //    OnHandGripRelease(e.HandPointer);
-                    //}
                 }
                 //If no change in state do not change the cursor
                 else if (e.HandPointer.HandEventType == HandEventType.None)
@@ -219,28 +252,13 @@ namespace FullTotal.ImageTransformations
 
                 }
             }
-            //this.statusBarText.Text = (e.HandPointer.GetPosition(this.medicalImage)).Y.ToString();
             e.Handled = true;
         }
 
-    
-        
+        # endregion Kinect events
 
-        public void Reset()
-        {
-            if (child != null)
-            {
-                // reset zoom
-                var st = GetScaleTransform(child);
-                st.ScaleX = 1.0;
-                st.ScaleY = 1.0;
 
-                // reset pan
-                var tt = GetTranslateTransform(child);
-                tt.X = 0.0;
-                tt.Y = 0.0;
-            }
-        }
+      
 
         #region Child Events
 
@@ -294,13 +312,6 @@ namespace FullTotal.ImageTransformations
         void child_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             this.Reset();
-            if (child != null)
-            {
-                var rt = GetRotateTransform(child);
-                rt.CenterX = 
-                rt.CenterY = e.GetPosition(this).Y;
-                rt.Angle += 5;
-            }
         }
 
         private void child_MouseMove(object sender, MouseEventArgs e)
