@@ -41,7 +41,7 @@ namespace FullTotal
         {
             InitializeComponent();
             isStretchGestureActive = false;
-            InitializeGestures();
+            
             parameters = new TransformSmoothParameters
             {
                 Smoothing = 0.75f,
@@ -54,12 +54,13 @@ namespace FullTotal
 
         private void InitializeGestures()
         {
-            stretchGestureDetector = new StretchGestureDetector(sensor);
+            stretchGestureDetector = new StretchGestureDetector(this.sensor, this.kinectRegion);
             stretchGestureDetector.OnGestureWithDistanceDetected += stretchGestureDetector_OnGestureWithDistanceDetected;
         }
 
-        private void stretchGestureDetector_OnGestureWithDistanceDetected(string gestureName, float distance)
+        private void stretchGestureDetector_OnGestureWithDistanceDetected(string gestureName, double distance)
         {
+            statusBarText.Text = gestureName + " " + distance.ToString();
             
         }
 
@@ -76,10 +77,15 @@ namespace FullTotal
 
             this.border.AssignKinectRegion(this.kinectRegion);
             this.border.StartStretchGestureFollowing += border_StartStretchGestureFollowing;
-           
+           this.border.OnVectorLengthUpdate += border_OnVectorLengthUpdate;
         }
 
-        private void border_StartStretchGestureFollowing(string gestureName)
+        private void border_OnVectorLengthUpdate(double vectorLength)
+        {
+            this.statusBarText.Text = "zoomable vector length: " + vectorLength.ToString();
+        }
+
+        private void border_StartStretchGestureFollowing()
         {
             isStretchGestureActive = true;
         }
@@ -144,12 +150,20 @@ namespace FullTotal
                 {
                     // KinectSensor might enter an invalid state while enabling/disabling streams or stream features.
                     // E.g.: sensor might be abruptly unplugged.
+
+                    this.statusBarText.Text = Properties.Resources.NoKinectReady;
                 }
                 if (this.sensor != null) //w miedzyczasie ktos mogl odlaczyc kinecta
                 {
-                    this.sensor.Start();
-                    this.medicalImage.Visibility = Visibility.Visible;
-                    this.statusBarText.Text = Properties.Resources.KinectReady;
+                    try
+                    {
+                        this.sensor.Start();
+                        this.medicalImage.Visibility = Visibility.Visible;
+                        this.statusBarText.Text = Properties.Resources.KinectReady;
+
+                        InitializeGestures();
+                    }
+                    catch { }
                 }
 
             }
@@ -190,6 +204,7 @@ namespace FullTotal
 
         private void ProcessFrame(SkeletonFrame frame, Skeleton[] skeletons)
         {
+            //Dictionary<int, string> stabilities = new Dictionary<int, string>(); //sluzy do wyswitelania stablilites na liscie - tu nieuzywane!
             var skeletonId = TrackClosestSkeleton(skeletons);
 
                 Skeleton closestSkeleton = skeletons.Where(skel => skel.TrackingId == skeletonId).FirstOrDefault();
@@ -197,6 +212,19 @@ namespace FullTotal
                 {
                     if (closestSkeleton.TrackingState != SkeletonTrackingState.Tracked)
                         return;
+
+                    contextTracker.Add(closestSkeleton.Position.ToVector3(), closestSkeleton.TrackingId);
+                    //stabilities.Add(closestSkeleton.TrackingId, contextTracker.IsStableRelativeToCurrentSpeed(closestSkeleton.TrackingId) ? "Stable" : "Non stable");
+                    if (!contextTracker.IsStableRelativeToCurrentSpeed(closestSkeleton.TrackingId))
+                        return;
+
+                    if (isStretchGestureActive)
+                    {
+                        if (closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked)
+                        {
+                            stretchGestureDetector.Add(closestSkeleton);
+                        }
+                    }
                 }
         }
 

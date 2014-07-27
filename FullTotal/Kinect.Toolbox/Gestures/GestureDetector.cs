@@ -16,7 +16,7 @@ namespace Kinect.Toolbox
       
         public event Action<string> OnGestureDetected;
 
-         protected DateTime lastGestureDate = DateTime.Now;
+        protected DateTime lastGestureDate = DateTime.Now;
 
         readonly int windowSize; // Number of recorded positions
 

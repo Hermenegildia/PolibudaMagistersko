@@ -21,10 +21,12 @@ namespace FullTotal.ImageTransformations
         bool isRightGripInteraction = false;
         bool isLeftGripInteraction = false;
        
-        public delegate void GestureDelegate(string gestureName);
+        public delegate void GestureDelegate();
         public event GestureDelegate StartStretchGestureFollowing;
         public event GestureDelegate EndStretchGestureFollowing;
-        
+
+        public delegate void VectorLengthUpdate(double vectorLength);
+        public event VectorLengthUpdate OnVectorLengthUpdate;
 
         public void AssignKinectRegion(KinectRegion kinectRegion)
         {
@@ -176,8 +178,13 @@ namespace FullTotal.ImageTransformations
                     {
                         var tt = GetTranslateTransform(child);
                         Vector v = start - e.HandPointer.GetPosition(this);
-                        tt.X = origin.X - v.X;
-                        tt.Y = origin.Y - v.Y;
+                        //if (OnVectorLengthUpdate != null) //wyświetlaj długość wektora w głównym oknie
+                        //    OnVectorLengthUpdate(v.Length);
+                        //if (v.Length > 8) //drżąca ręka na ekranie odfiltrowana, ale utracona płynność przesuwania
+                        //{
+                            tt.X = origin.X - v.X;
+                            tt.Y = origin.Y - v.Y;
+                        //}
                     }
                 }
             }
@@ -188,7 +195,7 @@ namespace FullTotal.ImageTransformations
                     if (e.HandPointer.Captured == null)
                     {
                         if (StartStretchGestureFollowing != null)
-                            StartStretchGestureFollowing("StretchGesture");
+                            StartStretchGestureFollowing();
                     }
                 }
             }
@@ -200,7 +207,7 @@ namespace FullTotal.ImageTransformations
             {
                 e.HandPointer.Capture(null);
                 if (EndStretchGestureFollowing != null)
-                    EndStretchGestureFollowing("StretchGesture");
+                    EndStretchGestureFollowing();
             }
         }
 

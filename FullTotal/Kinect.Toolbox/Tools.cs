@@ -4,6 +4,9 @@ using System.Linq;
 using System.IO;
 using Microsoft.Kinect;
 using System.Text;
+using System.Windows;
+using Microsoft.Kinect.Toolkit.Controls;
+
 
 namespace Kinect.Toolbox
 {
@@ -208,7 +211,19 @@ namespace Kinect.Toolbox
 
 
             }
-
         }
+
+        public static Point GetJointPoint(KinectSensor sensor, KinectRegion region, SkeletonPoint jointPosition) //sciagniete z beginning_kinect_programming
+        {
+            CoordinateMapper cm = new CoordinateMapper(sensor);
+            DepthImagePoint point = cm.MapSkeletonPointToDepthPoint(jointPosition, sensor.DepthStream.Format);
+
+            point.X *= (int)region.ActualWidth / sensor.DepthStream.FrameWidth;
+            point.Y *= (int)region.ActualHeight / sensor.DepthStream.FrameHeight;
+
+            return new Point(point.X, point.Y);
+        }
+
+      
     }
 }
