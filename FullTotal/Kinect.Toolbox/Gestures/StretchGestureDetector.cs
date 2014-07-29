@@ -53,8 +53,10 @@ namespace Kinect.Toolbox
                     //double currentRightDistance = (pointRightCurrent - pointRightEnd).Length;
                     //double currentLeftDistance = (pointLeftCurrent - pointLeftEnd).Length;
                     double currentTotalDistance = (pointRightCurrent - pointLeftCurrent).Length;
+                    //przeskalowanie
+                   
 
-                    if(Math.Abs( currentTotalDistance-distanceTotal) > 8) //jesli zmiana dystansu miedzy dlonmi, a nie tylko przesuniecie!
+                    if(Math.Abs( currentTotalDistance-distanceTotal) > 50) //jesli zmiana dystansu miedzy dlonmi, a nie tylko przesuniecie!
                     {
                         distanceTotal = currentTotalDistance;
                         return true;
