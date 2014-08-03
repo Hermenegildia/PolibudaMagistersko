@@ -277,7 +277,7 @@ namespace FullTotal.ImageTransformations
                 var tt = GetTranslateTransform(child);
 
                 double zoom = e.Delta > 0 ? .2 : -.2;
-                if (!(e.Delta > 0) && (st.ScaleX < .4 || st.ScaleY < .4))
+                if (!(e.Delta > 0) && (st.ScaleX < .4 || st.ScaleY < .4)) //limit oddalania
                     return;
 
                 Point relative = e.GetPosition(child);

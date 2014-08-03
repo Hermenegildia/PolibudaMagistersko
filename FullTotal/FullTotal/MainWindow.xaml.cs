@@ -50,6 +50,7 @@ namespace FullTotal
                 JitterRadius = 0.08f,
                 MaxDeviationRadius = 0.07f
             };
+            
         }
 
         private void InitializeGestures()
@@ -61,7 +62,6 @@ namespace FullTotal
         private void stretchGestureDetector_OnGestureWithDistanceDetected(string gestureName, double distance)
         {
             statusBarText.Text = gestureName + " " + distance.ToString();
-            
         }
 
       
@@ -72,12 +72,14 @@ namespace FullTotal
             kinectSensorChooserUI.KinectSensorChooser = this.kinectSensorChooser;
             kinectSensorChooser.Start();
 
+            //przypisz wlasciwosc "Kinect" sensorChooser'a do wlasciwosci "KinectSensorProperty" w this.kinectRegion
             var regionSensorBinding = new Binding("Kinect") { Source = this.kinectSensorChooser };
             BindingOperations.SetBinding(this.kinectRegion, KinectRegion.KinectSensorProperty, regionSensorBinding);
+           
 
-            this.border.AssignKinectRegion(this.kinectRegion);
-            this.border.StartStretchGestureFollowing += border_StartStretchGestureFollowing;
-           this.border.OnVectorLengthUpdate += border_OnVectorLengthUpdate;
+            this.zoomBorder.AssignKinectRegion(this.kinectRegion);
+            this.zoomBorder.StartStretchGestureFollowing += border_StartStretchGestureFollowing;
+            this.zoomBorder.OnVectorLengthUpdate += border_OnVectorLengthUpdate;
         }
 
         private void border_OnVectorLengthUpdate(double vectorLength)
@@ -89,9 +91,6 @@ namespace FullTotal
         {
             isStretchGestureActive = true;
         }
-
-       
-      
 
         private void kinectSencorChooser_KinectChanged(object sender, KinectChangedEventArgs e)
         {
@@ -150,7 +149,6 @@ namespace FullTotal
                 {
                     // KinectSensor might enter an invalid state while enabling/disabling streams or stream features.
                     // E.g.: sensor might be abruptly unplugged.
-
                     this.statusBarText.Text = Properties.Resources.NoKinectReady;
                 }
                 if (this.sensor != null) //w miedzyczasie ktos mogl odlaczyc kinecta
@@ -160,7 +158,6 @@ namespace FullTotal
                         this.sensor.Start();
                         this.medicalImage.Visibility = Visibility.Visible;
                         this.statusBarText.Text = Properties.Resources.KinectReady;
-
                         InitializeGestures();
                     }
                     catch { }
@@ -173,12 +170,10 @@ namespace FullTotal
 
         private void sensor_DepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
         {
-            
         }
 
         private void sensor_ColorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
         {
-           
         }
 
         private void sensor_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
@@ -198,7 +193,6 @@ namespace FullTotal
                     return;
 
                 ProcessFrame(frame, skeletons);
-              
             }
         }
 

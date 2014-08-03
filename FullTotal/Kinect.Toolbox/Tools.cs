@@ -208,8 +208,6 @@ namespace Kinect.Toolbox
                 {
                     writer.Write(sbY.ToString());
                 }
-
-
             }
         }
 

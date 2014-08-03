@@ -47,18 +47,27 @@ namespace Kinect.Toolbox
                 var pointRightCurrent = Tools.GetJointPoint(Sensor, kinectRegion, ((EntryKinect)Entries[WindowSize-1]).SkeletonPosition);
                 var pointLeftCurrent = Tools.GetJointPoint(Sensor, kinectRegion, ((EntryKinect)LeftEntries[WindowSize-1]).SkeletonPosition);
                 //Debug.WriteLine("dłonie: Right = " + pointRight.X + " rightY = " + pointRight.Y);
-                if (pointRightCurrent.X > pointLeftCurrent.Y) //tylko gdy prawa po prawej - coś dziwnego z pointami o.O,
+                //if (pointRightCurrent.X > pointLeftCurrent.Y) //tylko gdy prawa po prawej - coś dziwnego z pointami o.O,
                     //todo: Ala ten warunek nie działa :/
-                {
+                //{
                     //double currentRightDistance = (pointRightCurrent - pointRightEnd).Length;
                     //double currentLeftDistance = (pointLeftCurrent - pointLeftEnd).Length;
                     double currentTotalDistance = (pointRightCurrent - pointLeftCurrent).Length;
                     //przeskalowanie
-                   
+                    //var buf = Math.Abs(currentTotalDistance - distanceTotal);
+                    //pointRightCurrent.X;
+                    //pointRightCurrent.Y;
 
-                    if(Math.Abs( currentTotalDistance-distanceTotal) > 50) //jesli zmiana dystansu miedzy dlonmi, a nie tylko przesuniecie!
+                    double deltaX = pointRightCurrent.X - pointLeftCurrent.X;
+                    double deltaY = pointRightCurrent.Y - pointRightCurrent.Y;
+
+                    double ratioX = deltaX / kinectRegion.ActualWidth;
+                    double ratioY = deltaY / kinectRegion.ActualHeight;
+                    
+                    if(Math.Abs(currentTotalDistance-distanceTotal) > 8) //jesli zmiana dystansu miedzy dlonmi, a nie tylko przesuniecie!
                     {
-                        distanceTotal = currentTotalDistance;
+                        //distanceTotal = currentTotalDistance;
+                        distanceTotal = ratioX;
                         return true;
                     }
 
@@ -66,9 +75,9 @@ namespace Kinect.Toolbox
                     //distanceRight = currentRightDistance;
                     
                     return false;
-                }
-                else
-                    return false;
+                //}
+                //else
+                //    return false;
             }
             else
                 return false;
