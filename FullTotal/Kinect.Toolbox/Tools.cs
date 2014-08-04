@@ -211,15 +211,15 @@ namespace Kinect.Toolbox
             }
         }
 
-        public static Point GetJointPoint(KinectSensor sensor, KinectRegion region, SkeletonPoint jointPosition) //sciagniete z beginning_kinect_programming
+        public static Point GetJointPoint(KinectSensor sensor, FrameworkElement control, SkeletonPoint jointPosition) //sciagniete z beginning_kinect_programming
         {
             CoordinateMapper cm = new CoordinateMapper(sensor);
             DepthImagePoint point = cm.MapSkeletonPointToDepthPoint(jointPosition, sensor.DepthStream.Format);
 
-            point.X *= (int)region.ActualWidth / sensor.DepthStream.FrameWidth;
-            point.Y *= (int)region.ActualHeight / sensor.DepthStream.FrameHeight;
+            point.X *= (int)control.ActualWidth / sensor.DepthStream.FrameWidth;
+            point.Y *= (int)control.ActualHeight / sensor.DepthStream.FrameHeight;
 
-            return new Point(point.X, point.Y);
+            return new Point((double)point.X, (double)point.Y);
         }
 
       

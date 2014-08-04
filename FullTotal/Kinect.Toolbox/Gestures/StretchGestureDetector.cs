@@ -11,21 +11,21 @@ namespace Kinect.Toolbox
 {
     public class StretchGestureDetector : TwoHandsAlgorithmicGessureDetector
     {   
-        //double distanceLeft = 0;
-        //double distanceRight = 0;
         double distanceTotal = 0;
-        //double distance = 0;
-        KinectRegion kinectRegion;
+        double ratioX = 0;
+        double ratioY = 0;
+        FrameworkElement control;
 
 
-        public delegate void GestureDetection(string gestureName, double distance);
+        //public delegate void GestureDetection(string gestureName, double distance);
+        public delegate void GestureDetection(string gestureName, double ratioX, double ratioY);
         public event GestureDetection OnGestureWithDistanceDetected;
 
 
-        public StretchGestureDetector(KinectSensor sensor,KinectRegion kinectRegion,  string gestureName = "stretch", int windowSize = 5) :
+        public StretchGestureDetector(KinectSensor sensor, FrameworkElement control, string gestureName = "stretch", int windowSize = 5) :
             base(sensor, gestureName, windowSize)
         {
-            this.kinectRegion = kinectRegion;
+            this.control = control;
         }
 
         public override void Add(SkeletonPoint position, KinectSensor sensor) //tego nie uzywamy
@@ -44,9 +44,9 @@ namespace Kinect.Toolbox
                 //var vec2 = Tools.Convert(Sensor, ((EntryKinect)LeftEntries[0]).SkeletonPosition);
                 //var pointRightEnd = Tools.GetJointPoint(Sensor, kinectRegion, ((EntryKinect)Entries[0]).SkeletonPosition); //we wspolrzednych wyswietlania
                 //var pointLeftEnd = Tools.GetJointPoint(Sensor, kinectRegion, ((EntryKinect)LeftEntries[0]).SkeletonPosition);
-                var pointRightCurrent = Tools.GetJointPoint(Sensor, kinectRegion, ((EntryKinect)Entries[WindowSize-1]).SkeletonPosition);
-                var pointLeftCurrent = Tools.GetJointPoint(Sensor, kinectRegion, ((EntryKinect)LeftEntries[WindowSize-1]).SkeletonPosition);
-                //Debug.WriteLine("dłonie: Right = " + pointRight.X + " rightY = " + pointRight.Y);
+                var pointRightCurrent = Tools.GetJointPoint(Sensor, control, ((EntryKinect)Entries[WindowSize-1]).SkeletonPosition);
+                var pointLeftCurrent = Tools.GetJointPoint(Sensor, control, ((EntryKinect)LeftEntries[WindowSize-1]).SkeletonPosition);
+                //Debug.WriteLine("dłonie: Right = " + pointRightCurrent.X + " rightY = " + pointRightCurrent.Y);
                 //if (pointRightCurrent.X > pointLeftCurrent.Y) //tylko gdy prawa po prawej - coś dziwnego z pointami o.O,
                     //todo: Ala ten warunek nie działa :/
                 //{
@@ -55,24 +55,22 @@ namespace Kinect.Toolbox
                     double currentTotalDistance = (pointRightCurrent - pointLeftCurrent).Length;
                     //przeskalowanie
                     //var buf = Math.Abs(currentTotalDistance - distanceTotal);
-                    //pointRightCurrent.X;
-                    //pointRightCurrent.Y;
-
-                    double deltaX = pointRightCurrent.X - pointLeftCurrent.X;
-                    double deltaY = pointRightCurrent.Y - pointRightCurrent.Y;
-
-                    double ratioX = deltaX / kinectRegion.ActualWidth;
-                    double ratioY = deltaY / kinectRegion.ActualHeight;
                     
                     if(Math.Abs(currentTotalDistance-distanceTotal) > 8) //jesli zmiana dystansu miedzy dlonmi, a nie tylko przesuniecie!
                     {
-                        //distanceTotal = currentTotalDistance;
-                        distanceTotal = ratioX;
+                        double deltaX = pointRightCurrent.X - pointLeftCurrent.X;
+                        double deltaY = pointRightCurrent.Y - pointLeftCurrent.Y;
+
+                        double currentRatioX = deltaX / control.ActualWidth;
+                        double currentRatioY = deltaY / control.ActualHeight;
+
+                        this.distanceTotal = currentTotalDistance;
+                        this.ratioX = currentRatioX;
+                        this.ratioY = currentRatioY;
+                        
                         return true;
                     }
 
-                    //distanceLeft = currentLeftDistance;
-                    //distanceRight = currentRightDistance;
                     
                     return false;
                 //}
@@ -84,7 +82,7 @@ namespace Kinect.Toolbox
 
         }
 
-        protected void RaiseGestureDetected(string gesture, double distance)
+        protected void RaiseGestureDetected(string gesture, double xRatio, double yRatio)
         {
             // Too close?
             if (DateTime.Now.Subtract(lastGestureDate).TotalMilliseconds > MinimalPeriodBetweenGestures)
@@ -93,7 +91,7 @@ namespace Kinect.Toolbox
                 //    OnGestureDetected(gesture);
 
                 if (OnGestureWithDistanceDetected != null)
-                    OnGestureWithDistanceDetected(gesture, distance);
+                    OnGestureWithDistanceDetected(gesture, xRatio, yRatio);
 
                 lastGestureDate = DateTime.Now;
             }
@@ -110,7 +108,7 @@ namespace Kinect.Toolbox
         {
             if (ScanPositions())
             {
-                RaiseGestureDetected(gestureName, distanceTotal);
+                RaiseGestureDetected(gestureName, this.ratioX, this.ratioY);
                 //Debug.WriteLine("stretch: " + distance.ToString());
             }
         }

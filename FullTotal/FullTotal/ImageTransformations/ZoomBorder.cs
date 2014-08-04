@@ -104,17 +104,17 @@ namespace FullTotal.ImageTransformations
                 this.PreviewMouseRightButtonDown += new MouseButtonEventHandler(child_PreviewMouseRightButtonDown);
 
                 if (kinectRegion != null)
-            {
-                KinectRegion.RemoveQueryInteractionStatusHandler(this.child, OnQuery); //usuń stare powiązania
-                KinectRegion.AddQueryInteractionStatusHandler(this.child, OnQuery); //obsluga medicalImage przez kinectRegion
-                KinectRegion.RemoveHandPointerGripHandler(this.child, OnPointerGrip); //usuń stare powiązania
-                KinectRegion.AddHandPointerGripHandler(this.child, OnPointerGrip);
-                KinectRegion.RemoveHandPointerMoveHandler(this.child, OnPointerMove); //usuń stare powiązania
-                KinectRegion.AddHandPointerMoveHandler(this.child, OnPointerMove);
-                KinectRegion.RemoveHandPointerGripReleaseHandler(this.child, OnPointerGripRelease); //usuń stare powiązania
-                KinectRegion.AddHandPointerGripReleaseHandler(this.child, OnPointerGripRelease);
-                KinectRegion.RemoveHandPointerLeaveHandler(this.child, OnPointerLeave); //usuń stare powiązania
-                KinectRegion.AddHandPointerLeaveHandler(this.child, OnPointerLeave); //uwolnij uścisk gdy łapka schodzi z image
+                {
+                    KinectRegion.RemoveQueryInteractionStatusHandler(this.child, OnQuery); //usuń stare powiązania
+                    KinectRegion.AddQueryInteractionStatusHandler(this.child, OnQuery); //obsluga medicalImage przez kinectRegion
+                    KinectRegion.RemoveHandPointerGripHandler(this.child, OnPointerGrip); //usuń stare powiązania
+                    KinectRegion.AddHandPointerGripHandler(this.child, OnPointerGrip);
+                    KinectRegion.RemoveHandPointerMoveHandler(this.child, OnPointerMove); //usuń stare powiązania
+                    KinectRegion.AddHandPointerMoveHandler(this.child, OnPointerMove);
+                    KinectRegion.RemoveHandPointerGripReleaseHandler(this.child, OnPointerGripRelease); //usuń stare powiązania
+                    KinectRegion.AddHandPointerGripReleaseHandler(this.child, OnPointerGripRelease);
+                    KinectRegion.RemoveHandPointerLeaveHandler(this.child, OnPointerLeave); //usuń stare powiązania
+                    KinectRegion.AddHandPointerLeaveHandler(this.child, OnPointerLeave); //uwolnij uścisk gdy łapka schodzi z image
                 }
             }
         }
@@ -152,13 +152,14 @@ namespace FullTotal.ImageTransformations
             else
                 isLeftGripInteraction = false;
             e.HandPointer.IsInGripInteraction = false;
+            e.HandPointer.Capture(null);
         }
 
 
         //grip -> move -> release = przesuwanie
         private void OnPointerGrip(object sender, HandPointerEventArgs e)
         {
-            if (e.HandPointer.HandType == HandType.Right)
+            if (e.HandPointer.HandType == HandType.Right && !isLeftGripInteraction)
             {   
                 var tt = GetTranslateTransform(child);
                 start = e.HandPointer.GetPosition(this);
@@ -170,32 +171,32 @@ namespace FullTotal.ImageTransformations
 
         private void OnPointerMove(object sender, HandPointerEventArgs e)
         {
-            if (e.HandPointer.HandType == HandType.Right && !isLeftGripInteraction)
+            if (child != null)
             {
-                if (child != null)
+                if (e.HandPointer.HandType == HandType.Right && !isLeftGripInteraction)
                 {
                     if (e.HandPointer.Captured == child)
                     {
                         var tt = GetTranslateTransform(child);
                         Vector v = start - e.HandPointer.GetPosition(this);
-                        //if (OnVectorLengthUpdate != null) //wyświetlaj długość wektora w głównym oknie
-                        //    OnVectorLengthUpdate(v.Length);
-                        //if (v.Length > 8) //drżąca ręka na ekranie odfiltrowana, ale utracona płynność przesuwania
-                        //{
-                            tt.X = origin.X - v.X;
-                            tt.Y = origin.Y - v.Y;
-                        //}
+                     
+                        tt.X = origin.X - v.X;
+                        tt.Y = origin.Y - v.Y;
+                     
                     }
                 }
-            }
-            else if (isRightGripInteraction && isLeftGripInteraction)
-            {
-                if (child != null)
+
+                 if (isRightGripInteraction && isLeftGripInteraction)
                 {
                     if (e.HandPointer.Captured == null)
                     {
                         if (StartStretchGestureFollowing != null)
                             StartStretchGestureFollowing();
+                    }
+
+                    else if (e.HandPointer.Captured == child)
+                    {
+
                     }
                 }
             }
@@ -233,7 +234,6 @@ namespace FullTotal.ImageTransformations
                 else if (e.HandPointer.HandEventType == HandEventType.None)
                 {
                     e.IsInGripInteraction = isRightGripInteraction;
-
                 }
 
             }

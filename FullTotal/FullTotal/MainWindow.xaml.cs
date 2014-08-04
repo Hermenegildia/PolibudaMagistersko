@@ -59,9 +59,9 @@ namespace FullTotal
             stretchGestureDetector.OnGestureWithDistanceDetected += stretchGestureDetector_OnGestureWithDistanceDetected;
         }
 
-        private void stretchGestureDetector_OnGestureWithDistanceDetected(string gestureName, double distance)
+        private void stretchGestureDetector_OnGestureWithDistanceDetected(string gestureName, double ratioX, double ratioY)
         {
-            statusBarText.Text = gestureName + " " + distance.ToString();
+            statusBarText.Text = gestureName + " " + ratioY.ToString();
         }
 
       
@@ -108,7 +108,6 @@ namespace FullTotal
                     //e.OldSensor.AllFramesReady -= sensor_AllFramesReady;
                     //this.SkeletonViewerControl.KinectDevice = null;
                     this.kinectRegion.KinectSensor = null;
-
                 }
                 catch (InvalidOperationException)
                 {

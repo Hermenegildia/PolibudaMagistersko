@@ -82,6 +82,7 @@
     <Compile Include="ImageTransformations\ZoomBorder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ImageTransformations\ZoomBorderEventArgs.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
