@@ -157,6 +157,7 @@ namespace FullTotal.ImageTransformations
 
 
         //grip -> move -> release = przesuwanie
+        //grip prawa + lewa -> move -> release = rozciąganie
         private void OnPointerGrip(object sender, HandPointerEventArgs e)
         {
             if (e.HandPointer.HandType == HandType.Right && !isLeftGripInteraction)
@@ -167,6 +168,7 @@ namespace FullTotal.ImageTransformations
                 this.Cursor = Cursors.Hand;
                 e.HandPointer.Capture(child);
             }
+            if (
         }
 
         private void OnPointerMove(object sender, HandPointerEventArgs e)
@@ -196,7 +198,7 @@ namespace FullTotal.ImageTransformations
 
                     else if (e.HandPointer.Captured == child)
                     {
-
+                        
                     }
                 }
             }
