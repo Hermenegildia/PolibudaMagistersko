@@ -173,6 +173,7 @@ namespace FullTotal
                         this.medicalImage.Visibility = Visibility.Visible;
                         this.statusBarText.Text = Properties.Resources.KinectReady;
                         InitializeGestures();
+                        InitializePostures();
                     }
                     catch { }
                 }
