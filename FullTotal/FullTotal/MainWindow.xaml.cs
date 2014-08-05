@@ -34,6 +34,7 @@ namespace FullTotal
         readonly ContextTracker contextTracker = new ContextTracker();
         StretchGestureDetector stretchGestureDetector; 
         bool isStretchGestureActive;
+        AlgorithmicPostureDetector algorithmicPostureDetector = new AlgorithmicPostureDetector();
        
 
 
@@ -44,6 +45,11 @@ namespace FullTotal
             
             parameters = new TransformSmoothParameters
             {
+                //Smoothing = 0.5f,
+                //Correction = 0.5f,
+                //Prediction = 0.5f,
+                //JitterRadius = 0.05f,
+                //MaxDeviationRadius = 0.04f
                 Smoothing = 0.75f,
                 Correction = 0.07f,
                 Prediction = 0.08f,
@@ -57,6 +63,16 @@ namespace FullTotal
         {
             stretchGestureDetector = new StretchGestureDetector(this.sensor, this.kinectRegion);
             stretchGestureDetector.OnGestureWithDistanceDetected += stretchGestureDetector_OnGestureWithDistanceDetected;
+        }
+
+        private void InitializePostures()
+        {
+            algorithmicPostureDetector.PostureDetected +=algorithmicPostureDetector_PostureDetected;
+        }
+
+        private void algorithmicPostureDetector_PostureDetected(string posture)
+        {
+            this.NameTextBlock.Text = posture;
         }
 
         private void stretchGestureDetector_OnGestureWithDistanceDetected(string gestureName, double ratioX, double ratioY)
@@ -75,7 +91,6 @@ namespace FullTotal
             //przypisz wlasciwosc "Kinect" sensorChooser'a do wlasciwosci "KinectSensorProperty" w this.kinectRegion
             var regionSensorBinding = new Binding("Kinect") { Source = this.kinectSensorChooser };
             BindingOperations.SetBinding(this.kinectRegion, KinectRegion.KinectSensorProperty, regionSensorBinding);
-           
 
             this.zoomBorder.AssignKinectRegion(this.kinectRegion);
             this.zoomBorder.StartStretchGestureFollowing += border_StartStretchGestureFollowing;
@@ -211,6 +226,7 @@ namespace FullTotal
                     if (!contextTracker.IsStableRelativeToCurrentSpeed(closestSkeleton.TrackingId))
                         return;
 
+                    algorithmicPostureDetector.TrackPostures(closestSkeleton);
                     if (isStretchGestureActive)
                     {
                         if (closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked)
@@ -218,6 +234,7 @@ namespace FullTotal
                             stretchGestureDetector.Add(closestSkeleton);
                         }
                     }
+                    
                 }
         }
 

@@ -32,7 +32,7 @@ namespace GesturesViewer
         AudioStreamManager audioManager;
         SkeletonDisplayManager skeletonDisplayManager;
         readonly ContextTracker contextTracker = new ContextTracker();
-        //readonly AlgorithmicPostureDetector algorithmicPostureRecognizer = new AlgorithmicPostureDetector();
+        readonly AlgorithmicPostureDetector algorithmicPostureRecognizer = new AlgorithmicPostureDetector();
         //TemplatedPostureDetector templatePostureDetector;
         private bool recordNextFrameForPosture;
         bool displayDepth;
@@ -169,9 +169,9 @@ namespace GesturesViewer
             
             stretchGestureRecognizer = new StretchGestureDetector(kinectSensor);
             stretchGestureRecognizer.OnGestureDetected += OnGestureDetected;
- 
 
-            //algorithmicPostureRecognizer.PostureDetected += postureDetector_PostureDetected;
+
+            algorithmicPostureRecognizer.PostureDetected += postureDetector_PostureDetected;
 
             nuiCamera = new BindableNUICamera(kinectSensor);
 
@@ -340,7 +340,7 @@ namespace GesturesViewer
                         //}
                         // }
 
-                        //algorithmicPostureRecognizer.TrackPostures(closestSkeleton);
+                        algorithmicPostureRecognizer.TrackPostures(closestSkeleton);
                         //templatePostureDetector.TrackPostures(skeleton);
 
                         //if (recordNextFrameForPosture)

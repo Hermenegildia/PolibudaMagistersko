@@ -34,8 +34,8 @@ namespace FullTotal.ImageTransformations
 
             if (kinectRegion != null)
             {
-                KinectRegion.RemoveQueryInteractionStatusHandler(this.child, OnQuery); //usuń stare powiązania
-                KinectRegion.AddQueryInteractionStatusHandler(this.child, OnQuery); //obsluga medicalImage przez kinectRegion
+                //KinectRegion.RemoveQueryInteractionStatusHandler(this.child, OnQuery); //usuń stare powiązania
+                //KinectRegion.AddQueryInteractionStatusHandler(this.child, OnQuery); //obsluga medicalImage przez kinectRegion
                 KinectRegion.RemoveQueryInteractionStatusHandler(this, OnQuery); //usuń stare powiązania
                 KinectRegion.AddQueryInteractionStatusHandler(this, OnQuery); //obsluga ZoomBorder przez kinectRegion
                 KinectRegion.RemoveHandPointerGripHandler(this.child, OnPointerGrip); //usuń stare powiązania
@@ -105,8 +105,8 @@ namespace FullTotal.ImageTransformations
 
                 if (kinectRegion != null)
                 {
-                    KinectRegion.RemoveQueryInteractionStatusHandler(this.child, OnQuery); //usuń stare powiązania
-                    KinectRegion.AddQueryInteractionStatusHandler(this.child, OnQuery); //obsluga medicalImage przez kinectRegion
+                    //KinectRegion.RemoveQueryInteractionStatusHandler(this.child, OnQuery); //usuń stare powiązania
+                    //KinectRegion.AddQueryInteractionStatusHandler(this.child, OnQuery); //obsluga medicalImage przez kinectRegion
                     KinectRegion.RemoveHandPointerGripHandler(this.child, OnPointerGrip); //usuń stare powiązania
                     KinectRegion.AddHandPointerGripHandler(this.child, OnPointerGrip);
                     KinectRegion.RemoveHandPointerMoveHandler(this.child, OnPointerMove); //usuń stare powiązania
@@ -168,7 +168,7 @@ namespace FullTotal.ImageTransformations
                 this.Cursor = Cursors.Hand;
                 e.HandPointer.Capture(child);
             }
-            if (
+            //if (
         }
 
         private void OnPointerMove(object sender, HandPointerEventArgs e)
@@ -184,7 +184,6 @@ namespace FullTotal.ImageTransformations
                      
                         tt.X = origin.X - v.X;
                         tt.Y = origin.Y - v.Y;
-                     
                     }
                 }
 
@@ -245,6 +244,7 @@ namespace FullTotal.ImageTransformations
                 {
                     isLeftGripInteraction = true;
                     e.IsInGripInteraction = true;
+                    
                 }
 
                 //If Grip Release detected change the cursor image to open
