@@ -19,6 +19,7 @@ namespace Kinect.Toolbox
         double threshold;
         EntryKinect leftStartPosition;
         EntryKinect rightStartPosition;
+        Vector originalControlSize;
 
 
         //public delegate void GestureDetection(string gestureName, double distance);
@@ -26,14 +27,12 @@ namespace Kinect.Toolbox
         public event GestureDetection OnGestureWithDistanceDetected;
 
 
-        public StretchGestureDetector(KinectSensor sensor, FrameworkElement control, string gestureName = "stretch", int windowSize = 5) :
+        public StretchGestureDetector(KinectSensor sensor, FrameworkElement control, Vector originalControlSize, string gestureName = "stretch", int windowSize = 5) :
             base(sensor, gestureName, windowSize)
         {
             this.control = control;
-
-            //przeskalowanie domyślnej ósemki dla rozdzielczości 1600x900 (kinectRegion ma rozmiary 1600x717) na aktualne rozmiary kontrolki
-            //zoomBorder ma 425.28x288
-            threshold = (10 * this.control.ActualHeight * this.control.ActualWidth) / (425.28 * 288); 
+            this.originalControlSize = originalControlSize;
+         
         }
 
         public override void Add(SkeletonPoint position, KinectSensor sensor) //tego nie uzywamy
@@ -58,6 +57,10 @@ namespace Kinect.Toolbox
                
             }
 
+            //przeskalowanie domyślnej dyszki dla rozdzielczości 1600x900 (kinectRegion ma rozmiary 1600x717) na aktualne rozmiary kontrolki
+            //zoomBorder ma 1024x693
+            var actualSize = control.PointToScreen(new Point(control.ActualWidth, control.ActualHeight)) - control.PointToScreen(new Point(0, 0));
+            threshold = (10 * actualSize.Y * actualSize.X) / (originalControlSize.X * originalControlSize.Y); 
         }
 
         protected bool ScanPositions()
@@ -82,14 +85,17 @@ namespace Kinect.Toolbox
                     //przeskalowanie
                     //var buf = Math.Abs(currentTotalDistance - distanceTotal);
                     distanceTotal = (Tools.GetJointPoint(Sensor, control, rightStartPosition.SkeletonPosition) - Tools.GetJointPoint(Sensor, control, leftStartPosition.SkeletonPosition)).Length;
-                    Debug.WriteLine("distanceTotal: " + distanceTotal);
+                    //Debug.WriteLine("distanceTotal: " + distanceTotal);
+                   
+                    var actualSize = control.PointToScreen(new Point(control.ActualWidth, control.ActualHeight)) - control.PointToScreen(new Point(0, 0));
+                    threshold = (10 * actualSize.Y * actualSize.X) / (1024 * 693); 
                     if(Math.Abs(currentTotalDistance-distanceTotal) > threshold) //jesli zmiana dystansu miedzy dlonmi, a nie tylko przesuniecie!
                     {
                         double deltaX = pointRightCurrent.X - pointLeftCurrent.X;
                         double deltaY = pointRightCurrent.Y - pointLeftCurrent.Y;
-
-                        double currentRatioX = deltaX / control.ActualWidth; //wzgledne przesuniecie wzgledem rozmiaru okna
-                        double currentRatioY = deltaY / control.ActualHeight;
+                       
+                        double currentRatioX = deltaX / actualSize.X; //wzgledne przesuniecie wzgledem rozmiaru okna
+                        double currentRatioY = deltaY / actualSize.Y;
 
                         //this.distanceTotal = currentTotalDistance;
                         //this.leftStartPosition = (EntryKinect)LeftEntries[WindowSize - 1];

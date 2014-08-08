@@ -215,12 +215,13 @@ namespace Kinect.Toolbox
         {
             CoordinateMapper cm = new CoordinateMapper(sensor);
             DepthImagePoint point = cm.MapSkeletonPointToDepthPoint(jointPosition, sensor.DepthStream.Format);
-
+            //actualHeight nie działa w Viewboxie! :(
+            var actualSize = control.PointToScreen(new Point(control.ActualWidth, control.ActualHeight)) - control.PointToScreen(new Point(0, 0));
             //przerobione z  (int)control.ActualHeight / sensor.DepthStream.FrameHeight na (control.ActualHeight / sensor.DepthStream.FrameHeight)
             double pointX = (double)point.X;
-            pointX *= (control.ActualWidth / sensor.DepthStream.FrameWidth);
+            pointX *= (actualSize.X / sensor.DepthStream.FrameWidth); //(control.ActualWidth / sensor.DepthStream.FrameWidth);
             double pointY = (double)point.Y;
-            pointY *= (control.ActualHeight / sensor.DepthStream.FrameHeight);
+            pointY *= (actualSize.Y / sensor.DepthStream.FrameHeight);
 
             return new Point(pointX, pointY);
         }

@@ -61,8 +61,8 @@ namespace FullTotal
 
         private void InitializeGestures()
         {
-            
-            stretchGestureDetector = new StretchGestureDetector(this.sensor, this.zoomBorder);
+            var originalSize = this.zoomBorder.PointToScreen(new Point(this.zoomBorder.ActualWidth, this.zoomBorder.ActualHeight)) - this.zoomBorder.PointToScreen(new Point(0, 0));
+            stretchGestureDetector = new StretchGestureDetector(this.sensor, this.zoomBorder, originalSize);
             stretchGestureDetector.OnGestureWithDistanceDetected += stretchGestureDetector_OnGestureWithDistanceDetected;
         }
 
