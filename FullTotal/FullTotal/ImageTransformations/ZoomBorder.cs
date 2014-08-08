@@ -18,8 +18,9 @@ namespace FullTotal.ImageTransformations
         private Point origin;
         private Point start;
         KinectRegion kinectRegion;
-        bool isRightGripInteraction = false;
-        bool isLeftGripInteraction = false;
+      
+        HandPointer leftHandPointer;
+        HandPointer rightHandPointer;
        
         public delegate void GestureDelegate();
         public event GestureDelegate StartStretchGestureFollowing;
@@ -46,7 +47,10 @@ namespace FullTotal.ImageTransformations
                 KinectRegion.AddHandPointerGripReleaseHandler(this.child, OnPointerGripRelease);
                 KinectRegion.RemoveHandPointerLeaveHandler(this.child, OnPointerLeave); //usuń stare powiązania
                 KinectRegion.AddHandPointerLeaveHandler(this.child, OnPointerLeave); ////uwolnij uścisk gdy łapka schodzi z image
+
+               
             }
+            
         }
 
 
@@ -83,6 +87,7 @@ namespace FullTotal.ImageTransformations
         public void Initialize(UIElement element)
         {
             this.child = element;
+
             if (child != null)
             {
                 TransformGroup group = new TransformGroup();
@@ -147,12 +152,18 @@ namespace FullTotal.ImageTransformations
         //rozluźnij łapkę, gdy wyjazd za foto
         private void OnPointerLeave(object sender, HandPointerEventArgs e)
         {
-            if (e.HandPointer.HandType == HandType.Right)
-                isRightGripInteraction = false;
-            else
-                isLeftGripInteraction = false;
             e.HandPointer.IsInGripInteraction = false;
             e.HandPointer.Capture(null);
+
+            if (e.HandPointer.HandType == HandType.Right)
+            {
+                rightHandPointer = e.HandPointer;
+            }
+            else
+            {
+                leftHandPointer = e.HandPointer;
+            }
+            
         }
 
 
@@ -160,45 +171,68 @@ namespace FullTotal.ImageTransformations
         //grip prawa + lewa -> move -> release = rozciąganie
         private void OnPointerGrip(object sender, HandPointerEventArgs e)
         {
-            if (e.HandPointer.HandType == HandType.Right && !isLeftGripInteraction)
-            {   
+           
+            if (rightHandPointer != null && leftHandPointer != null)
+            {
+                if (!leftHandPointer.IsInGripInteraction && rightHandPointer.IsInGripInteraction)
+                {
+                    if (child != null)
+                    {
+                        var tt = GetTranslateTransform(child);
+                        start = e.HandPointer.GetPosition(this);
+                        origin = new Point(tt.X, tt.Y);
+                    }
+                }
+
+                //stretching gesture begin!
+                if (rightHandPointer.IsInGripInteraction && leftHandPointer.IsInGripInteraction)
+                {
+                    if (e.HandPointer.Captured == null)
+                    {
+                        if (StartStretchGestureFollowing != null)
+                            StartStretchGestureFollowing();
+                        //if (e.HandPointer.HandType == 
+                    }
+
+                }
+             
+            }
+
+            //move tylko gdy tylko prawa ręka gripped
+             if (e.HandPointer.HandType == HandType.Right && (leftHandPointer == null || !leftHandPointer.IsInGripInteraction))
+            {
                 var tt = GetTranslateTransform(child);
                 start = e.HandPointer.GetPosition(this);
                 origin = new Point(tt.X, tt.Y);
                 this.Cursor = Cursors.Hand;
                 e.HandPointer.Capture(child);
             }
-            //if (
         }
 
         private void OnPointerMove(object sender, HandPointerEventArgs e)
         {
             if (child != null)
             {
-                if (e.HandPointer.HandType == HandType.Right && !isLeftGripInteraction)
+                if (leftHandPointer == null || !leftHandPointer.IsInGripInteraction)
                 {
-                    if (e.HandPointer.Captured == child)
+                    if (e.HandPointer.HandType == HandType.Right)
                     {
-                        var tt = GetTranslateTransform(child);
-                        Vector v = start - e.HandPointer.GetPosition(this);
-                     
-                        tt.X = origin.X - v.X;
-                        tt.Y = origin.Y - v.Y;
+                        if (rightHandPointer == null)
+                            rightHandPointer = e.HandPointer;
+
+                        if (e.HandPointer.Captured == child)
+                        {
+                            var tt = GetTranslateTransform(child);
+                            Vector v = start - e.HandPointer.GetPosition(this);
+
+                            tt.X = origin.X - v.X;
+                            tt.Y = origin.Y - v.Y;
+                        }
                     }
                 }
-
-                 if (isRightGripInteraction && isLeftGripInteraction)
+                else if (rightHandPointer.IsInGripInteraction && leftHandPointer.IsInGripInteraction)
                 {
-                    if (e.HandPointer.Captured == null)
-                    {
-                        if (StartStretchGestureFollowing != null)
-                            StartStretchGestureFollowing();
-                    }
 
-                    else if (e.HandPointer.Captured == child)
-                    {
-                        
-                    }
                 }
             }
         }
@@ -211,55 +245,69 @@ namespace FullTotal.ImageTransformations
                 if (EndStretchGestureFollowing != null)
                     EndStretchGestureFollowing();
             }
+
+            if (rightHandPointer != null && leftHandPointer != null)
+            {
+                if (rightHandPointer.IsInGripInteraction && leftHandPointer.IsInGripInteraction)
+                {
+                    if (e.HandPointer.Captured == null)
+                    {
+                        if (EndStretchGestureFollowing != null)
+                            EndStretchGestureFollowing();
+                    }
+
+                }
+            }
         }
 
         private void OnQuery(object sender, QueryInteractionStatusEventArgs e)
         {
             if (e.HandPointer.HandType == HandType.Right)
             {
+                if (rightHandPointer == null)
+                   rightHandPointer = e.HandPointer;
+
                 //If a grip detected change the cursor image to grip
                 if (e.HandPointer.HandEventType == HandEventType.Grip)
                 {
-                    isRightGripInteraction = true;
                     e.IsInGripInteraction = true;
                 }
 
                 //If Grip Release detected change the cursor image to open
                 else if (e.HandPointer.HandEventType == HandEventType.GripRelease)
                 {
-                    isRightGripInteraction = false;
                     e.IsInGripInteraction = false;
                 }
 
                 //If no change in state do not change the cursor
                 else if (e.HandPointer.HandEventType == HandEventType.None)
                 {
-                    e.IsInGripInteraction = isRightGripInteraction;
+                    e.IsInGripInteraction = rightHandPointer.IsInGripInteraction;
                 }
 
+                rightHandPointer = e.HandPointer;
             }
             else if (e.HandPointer.HandType == HandType.Left)
             {
+                if (leftHandPointer == null)
+                    leftHandPointer = e.HandPointer;
+
                 if (e.HandPointer.HandEventType == HandEventType.Grip)
                 {
-                    isLeftGripInteraction = true;
                     e.IsInGripInteraction = true;
-                    
                 }
 
                 //If Grip Release detected change the cursor image to open
                 else if (e.HandPointer.HandEventType == HandEventType.GripRelease)
                 {
-                    isLeftGripInteraction = false;
                     e.IsInGripInteraction = false;
-
                 }
                 //If no change in state do not change the cursor
                 else if (e.HandPointer.HandEventType == HandEventType.None)
                 {
-                    e.IsInGripInteraction = isLeftGripInteraction;
-
+                    e.IsInGripInteraction = leftHandPointer.IsInGripInteraction;
                 }
+                leftHandPointer = e.HandPointer;
             }
             e.Handled = true;
         }

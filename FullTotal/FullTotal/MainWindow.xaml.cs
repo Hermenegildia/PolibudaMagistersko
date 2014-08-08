@@ -35,7 +35,7 @@ namespace FullTotal
         StretchGestureDetector stretchGestureDetector; 
         bool isStretchGestureActive;
         AlgorithmicPostureDetector algorithmicPostureDetector = new AlgorithmicPostureDetector();
-       
+        int counter = 0;
 
 
         public MainWindow()
@@ -61,7 +61,8 @@ namespace FullTotal
 
         private void InitializeGestures()
         {
-            stretchGestureDetector = new StretchGestureDetector(this.sensor, this.kinectRegion);
+            
+            stretchGestureDetector = new StretchGestureDetector(this.sensor, this.zoomBorder);
             stretchGestureDetector.OnGestureWithDistanceDetected += stretchGestureDetector_OnGestureWithDistanceDetected;
         }
 
@@ -77,7 +78,7 @@ namespace FullTotal
 
         private void stretchGestureDetector_OnGestureWithDistanceDetected(string gestureName, double ratioX, double ratioY)
         {
-            statusBarText.Text = gestureName + " " + ratioY.ToString();
+            statusBarText.Text = gestureName + " " + ratioX.ToString();
         }
 
       
@@ -94,7 +95,14 @@ namespace FullTotal
 
             this.zoomBorder.AssignKinectRegion(this.kinectRegion);
             this.zoomBorder.StartStretchGestureFollowing += border_StartStretchGestureFollowing;
+            this.zoomBorder.EndStretchGestureFollowing +=zoomBorder_EndStretchGestureFollowing;
             this.zoomBorder.OnVectorLengthUpdate += border_OnVectorLengthUpdate;
+        }
+
+        private void zoomBorder_EndStretchGestureFollowing()
+        {
+            isStretchGestureActive = false;
+            counter = 0;
         }
 
         private void border_OnVectorLengthUpdate(double vectorLength)
@@ -122,7 +130,8 @@ namespace FullTotal
                     e.OldSensor.DepthFrameReady -= sensor_DepthFrameReady;
                     //e.OldSensor.AllFramesReady -= sensor_AllFramesReady;
                     //this.SkeletonViewerControl.KinectDevice = null;
-                    this.kinectRegion.KinectSensor = null;
+                    //this.kinectRegion.KinectSensor = null;
+                    this.sensor = null;
                 }
                 catch (InvalidOperationException)
                 {
@@ -232,6 +241,12 @@ namespace FullTotal
                     {
                         if (closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked)
                         {
+                            if (counter == 0) //ustaw wartosci poczatkowe przy pierwszej iteracji
+                            {
+                                stretchGestureDetector.SetStartPosition(closestSkeleton);
+                                counter++;
+                            }
+                            else
                             stretchGestureDetector.Add(closestSkeleton);
                         }
                     }

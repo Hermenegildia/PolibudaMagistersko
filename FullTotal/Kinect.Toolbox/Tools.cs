@@ -216,10 +216,13 @@ namespace Kinect.Toolbox
             CoordinateMapper cm = new CoordinateMapper(sensor);
             DepthImagePoint point = cm.MapSkeletonPointToDepthPoint(jointPosition, sensor.DepthStream.Format);
 
-            point.X *= (int)control.ActualWidth / sensor.DepthStream.FrameWidth;
-            point.Y *= (int)control.ActualHeight / sensor.DepthStream.FrameHeight;
+            //przerobione z  (int)control.ActualHeight / sensor.DepthStream.FrameHeight na (control.ActualHeight / sensor.DepthStream.FrameHeight)
+            double pointX = (double)point.X;
+            pointX *= (control.ActualWidth / sensor.DepthStream.FrameWidth);
+            double pointY = (double)point.Y;
+            pointY *= (control.ActualHeight / sensor.DepthStream.FrameHeight);
 
-            return new Point((double)point.X, (double)point.Y);
+            return new Point(pointX, pointY);
         }
 
       
