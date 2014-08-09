@@ -36,6 +36,7 @@ namespace FullTotal
         bool isStretchGestureActive;
         AlgorithmicPostureDetector algorithmicPostureDetector = new AlgorithmicPostureDetector();
         int counter = 0;
+        double stretchRatio = 0;
 
 
         public MainWindow()
@@ -79,6 +80,8 @@ namespace FullTotal
         private void stretchGestureDetector_OnGestureWithDistanceDetected(string gestureName, double totalRatio)
         {
             statusBarText.Text = gestureName + " " + totalRatio.ToString();
+            //this.zoomBorder.SetZoomFactor(totalRatio);
+            
         }
 
       
@@ -239,7 +242,7 @@ namespace FullTotal
                     algorithmicPostureDetector.TrackPostures(closestSkeleton);
                     if (isStretchGestureActive)
                     {
-                        if (closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked)
+                        if (closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && closestSkeleton.Joints[JointType.HandRight].TrackingState == JointTrackingState.Tracked)
                         {
                             if (counter == 0) //ustaw wartosci poczatkowe przy pierwszej iteracji
                             {

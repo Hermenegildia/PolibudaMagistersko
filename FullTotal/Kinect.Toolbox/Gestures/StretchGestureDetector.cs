@@ -21,6 +21,7 @@ namespace Kinect.Toolbox
         double threshold;
         EntryKinect leftStartPosition;
         EntryKinect rightStartPosition;
+        double initialDistance = 0;
         Vector originalControlSize;
 
 
@@ -58,7 +59,7 @@ namespace Kinect.Toolbox
                 leftStartPosition = new EntryKinect { Position = position.ToVector3(), SkeletonPosition = position, Time = DateTime.Now };
                
             }
-
+            initialDistance = (Tools.GetJointPoint(Sensor, control, rightStartPosition.SkeletonPosition) - Tools.GetJointPoint(Sensor, control, leftStartPosition.SkeletonPosition)).Length;
             //przeskalowanie domyślnej dyszki dla rozdzielczości 1600x900 (kinectRegion ma rozmiary 1600x717) na aktualne rozmiary kontrolki
             //zoomBorder ma 1024x693
             var actualSize = control.PointToScreen(new Point(control.ActualWidth, control.ActualHeight)) - control.PointToScreen(new Point(0, 0));
@@ -96,7 +97,10 @@ namespace Kinect.Toolbox
                         
                         //this.ratioX = currentRatioX;
                         //this.ratioY = currentRatioY;
-                        this.ratioTotal = totalRatio;
+                        if (totalRatio > initialDistance)
+                            this.ratioTotal = totalRatio;
+                        else
+                            this.ratioTotal = -totalRatio;
 
                         return true;
                     }
