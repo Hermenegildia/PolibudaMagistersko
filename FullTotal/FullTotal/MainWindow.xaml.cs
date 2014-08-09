@@ -76,9 +76,9 @@ namespace FullTotal
             this.NameTextBlock.Text = posture;
         }
 
-        private void stretchGestureDetector_OnGestureWithDistanceDetected(string gestureName, double ratioX, double ratioY)
+        private void stretchGestureDetector_OnGestureWithDistanceDetected(string gestureName, double totalRatio)
         {
-            statusBarText.Text = gestureName + " " + ratioX.ToString();
+            statusBarText.Text = gestureName + " " + totalRatio.ToString();
         }
 
       

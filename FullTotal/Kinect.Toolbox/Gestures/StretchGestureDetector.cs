@@ -25,7 +25,7 @@ namespace Kinect.Toolbox
 
 
         //public delegate void GestureDetection(string gestureName, double distance);
-        public delegate void GestureDetection(string gestureName, double ratioX, double ratioY);
+        public delegate void GestureDetection(string gestureName, double totalRatio);
         public event GestureDetection OnGestureWithDistanceDetected;
 
 
@@ -108,7 +108,7 @@ namespace Kinect.Toolbox
 
         }
 
-        protected void RaiseGestureDetected(string gesture, double xRatio, double yRatio)
+        protected void RaiseGestureDetected(string gesture, double totalRatio)
         {
             // Too close?
             if (DateTime.Now.Subtract(lastGestureDate).TotalMilliseconds > MinimalPeriodBetweenGestures)
@@ -117,7 +117,7 @@ namespace Kinect.Toolbox
                 //    OnGestureDetected(gesture);
 
                 if (OnGestureWithDistanceDetected != null)
-                    OnGestureWithDistanceDetected(gesture, xRatio, yRatio);
+                    OnGestureWithDistanceDetected(gesture, totalRatio);
 
                 lastGestureDate = DateTime.Now;
             }
@@ -134,7 +134,7 @@ namespace Kinect.Toolbox
         {
             if (ScanPositions())
             {
-                RaiseGestureDetected(gestureName, this.ratioTotal, this.ratioY);
+                RaiseGestureDetected(gestureName, this.ratioTotal);
                 //Debug.WriteLine("stretch: " + distance.ToString());
             }
         }

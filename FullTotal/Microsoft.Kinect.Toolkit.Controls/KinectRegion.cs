@@ -150,6 +150,10 @@ namespace Microsoft.Kinect.Toolkit.Controls
         /// </summary>
         private UserInfo[] userInfos;
 
+        //Ala added things&stuff!
+        private Joint[] jointsForInteractionStream = new Joint[2];
+        //private DepthImageFrame depthFrameForInteractionStream;
+
         [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "We need to OverrideMetadata in the static constructor")]
         static KinectRegion()
         {
@@ -849,6 +853,7 @@ namespace Microsoft.Kinect.Toolkit.Controls
                     {
                         // Hand data to Interaction framework to be processed
                         this.interactionStream.ProcessDepth(depthFrame.GetRawPixelData(), depthFrame.Timestamp);
+                        //this.depthFrameForInteractionStream = depthFrame;
                     }
                     catch (InvalidOperationException)
                     {
@@ -888,7 +893,16 @@ namespace Microsoft.Kinect.Toolkit.Controls
                         skeletons = SetTrackedSkeleton(skeletons, skeletonId);
                         // Hand data to Interaction framework to be processed
                         this.interactionStream.ProcessSkeleton(this.skeletons, accelerometerReading, skeletonFrame.Timestamp);
-                    }
+                        Skeleton skel = skeletons.Where(s => s.TrackingId == skeletonId).FirstOrDefault();
+                        if (skel.Joints[JointType.HandLeft].TrackingState != JointTrackingState.NotTracked)
+                            this.jointsForInteractionStream[0] = skel.Joints[JointType.HandLeft];
+                        
+
+                        if (skel.Joints[JointType.HandRight].TrackingState != JointTrackingState.NotTracked)
+                            this.jointsForInteractionStream[1] = skel.Joints[JointType.HandRight];
+                       
+                        
+                    }                    
                     catch (InvalidOperationException)
                     {
                         // SkeletonFrame functions may throw when the sensor gets
@@ -982,6 +996,7 @@ namespace Microsoft.Kinect.Toolkit.Controls
 
             using (InteractionFrame interactionFrame = e.OpenInteractionFrame())
             {
+                
                 if (interactionFrame != null)
                 {
                     // Copy interaction frame data so we can dispose interaction frame
@@ -1061,7 +1076,7 @@ namespace Microsoft.Kinect.Toolkit.Controls
                 Z = handPointer.PressExtent
             };
 
-            this.kinectAdapter.HandleHandPointerData(interactionData);
+            this.kinectAdapter.HandleHandPointerData(interactionData, this.jointsForInteractionStream, this.KinectSensor);//, this.depthFrameForInteractionStream);
         }
     }
 }

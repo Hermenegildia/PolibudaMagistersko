@@ -56,6 +56,37 @@ namespace Microsoft.Kinect.Toolkit.Controls
             uiY = userInterfaceHeight * izY;
         }
 
+        //refactored by Ala
+        public static void InteractionZoneToUserInterface(double izX, double izY, double userInterfaceWidth, double userInterfaceHeight, Joint[] handsJoints, KinectSensor sensor, HandType handType, out double uiX, out double uiY)
+        {
+            if (handsJoints.Length > 0)
+            {
+                CoordinateMapper cm = new CoordinateMapper(sensor);
+                SkeletonPoint jointPosition = new SkeletonPoint();
+                //handsJoints[0] --> leftHand
+                //handsJoints[1] --> rightHand
+                if (handType == HandType.Left)
+                    jointPosition = handsJoints.Where(x => x.JointType == JointType.HandLeft).FirstOrDefault().Position;
+                else if (handType == HandType.Right)
+                    jointPosition = handsJoints.Where(x => x.JointType == JointType.HandRight).FirstOrDefault().Position;
+                else
+                {
+                    uiX = userInterfaceWidth * izX;
+                    uiY = userInterfaceHeight * izY;
+                    return;
+                }
+                DepthImagePoint point = cm.MapSkeletonPointToDepthPoint(jointPosition, sensor.DepthStream.Format);
+
+                uiX = point.X * userInterfaceWidth / sensor.DepthStream.FrameWidth;
+                uiY = point.Y * userInterfaceHeight / sensor.DepthStream.FrameHeight;
+            }
+            else
+            {
+                uiX = userInterfaceWidth * izX;
+                uiY = userInterfaceHeight * izY;
+            }
+        }
+
         /// <summary>
         /// Convert coordinates relative to the area available for interaction in UI
         /// into coordinates expressed in interaction zone coordinate space.
@@ -293,6 +324,63 @@ namespace Microsoft.Kinect.Toolkit.Controls
             double newX;
             double newY;
             InteractionZoneDefinition.InteractionZoneToUserInterface(data.X, data.Y, this.InteractionRootElement.ActualWidth, this.InteractionRootElement.ActualHeight, out newX, out newY);
+            bool positionChanged = !InteractionZoneDefinition.AreUserInterfaceValuesClose(newX, handPointer.X) ||
+                    !InteractionZoneDefinition.AreUserInterfaceValuesClose(newY, handPointer.Y) ||
+                    !InteractionZoneDefinition.AreUserInterfaceValuesClose(data.Z, handPointer.PressExtent);
+            handPointer.X = newX;
+            handPointer.Y = newY;
+            handPointer.PressExtent = data.Z;
+
+            this.HandleHandPointerChanges(handPointer, pressedChanged, positionChanged, primaryHandOfPrimaryUserChanged, false);
+        }
+
+        //refactered by Ala, żeby ładnie poustawiać łapki
+        
+        public void HandleHandPointerData(InteractionFrameData data, Joint[] handsJoints, KinectSensor sensor)
+        {
+            Debug.Assert(this.IsInInteractionFrame, "Call to HandleHandPointerData made without call to BeginInteractionFrame");
+
+            if (this.isClearRequestPending)
+            {
+                // We don't care about new hand pointer data if client requested to clear
+                // all hand pointers while in the middle of interaction frame processing.
+                return;
+            }
+
+            var id = new Tuple<int, HandType>(data.TrackingId, data.HandType);
+
+            HandPointer handPointer;
+            if (!this.handPointers.TryGetValue(id, out handPointer))
+            {
+                handPointer = new HandPointer
+                {
+                    TrackingId = data.TrackingId,
+                    PlayerIndex = data.PlayerIndex,
+                    HandType = data.HandType,
+                    Owner = this,
+                };
+                this.handPointers[id] = handPointer;
+            }
+
+            handPointer.Updated = true;
+
+            handPointer.TimestampOfLastUpdate = data.TimeStampOfLastUpdate;
+            handPointer.HandEventType = data.HandEventType;
+
+            bool pressedChanged = handPointer.IsPressed != data.IsPressed;
+            handPointer.IsPressed = data.IsPressed;
+
+            handPointer.IsTracked = data.IsTracked;
+            handPointer.IsActive = data.IsActive;
+            handPointer.IsInteractive = data.IsInteractive;
+
+            bool primaryHandOfPrimaryUserChanged = handPointer.IsPrimaryHandOfPrimaryUser != (data.IsPrimaryHandOfUser && data.IsPrimaryUser);
+            handPointer.IsPrimaryHandOfUser = data.IsPrimaryHandOfUser;
+            handPointer.IsPrimaryUser = data.IsPrimaryUser;
+
+            double newX;
+            double newY;
+            InteractionZoneDefinition.InteractionZoneToUserInterface(data.X, data.Y, this.InteractionRootElement.ActualWidth, this.InteractionRootElement.ActualHeight, handsJoints, sensor, data.HandType, out newX, out newY);
             bool positionChanged = !InteractionZoneDefinition.AreUserInterfaceValuesClose(newX, handPointer.X) ||
                     !InteractionZoneDefinition.AreUserInterfaceValuesClose(newY, handPointer.Y) ||
                     !InteractionZoneDefinition.AreUserInterfaceValuesClose(data.Z, handPointer.PressExtent);
