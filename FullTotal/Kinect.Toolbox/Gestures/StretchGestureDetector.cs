@@ -10,10 +10,12 @@ using System.Windows;
 namespace Kinect.Toolbox
 {
     public class StretchGestureDetector : TwoHandsAlgorithmicGessureDetector
-    {   
+    {
+        const double startThresholdLevel = 5;
         double distanceTotal = 0;
         double ratioX = 0;
         double ratioY = 0;
+        double ratioTotal = 0;
         FrameworkElement control;
 
         double threshold;
@@ -60,7 +62,7 @@ namespace Kinect.Toolbox
             //przeskalowanie domyślnej dyszki dla rozdzielczości 1600x900 (kinectRegion ma rozmiary 1600x717) na aktualne rozmiary kontrolki
             //zoomBorder ma 1024x693
             var actualSize = control.PointToScreen(new Point(control.ActualWidth, control.ActualHeight)) - control.PointToScreen(new Point(0, 0));
-            threshold = (10 * actualSize.Y * actualSize.X) / (originalControlSize.X * originalControlSize.Y); 
+            threshold = (startThresholdLevel * actualSize.Y * actualSize.X) / (originalControlSize.X * originalControlSize.Y); 
         }
 
         protected bool ScanPositions()
@@ -82,20 +84,20 @@ namespace Kinect.Toolbox
                     //Debug.WriteLine("distanceTotal: " + distanceTotal);
 
                     var actualSize = control.PointToScreen(new Point(control.ActualWidth, control.ActualHeight)) - control.PointToScreen(new Point(0, 0));
-                    threshold = (10 * actualSize.Y * actualSize.X) / (1024 * 693);
+                    threshold = (startThresholdLevel * actualSize.Y * actualSize.X) / (originalControlSize.X * originalControlSize.Y); 
                     if (Math.Abs(currentTotalDistance - distanceTotal) > threshold) //jesli zmiana dystansu miedzy dlonmi, a nie tylko przesuniecie!
                     {
-                        double deltaX = pointRightCurrent.X - pointLeftCurrent.X;
-                        double deltaY = pointRightCurrent.Y - pointLeftCurrent.Y;
+                        //double deltaX = pointRightCurrent.X - pointLeftCurrent.X;
+                        //double deltaY = pointRightCurrent.Y - pointLeftCurrent.Y;
 
-                        double currentRatioX = deltaX / actualSize.X; //wzgledne przesuniecie wzgledem rozmiaru okna
-                        double currentRatioY = deltaY / actualSize.Y;
+                        //double currentRatioX = deltaX / actualSize.X; //wzgledne przesuniecie wzgledem rozmiaru okna
+                        //double currentRatioY = deltaY / actualSize.Y;
 
-                        //this.distanceTotal = currentTotalDistance;
-                        //this.leftStartPosition = (EntryKinect)LeftEntries[WindowSize - 1];
-                        //this.rightStartPosition = (EntryKinect)Entries[WindowSize - 1];
-                        this.ratioX = currentRatioX;
-                        this.ratioY = currentRatioY;
+                        double totalRatio = currentTotalDistance / distanceTotal;
+                        
+                        //this.ratioX = currentRatioX;
+                        //this.ratioY = currentRatioY;
+                        this.ratioTotal = totalRatio;
 
                         return true;
                     }
@@ -137,7 +139,7 @@ namespace Kinect.Toolbox
         {
             if (ScanPositions())
             {
-                RaiseGestureDetected(gestureName, this.ratioX, this.ratioY);
+                RaiseGestureDetected(gestureName, this.ratioTotal, this.ratioY);
                 //Debug.WriteLine("stretch: " + distance.ToString());
             }
         }

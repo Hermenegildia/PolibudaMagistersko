@@ -47,8 +47,6 @@ namespace FullTotal.ImageTransformations
                 KinectRegion.AddHandPointerGripReleaseHandler(this.child, OnPointerGripRelease);
                 KinectRegion.RemoveHandPointerLeaveHandler(this.child, OnPointerLeave); //usuń stare powiązania
                 KinectRegion.AddHandPointerLeaveHandler(this.child, OnPointerLeave); ////uwolnij uścisk gdy łapka schodzi z image
-
-               
             }
             
         }
@@ -110,8 +108,8 @@ namespace FullTotal.ImageTransformations
 
                 if (kinectRegion != null)
                 {
-                    //KinectRegion.RemoveQueryInteractionStatusHandler(this.child, OnQuery); //usuń stare powiązania
-                    //KinectRegion.AddQueryInteractionStatusHandler(this.child, OnQuery); //obsluga medicalImage przez kinectRegion
+                    KinectRegion.RemoveQueryInteractionStatusHandler(this, OnQuery); //usuń stare powiązania
+                    KinectRegion.AddQueryInteractionStatusHandler(this, OnQuery); //obsluga medicalImage przez kinectRegion
                     KinectRegion.RemoveHandPointerGripHandler(this.child, OnPointerGrip); //usuń stare powiązania
                     KinectRegion.AddHandPointerGripHandler(this.child, OnPointerGrip);
                     KinectRegion.RemoveHandPointerMoveHandler(this.child, OnPointerMove); //usuń stare powiązania
@@ -174,15 +172,16 @@ namespace FullTotal.ImageTransformations
            
             if (rightHandPointer != null && leftHandPointer != null)
             {
-                if (!leftHandPointer.IsInGripInteraction && rightHandPointer.IsInGripInteraction)
-                {
-                    if (child != null)
-                    {
-                        var tt = GetTranslateTransform(child);
-                        start = e.HandPointer.GetPosition(this);
-                        origin = new Point(tt.X, tt.Y);
-                    }
-                }
+                ////przesuwanie
+                //if (!leftHandPointer.IsInGripInteraction && rightHandPointer.IsInGripInteraction)
+                //{
+                //    if (child != null)
+                //    {
+                //        var tt = GetTranslateTransform(child);
+                //        start = e.HandPointer.GetPosition(this);
+                //        origin = new Point(tt.X, tt.Y);
+                //    }
+                //}
 
                 //stretching gesture begin!
                 if (rightHandPointer.IsInGripInteraction && leftHandPointer.IsInGripInteraction)
@@ -191,6 +190,7 @@ namespace FullTotal.ImageTransformations
                     {
                         if (StartStretchGestureFollowing != null)
                             StartStretchGestureFollowing();
+                        return;
                         //if (e.HandPointer.HandType == 
                     }
 
@@ -204,7 +204,7 @@ namespace FullTotal.ImageTransformations
                 var tt = GetTranslateTransform(child);
                 start = e.HandPointer.GetPosition(this);
                 origin = new Point(tt.X, tt.Y);
-                this.Cursor = Cursors.Hand;
+               
                 e.HandPointer.Capture(child);
             }
         }
