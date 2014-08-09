@@ -231,7 +231,7 @@ namespace Microsoft.Kinect.Toolkit.Controls
 
 
         public void BeginInteractionFrame()
-        {
+         {
             Debug.Assert(!this.IsInInteractionFrame, "Call to BeginInteractionFrame made without call to EndInteractionFrame");
             
             this.IsInInteractionFrame = true;

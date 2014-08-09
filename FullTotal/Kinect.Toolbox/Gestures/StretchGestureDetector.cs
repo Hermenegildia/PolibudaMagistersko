@@ -71,19 +71,18 @@ namespace Kinect.Toolbox
             {
                 var pointRightCurrent = Tools.GetJointPoint(Sensor, control, ((EntryKinect)Entries[WindowSize-1]).SkeletonPosition);
                 var pointLeftCurrent = Tools.GetJointPoint(Sensor, control, ((EntryKinect)LeftEntries[WindowSize-1]).SkeletonPosition);
-                //Debug.WriteLine("dłonie: Right = " + pointRightCurrent.X + " rightY = " + pointRightCurrent.Y);
+             
                 if (pointRightCurrent.X > pointLeftCurrent.X) //tylko gdy prawa po prawej - coś dziwnego z pointami o.O,
                 {  //todo: Ala ten warunek nie działa :/
-                    //{
-                    //double currentRightDistance = (pointRightCurrent - pointRightEnd).Length;
-                    //double currentLeftDistance = (pointLeftCurrent - pointLeftEnd).Length;
+                  
                     double currentTotalDistance = (pointRightCurrent - pointLeftCurrent).Length;
                     //przeskalowanie
-                    //var buf = Math.Abs(currentTotalDistance - distanceTotal);
-                    distanceTotal = (Tools.GetJointPoint(Sensor, control, rightStartPosition.SkeletonPosition) - Tools.GetJointPoint(Sensor, control, leftStartPosition.SkeletonPosition)).Length;
+                  
+                    //distanceTotal = (Tools.GetJointPoint(Sensor, control, rightStartPosition.SkeletonPosition) - Tools.GetJointPoint(Sensor, control, leftStartPosition.SkeletonPosition)).Length;
                     //Debug.WriteLine("distanceTotal: " + distanceTotal);
-
+         
                     var actualSize = control.PointToScreen(new Point(control.ActualWidth, control.ActualHeight)) - control.PointToScreen(new Point(0, 0));
+                    distanceTotal = actualSize.Length;
                     threshold = (startThresholdLevel * actualSize.Y * actualSize.X) / (originalControlSize.X * originalControlSize.Y); 
                     if (Math.Abs(currentTotalDistance - distanceTotal) > threshold) //jesli zmiana dystansu miedzy dlonmi, a nie tylko przesuniecie!
                     {
@@ -102,11 +101,7 @@ namespace Kinect.Toolbox
                         return true;
                     }
                 }
-                    
                     return false;
-                //}
-                //else
-                //    return false;
             }
             else
                 return false;

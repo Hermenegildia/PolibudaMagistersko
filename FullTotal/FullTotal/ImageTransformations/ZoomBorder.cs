@@ -150,17 +150,17 @@ namespace FullTotal.ImageTransformations
         //rozluźnij łapkę, gdy wyjazd za foto
         private void OnPointerLeave(object sender, HandPointerEventArgs e)
         {
-            e.HandPointer.IsInGripInteraction = false;
-            e.HandPointer.Capture(null);
+            //e.HandPointer.IsInGripInteraction = false;
+            //e.HandPointer.Capture(null);
 
-            if (e.HandPointer.HandType == HandType.Right)
-            {
-                rightHandPointer = e.HandPointer;
-            }
-            else
-            {
-                leftHandPointer = e.HandPointer;
-            }
+            //if (e.HandPointer.HandType == HandType.Right)
+            //{
+            //    rightHandPointer = e.HandPointer;
+            //}
+            //else
+            //{
+            //    leftHandPointer = e.HandPointer;
+            //}
             
         }
 
@@ -190,12 +190,13 @@ namespace FullTotal.ImageTransformations
                     {
                         if (StartStretchGestureFollowing != null)
                             StartStretchGestureFollowing();
+
+                        var actualSize = this.PointToScreen(new Point(e.HandPointer.GetPosition(this).X, e.HandPointer.GetPosition(this).Y)) - this.PointToScreen(new Point(0, 0));                     
                         return;
+
                         //if (e.HandPointer.HandType == 
                     }
-
                 }
-             
             }
 
             //move tylko gdy tylko prawa ręka gripped
@@ -204,7 +205,7 @@ namespace FullTotal.ImageTransformations
                 var tt = GetTranslateTransform(child);
                 start = e.HandPointer.GetPosition(this);
                 origin = new Point(tt.X, tt.Y);
-               
+                
                 e.HandPointer.Capture(child);
             }
         }

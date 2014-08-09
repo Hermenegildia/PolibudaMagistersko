@@ -213,6 +213,7 @@ namespace Kinect.Toolbox
 
         public static Point GetJointPoint(KinectSensor sensor, FrameworkElement control, SkeletonPoint jointPosition) //sciagniete z beginning_kinect_programming
         {
+            //operujemy we współrzędnych ekranu
             CoordinateMapper cm = new CoordinateMapper(sensor);
             DepthImagePoint point = cm.MapSkeletonPointToDepthPoint(jointPosition, sensor.DepthStream.Format);
             //actualHeight nie działa w Viewboxie! :(

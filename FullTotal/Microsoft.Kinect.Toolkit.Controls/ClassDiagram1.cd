@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.ContentStateToVisibilityConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ContentStateToVisibilityConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.DepthImageColorizerStrategy" Collapsed="true">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAACABAABAAAAAAAAAAAAAAAAACIAAAAAAAACA=</HashCode>
+      <FileName>DepthImageColorizerStrategy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.DepthImageProcessor" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAQACCAIICAAAAAEgASAAUAgAgCCBkAgUAAAAAQAAEU=</HashCode>
+      <FileName>DepthImageProcessor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.DepthImageProcessedEventArgs" Collapsed="true">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DepthImageProcessor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.DoubleToThicknessConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DoubleToThicknessConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.EnumHelper" Collapsed="true">
+    <Position X="5.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EnumHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.HandPointer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAkABCAICAZCABAOQAEgDQAgAAEIAAAVLAACBSAYAg=</HashCode>
+      <FileName>HandPointer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.HandPointerEventArgs" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>HandPointerEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.HandPointerSampleTracker" Collapsed="true">
+    <Position X="8.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAICAAAAAAIIAAgACAAAAAAAAAAAABAAgA=</HashCode>
+      <FileName>HandPointerSampleTracker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.InteractionFrameData" Collapsed="true">
+    <Position X="10.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAIAAQAABAEAAAgAAAAAAEIABAAAAAAACAYAk=</HashCode>
+      <FileName>InteractionFrameData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.InteractionZoneDefinition" Collapsed="true">
+    <Position X="12.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAQAAAAAAAACFAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>KinectAdapter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.KinectAdapter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QIgEABAAAgBYAgAAYACIAAAQSiAAAAAIQAAEAEACADA=</HashCode>
+      <FileName>KinectAdapter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.KinectButtonBase" Collapsed="true">
+    <Position X="1.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAIAAAQAAABCICAAQAEAAARACAAAAEACA=</HashCode>
+      <FileName>KinectButtonBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.KinectButtonBaseAutomationPeer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAQAAAAAAAAAAICAAAA=</HashCode>
+      <FileName>KinectButtonBaseAutomationPeer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.KinectCircleButton" Collapsed="true">
+    <Position X="0.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BCQQAACAEAAAAAAAAAoAIQAABAAACAABBCiAAAAAAAI=</HashCode>
+      <FileName>KinectCircleButton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.KinectCursor" Collapsed="true">
+    <Position X="8.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IrABAAgAAAAgQAgAEGiAAAAAACEAAAAQFAAAQADAGAo=</HashCode>
+      <FileName>KinectCursor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.KinectCursorVisualizer" Collapsed="true">
+    <Position X="10.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AqABgAoBAAAAAAABEACAAAAAAAQAAAAABAAAAABAEAA=</HashCode>
+      <FileName>KinectCursorVisualizer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.KinectItemClickEventArgs" Collapsed="true">
+    <Position X="12.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>KinectItemClickEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.KinectItemsControl" Collapsed="true">
+    <Position X="5.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAEAAAQAAAAAAAAAAAIkAAAAQAACAAAAAAAQAAAA=</HashCode>
+      <FileName>KinectItemsControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.KinectPrimaryUserTracker" Collapsed="true">
+    <Position X="7" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAQAAAAAAAAAAgAAAAAAAABAAAA=</HashCode>
+      <FileName>KinectPrimaryUserTracker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.KinectRegion">
+    <Position X="8.25" Y="3.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>QvGHuCqAAIBIgRgIGV6QIAYAmJAwAFECNdAgkmBAUAA=</HashCode>
+      <FileName>KinectRegion.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.KinectRegionBinder" Collapsed="true">
+    <Position X="11" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAACAAAAAAAAAAAAAAAAAAAAAAAAkAgEAAAABBAAAA=</HashCode>
+      <FileName>KinectRegionBinder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.KinectScrollViewer" Collapsed="true">
+    <Position X="12.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>loCcCdgiBABJQAiEYJAAFAKBIJVGUCAAoADAyAIFEDA=</HashCode>
+      <FileName>KinectScrollViewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.KinectTileButton" Collapsed="true">
+    <Position X="2.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQQAACAEAAAAAAAAAoAAQAABAAAAAAABCgAAAAAAAA=</HashCode>
+      <FileName>KinectTileButton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.KinectUserViewer" Collapsed="true">
+    <Position X="5.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQUAAgIAiAAQAQAAAQAAAgQAAECABAAFAACIcdAAAQ=</HashCode>
+      <FileName>KinectUserViewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.QueryInteractionStatusEventArgs" Collapsed="true">
+    <Position X="0.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>QueryInteractionStatusEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Kinect.Toolkit.Controls.ScrollViewerInertiaScroller" Collapsed="true">
+    <Position X="6.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAQACCAAAGgAAAAAMAAAABAkAEAAAFEIIEgAQAAAABA=</HashCode>
+      <FileName>ScrollViewerInertiaScroller.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Microsoft.Kinect.Toolkit.Controls.IDepthImageColorizerParameters" Collapsed="true">
+    <Position X="5.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAEAAQAAAAAAAACAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>IDepthImageColorizerParameters.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="Microsoft.Kinect.Toolkit.Controls.HandEventType" Collapsed="true">
+    <Position X="7" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>HandEventType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Microsoft.Kinect.Toolkit.Controls.HandType" Collapsed="true">
+    <Position X="8.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACACAAAEAAAA=</HashCode>
+      <FileName>HandType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Microsoft.Kinect.Toolkit.Controls.KinectCircleButtonLabelPosition" Collapsed="true">
+    <Position X="10.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAACAAAEAAAA=</HashCode>
+      <FileName>KinectCircleButton.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Microsoft.Kinect.Toolkit.Controls.AnimationState" Collapsed="true">
+    <Position X="5.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAEAAAQ=</HashCode>
+      <FileName>ScrollViewerInertiaScroller.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Microsoft.Kinect.Toolkit.Controls.UserColoringMode" Collapsed="true">
+    <Position X="12.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UserColoringMode.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Delegate Name="Microsoft.Kinect.Toolkit.Controls.QueryPrimaryUserTrackingIdCallback" Collapsed="true">
+    <Position X="5.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAEAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>KinectRegion.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
