@@ -1076,7 +1076,7 @@ namespace Microsoft.Kinect.Toolkit.Controls
                 Z = handPointer.PressExtent
             };
 
-            this.kinectAdapter.HandleHandPointerData(interactionData, this.jointsForInteractionStream, this.KinectSensor);//, this.depthFrameForInteractionStream);
+            this.kinectAdapter.HandleHandPointerData(interactionData);//(interactionData, this.jointsForInteractionStream, this.KinectSensor);//, this.depthFrameForInteractionStream);
         }
     }
 }

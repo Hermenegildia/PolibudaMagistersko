@@ -35,6 +35,7 @@ namespace FullTotal
         StretchGestureDetector stretchGestureDetector;
         RotationGestureDetector rotationGestureDetector;
         bool isStretchGestureActive;
+        bool isRotateGestureActive;
         AlgorithmicPostureDetector algorithmicPostureDetector = new AlgorithmicPostureDetector();
         int counterStretch = 0;
         int counterRotate = 0;
@@ -45,6 +46,7 @@ namespace FullTotal
         {
             InitializeComponent();
             isStretchGestureActive = false;
+            isRotateGestureActive = false;
             
             parameters = new TransformSmoothParameters
             {
@@ -74,9 +76,10 @@ namespace FullTotal
             rotationGestureDetector.OnGestureWithAngleDetected +=rotationGestureDetector_OnGestureWithAngleDetected;
         }
 
-        private void rotationGestureDetector_OnGestureWithAngleDetected(string gestureName, float angle)
+        private void rotationGestureDetector_OnGestureWithAngleDetected(string gestureName, double angle)
         {
             statusBarText.Text = gestureName + " " + angle.ToString();
+            zoomBorder.SetRotationAngle(angle);
         }
 
         private void InitializePostures()
@@ -109,20 +112,33 @@ namespace FullTotal
             BindingOperations.SetBinding(this.kinectRegion, KinectRegion.KinectSensorProperty, regionSensorBinding);
 
             this.zoomBorder.AssignKinectRegion(this.kinectRegion);
-            this.zoomBorder.StartStretchGestureFollowing += border_StartStretchGestureFollowing;
-            this.zoomBorder.EndStretchGestureFollowing +=zoomBorder_EndStretchGestureFollowing;
-            this.zoomBorder.OnVectorLengthUpdate += border_OnVectorLengthUpdate;
+            this.zoomBorder.OnStartStretchGestureFollowing += border_StartStretchGestureFollowing;
+            this.zoomBorder.OnEndStretchGestureFollowing +=zoomBorder_EndStretchGestureFollowing;
+            this.zoomBorder.OnStartRotateFestureFollowing +=zoomBorder_StartRotateFestureFollowing;
+            this.zoomBorder.OnEndRotateFestureFollowing += zoomBorder_EndRotateFestureFollowing;
+            this.zoomBorder.OnMoving +=zoomBorder_OnMoving;
+        }
+
+        private void zoomBorder_OnMoving(string position)
+        {
+            this.statusBarText.Text = position;
+        }
+
+        private void zoomBorder_EndRotateFestureFollowing()
+        {
+            counterRotate = 0;
+            isRotateGestureActive = false;
+        }
+
+        private void zoomBorder_StartRotateFestureFollowing()
+        {
+            isRotateGestureActive = true;
         }
 
         private void zoomBorder_EndStretchGestureFollowing()
         {
             isStretchGestureActive = false;
-            counter = 0;
-        }
-
-        private void border_OnVectorLengthUpdate(double vectorLength)
-        {
-            this.statusBarText.Text = "zoomable vector length: " + vectorLength.ToString();
+            counterStretch = 0;
         }
 
         private void border_StartStretchGestureFollowing()
@@ -141,8 +157,8 @@ namespace FullTotal
                     e.OldSensor.DepthStream.Disable();
                     e.OldSensor.SkeletonStream.Disable();
                     e.OldSensor.SkeletonFrameReady -= sensor_SkeletonFrameReady;
-                    e.OldSensor.ColorFrameReady -= sensor_ColorFrameReady;
-                    e.OldSensor.DepthFrameReady -= sensor_DepthFrameReady;
+                    //e.OldSensor.ColorFrameReady -= sensor_ColorFrameReady;
+                    //e.OldSensor.DepthFrameReady -= sensor_DepthFrameReady;
                     //e.OldSensor.AllFramesReady -= sensor_AllFramesReady;
                     //this.SkeletonViewerControl.KinectDevice = null;
                     //this.kinectRegion.KinectSensor = null;
@@ -166,8 +182,8 @@ namespace FullTotal
                     this.sensor.SkeletonStream.Enable(parameters);
 
                     this.sensor.SkeletonFrameReady += sensor_SkeletonFrameReady;
-                    this.sensor.ColorFrameReady += sensor_ColorFrameReady;
-                    this.sensor.DepthFrameReady += sensor_DepthFrameReady;
+                    //this.sensor.ColorFrameReady += sensor_ColorFrameReady;
+                    //this.sensor.DepthFrameReady += sensor_DepthFrameReady;
                     //this.sensor.AllFramesReady += sensor_AllFramesReady;
                     this.kinectRegion.KinectSensor = this.sensor;
 
@@ -207,13 +223,13 @@ namespace FullTotal
                 this.statusBarText.Text = Properties.Resources.NoKinectReady;
         }
 
-        private void sensor_DepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
-        {
-        }
+        //private void sensor_DepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
+        //{
+        //}
 
-        private void sensor_ColorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
-        {
-        }
+        //private void sensor_ColorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
+        //{
+        //}
 
         private void sensor_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
@@ -240,42 +256,49 @@ namespace FullTotal
             //Dictionary<int, string> stabilities = new Dictionary<int, string>(); //sluzy do wyswitelania stablilites na liscie - tu nieuzywane!
             var skeletonId = TrackClosestSkeleton(skeletons);
 
-                Skeleton closestSkeleton = skeletons.Where(skel => skel.TrackingId == skeletonId).FirstOrDefault();
-                if (closestSkeleton != null && sensor != null)
+            Skeleton closestSkeleton = skeletons.Where(skel => skel.TrackingId == skeletonId).FirstOrDefault();
+            if (closestSkeleton != null && sensor != null)
+            {
+                if (closestSkeleton.TrackingState != SkeletonTrackingState.Tracked)
+                    return;
+
+                contextTracker.Add(closestSkeleton.Position.ToVector3(), closestSkeleton.TrackingId);
+                //stabilities.Add(closestSkeleton.TrackingId, contextTracker.IsStableRelativeToCurrentSpeed(closestSkeleton.TrackingId) ? "Stable" : "Non stable");
+                if (!contextTracker.IsStableRelativeToCurrentSpeed(closestSkeleton.TrackingId))
+                    return;
+
+                algorithmicPostureDetector.TrackPostures(closestSkeleton);
+                if (isStretchGestureActive)
                 {
-                    if (closestSkeleton.TrackingState != SkeletonTrackingState.Tracked)
-                        return;
-
-                    contextTracker.Add(closestSkeleton.Position.ToVector3(), closestSkeleton.TrackingId);
-                    //stabilities.Add(closestSkeleton.TrackingId, contextTracker.IsStableRelativeToCurrentSpeed(closestSkeleton.TrackingId) ? "Stable" : "Non stable");
-                    if (!contextTracker.IsStableRelativeToCurrentSpeed(closestSkeleton.TrackingId))
-                        return;
-
-                    algorithmicPostureDetector.TrackPostures(closestSkeleton);
-                    if (isStretchGestureActive)
+                    if (closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && closestSkeleton.Joints[JointType.HandRight].TrackingState == JointTrackingState.Tracked)
                     {
-                        if (closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && closestSkeleton.Joints[JointType.HandRight].TrackingState == JointTrackingState.Tracked)
+                        if (counterStretch == 0) //ustaw wartosci poczatkowe przy pierwszej iteracji
                         {
-                            if (counterStretch == 0) //ustaw wartosci poczatkowe przy pierwszej iteracji
-                            {
-                                stretchGestureDetector.SetStartPosition(closestSkeleton);
-                                counterStretch++;
-                            }
-                            else
-                            stretchGestureDetector.Add(closestSkeleton);
-
-                            if (counterRotate == 0)
-                            {
-                                rotationGestureDetector.SetStartPosition(closestSkeleton);
-                                counterRotate++;
-                            }
-                            else
-                                rotationGestureDetector.Add(closestSkeleton);
+                            stretchGestureDetector.SetStartPosition(closestSkeleton);
+                            counterStretch++;
                         }
+                        else
+                            stretchGestureDetector.Add(closestSkeleton);
                     }
-                    
                 }
+                if (isRotateGestureActive)
+                {
+                    if (closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && closestSkeleton.Joints[JointType.HandRight].TrackingState == JointTrackingState.Tracked)
+                    {
+                        if (counterRotate == 0)
+                        {
+                            rotationGestureDetector.SetStartPosition(closestSkeleton);
+                            counterRotate++;
+                        }
+                        else
+                            rotationGestureDetector.Add(closestSkeleton);
+                    }
+                }
+            }
         }
+                  
+                    
+            
 
         private int TrackClosestSkeleton(Skeleton[] skeletons)
         {
@@ -313,9 +336,9 @@ namespace FullTotal
         {
             if (null != this.sensor)
             {
-                sensor.DepthFrameReady -= sensor_DepthFrameReady;
+                //sensor.DepthFrameReady -= sensor_DepthFrameReady;
                 sensor.SkeletonFrameReady -= sensor_SkeletonFrameReady;
-                sensor.ColorFrameReady -= sensor_ColorFrameReady;
+                //sensor.ColorFrameReady -= sensor_ColorFrameReady;
                 this.sensor.Stop();
                 sensor = null;
             }

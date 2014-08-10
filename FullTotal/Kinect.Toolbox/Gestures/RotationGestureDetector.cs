@@ -11,18 +11,18 @@ namespace Kinect.Toolbox
 {
     public class RotationGestureDetector: TwoHandsAlgorithmicGessureDetector
     {
-        float angle = 0.0f;
+        double angle = 0;
         EntryKinect leftStartPosition;
         EntryKinect rightStartPosition;
         FrameworkElement control;
         Vector originalControlSize;
         Vector initialVector;
 
-        public delegate void GestureDetection(string gestureName, float angle);
+        public delegate void GestureDetection(string gestureName, double angle);
         public event GestureDetection OnGestureWithAngleDetected;
     
 
-        public RotationGestureDetector(KinectSensor sensor, FrameworkElement control, Vector originalControlSize, string gestureName = "rotation", int windowSize = 1)
+        public RotationGestureDetector(KinectSensor sensor, FrameworkElement control, Vector originalControlSize, string gestureName = "rotation", int windowSize = 10)
             : base(sensor, gestureName, windowSize)
         {
             this.control = control;
@@ -50,26 +50,32 @@ namespace Kinect.Toolbox
                 leftStartPosition = new EntryKinect { Position = position.ToVector3(), SkeletonPosition = position, Time = DateTime.Now };
 
             }
-            initialVector = Tools.GetJointPoint(Sensor, control, rightStartPosition.SkeletonPosition) - Tools.GetJointPoint(Sensor, control, leftStartPosition.SkeletonPosition));
+            initialVector = Tools.GetJointPoint(Sensor, control, rightStartPosition.SkeletonPosition) - Tools.GetJointPoint(Sensor, control, leftStartPosition.SkeletonPosition);
             
         }
 
 
         protected bool ScanPositions()
         {
-            if (Entries.Count > 0 && LeftEntries.Count > 0)
+            if (Entries.Count == WindowSize && LeftEntries.Count == WindowSize)
             {
-                var vec1 = Tools.Convert(Sensor, ((EntryKinect)Entries[0]).SkeletonPosition);
-                var vec2 = Tools.Convert(Sensor, ((EntryKinect)LeftEntries[0]).SkeletonPosition);
-                angle = GoldenSection.GetAngleBetween(Vector2.Zero, vec2 - vec1);
-                return true;
-            }
-            else
-                return false;
+                var pointRightCurrent = Tools.GetJointPoint(Sensor, control, ((EntryKinect)Entries[WindowSize - 1]).SkeletonPosition);
+                var pointLeftCurrent = Tools.GetJointPoint(Sensor, control, ((EntryKinect)LeftEntries[WindowSize - 1]).SkeletonPosition);
 
+                    var vecR = new Vector2((float)pointRightCurrent.X, (float)pointRightCurrent.Y);
+                    var vecL = new Vector2((float)pointLeftCurrent.X, (float)pointLeftCurrent.Y);
+                    //angle = GoldenSection.GetAngleBetween(Vector2.Zero, vec2 - vec1);
+                //wartosc kata wyrazona w radianach
+                    var bufAngle = GoldenSection.GetAngleBetween(new Vector2((float)initialVector.X, (float)initialVector.Y), vecL - vecR);//vecR - vecL);
+                   angle = 180 * bufAngle / Math.PI;
+                    return true;
+
+            }
+
+            return false;
         }
 
-        protected void RaiseGestureDetected(string gesture, float angle)
+        protected void RaiseGestureDetected(string gesture, double angle)
         {
             // Too close?
             if (DateTime.Now.Subtract(lastGestureDate).TotalMilliseconds > MinimalPeriodBetweenGestures)

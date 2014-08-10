@@ -25,10 +25,12 @@ namespace FullTotal.ImageTransformations
         HandPointer rightHandPointer;
        
         public delegate void GestureDelegate();
-        public event GestureDelegate StartStretchGestureFollowing;
-        public event GestureDelegate EndStretchGestureFollowing;
-        public event GestureDelegate StartRotateFestureFollowing;
-        public event GestureDelegate EndRotateFestureFollowing;
+        public event GestureDelegate OnStartStretchGestureFollowing;
+        public event GestureDelegate OnEndStretchGestureFollowing;
+        public event GestureDelegate OnStartRotateFestureFollowing;
+        public event GestureDelegate OnEndRotateFestureFollowing;
+        public delegate void MoveDelegate(string position);
+        public event MoveDelegate OnMoving;
 
         public delegate void VectorLengthUpdate(double vectorLength);
         
@@ -37,7 +39,8 @@ namespace FullTotal.ImageTransformations
         bool wasLastGestureStretch = false;
         bool wasLastGestureRotate = false;
         DateTime lastZoomDate = DateTime.Now;
-        const int timePeriodBetweenZoom = 200; 
+        const int timePeriodBetweenZoom = 200;
+        double angle = 0;
 
 
         public void AssignKinectRegion(KinectRegion kinectRegion)
@@ -56,8 +59,8 @@ namespace FullTotal.ImageTransformations
                 KinectRegion.AddHandPointerMoveHandler(this.child, OnPointerMove);
                 KinectRegion.RemoveHandPointerGripReleaseHandler(this.child, OnPointerGripRelease); //usuń stare powiązania
                 KinectRegion.AddHandPointerGripReleaseHandler(this.child, OnPointerGripRelease);
-                KinectRegion.RemoveHandPointerLeaveHandler(this.child, OnPointerLeave); //usuń stare powiązania
-                KinectRegion.AddHandPointerLeaveHandler(this.child, OnPointerLeave); ////uwolnij uścisk gdy łapka schodzi z image
+                KinectRegion.RemoveHandPointerLeaveHandler(this, OnPointerLeave); //usuń stare powiązania
+                KinectRegion.AddHandPointerLeaveHandler(this, OnPointerLeave); ////uwolnij uścisk gdy łapka schodzi z image
             }
             
         }
@@ -101,13 +104,17 @@ namespace FullTotal.ImageTransformations
             {
                 TransformGroup group = new TransformGroup();
                 ScaleTransform st = new ScaleTransform();
-                group.Children.Add(st);
+               
                 TranslateTransform tt = new TranslateTransform();
-                group.Children.Add(tt);
+               
                 //added by Ala
                 RotateTransform rt = new RotateTransform();
-                group.Children.Add(rt);
+              
                 //
+                group.Children.Add(st);
+                group.Children.Add(tt);
+                group.Children.Add(rt);
+
                 child.RenderTransform = group;
                 child.RenderTransformOrigin = new Point(0.0, 0.0);
               
@@ -127,8 +134,8 @@ namespace FullTotal.ImageTransformations
                     KinectRegion.AddHandPointerMoveHandler(this.child, OnPointerMove);
                     KinectRegion.RemoveHandPointerGripReleaseHandler(this.child, OnPointerGripRelease); //usuń stare powiązania
                     KinectRegion.AddHandPointerGripReleaseHandler(this.child, OnPointerGripRelease);
-                    KinectRegion.RemoveHandPointerLeaveHandler(this.child, OnPointerLeave); //usuń stare powiązania
-                    KinectRegion.AddHandPointerLeaveHandler(this.child, OnPointerLeave); //uwolnij uścisk gdy łapka schodzi z image
+                    KinectRegion.RemoveHandPointerLeaveHandler(this, OnPointerLeave); //usuń stare powiązania
+                    KinectRegion.AddHandPointerLeaveHandler(this, OnPointerLeave); //uwolnij uścisk gdy łapka schodzi z image
                 }
             }
         }
@@ -161,17 +168,15 @@ namespace FullTotal.ImageTransformations
         //rozluźnij łapkę, gdy wyjazd za foto
         private void OnPointerLeave(object sender, HandPointerEventArgs e)
         {
-            //e.HandPointer.IsInGripInteraction = false;
-            //e.HandPointer.Capture(null);
+            e.HandPointer.IsInGripInteraction = false;
+            e.HandPointer.Capture(null);
+            AssignHandPointerToBuffer(e.HandPointer);
 
-            //if (e.HandPointer.HandType == HandType.Right)
-            //{
-            //    rightHandPointer = e.HandPointer;
-            //}
-            //else
-            //{
-            //    leftHandPointer = e.HandPointer;
-            //}
+            if (OnEndRotateFestureFollowing != null)
+                OnEndRotateFestureFollowing();
+            if (OnEndStretchGestureFollowing != null)
+                OnEndStretchGestureFollowing();
+
             e.Handled = true;
         }
 
@@ -184,23 +189,24 @@ namespace FullTotal.ImageTransformations
             if (rightHandPointer != null && leftHandPointer != null)
             {
                
-                //stretching gesture begin!
+                //stretching/rotating gesture begin!
                 if (rightHandPointer.IsInGripInteraction && leftHandPointer.IsInGripInteraction)
                 {
-                    if (e.HandPointer.Captured == null)
-                    {
+                    //if (e.HandPointer.Captured == null)
+                    //{
                         //if (StartStretchGestureFollowing != null)
                         //    StartStretchGestureFollowing();
                         //wasLastGestureStretch = true;
                         
-                        if (StartRotateFestureFollowing != null)
-                            StartRotateFestureFollowing();
+                        if (OnStartRotateFestureFollowing != null)
+                            OnStartRotateFestureFollowing();
                         wasLastGestureRotate = true;
 
-                        AssignHandPointerToBuffer(e.HandPointer);
-                        e.Handled = true;
-                    }
+                        
+                        
+                    //}
                     AssignHandPointerToBuffer(e.HandPointer);
+                    e.Handled = true;
                 }
             }
 
@@ -226,57 +232,87 @@ namespace FullTotal.ImageTransformations
                     //move
                     if (e.HandPointer.HandType == HandType.Right && e.HandPointer.IsInGripInteraction)
                     {
-                        if (rightHandPointer == null)
-                            rightHandPointer = e.HandPointer;
-
-                        if (e.HandPointer.Captured == child)//zlapany obrazek
-                        {
-                            var tt = GetTranslateTransform(child);
-                            Vector v = start - e.HandPointer.GetPosition(this);
-
-                            tt.X = origin.X - v.X;
-                            tt.Y = origin.Y - v.Y;
-                        }
+                        DoMoving(e);
                     }
+                    
                 }
                 //dwureczne --> obie rece aktywne
                 else if (rightHandPointer != null && leftHandPointer != null)
                 {
+                    AssignHandPointerToBuffer(e.HandPointer);
                     if (rightHandPointer.IsInGripInteraction && leftHandPointer.IsInGripInteraction)
                     {
                         //do zooming
                         if (wasLastGestureStretch)
                         {
-                            if (DateTime.Now.Subtract(lastZoomDate).TotalMilliseconds > timePeriodBetweenZoom)
-                            {
-                                var st = GetScaleTransform(child);
-                                var tt = GetTranslateTransform(child);
+                            DoZooming();
+                        }
 
-                                if ((zoomFactor < 0) && (st.ScaleX < .8 || st.ScaleY < .8)) //limit oddalania
-                                    return;
-
-                                Point relative = new Point(this.ActualWidth / 2, this.ActualHeight / 2); //zawsze wzgledem srodka ZoomBorder
-                                double abosuluteX;
-                                double abosuluteY;
-
-                                abosuluteX = relative.X * st.ScaleX + tt.X;
-                                abosuluteY = relative.Y * st.ScaleY + tt.Y;
-
-                                st.ScaleX += zoomFactor;
-                                st.ScaleY += zoomFactor;
-
-                                tt.X = abosuluteX - relative.X * st.ScaleX;
-                                tt.Y = abosuluteY - relative.Y * st.ScaleY;
-
-                                lastZoomDate = DateTime.Now;
-                                zoomFactor = 0;
-                            }
+                        if (wasLastGestureRotate)
+                        {
+                            DoRotation();
                         }
                     }
+                    
                 }
-                AssignHandPointerToBuffer(e.HandPointer);
             }
             e.Handled = true;
+        }
+
+        private void DoRotation()
+        {
+            if (child != null)
+            {
+                var rt = GetRotateTransform(child);
+                var centerX = ((Image)this.child).ActualWidth / 2;///Math.Abs((rightHandPointer.GetPosition(this).X - leftHandPointer.GetPosition(this).X));
+                var centerY = ((Image)this.child).ActualHeight / 2;//Math.Abs((rightHandPointer.GetPosition(this).Y - leftHandPointer.GetPosition(this).Y));
+                rt.CenterX = centerX;
+                rt.CenterY = centerY;
+                rt.Angle = angle;
+            }
+        }
+
+        private void DoZooming()
+        {
+            if (DateTime.Now.Subtract(lastZoomDate).TotalMilliseconds > timePeriodBetweenZoom)
+            {
+                var st = GetScaleTransform(child);
+                var tt = GetTranslateTransform(child);
+
+                if ((zoomFactor < 0) && (st.ScaleX < .8 || st.ScaleY < .8)) //limit oddalania
+                    return;
+
+                Point relative = new Point(this.ActualWidth / 2, this.ActualHeight / 2); //zawsze wzgledem srodka ZoomBorder
+                double abosuluteX;
+                double abosuluteY;
+
+                abosuluteX = relative.X * st.ScaleX + tt.X;
+                abosuluteY = relative.Y * st.ScaleY + tt.Y;
+
+                st.ScaleX += zoomFactor;
+                st.ScaleY += zoomFactor;
+
+                tt.X = abosuluteX - relative.X * st.ScaleX;
+                tt.Y = abosuluteY - relative.Y * st.ScaleY;
+
+                lastZoomDate = DateTime.Now;
+                zoomFactor = 0;
+            }
+        }
+
+        private void DoMoving(HandPointerEventArgs e)
+        {
+            if (rightHandPointer == null)
+                rightHandPointer = e.HandPointer;
+
+            if (e.HandPointer.Captured == child)//zlapany obrazek
+            {
+                var tt = GetTranslateTransform(child);
+                Vector v = start - e.HandPointer.GetPosition(this);
+
+                tt.X = origin.X - v.X;
+                tt.Y = origin.Y - v.Y;
+            }
         }
 
         private void OnPointerGripRelease(object sender, HandPointerEventArgs e)
@@ -296,11 +332,11 @@ namespace FullTotal.ImageTransformations
                     if (child != null)
                     {
                         e.HandPointer.Capture(null);
-                        if (EndStretchGestureFollowing != null)
-                            EndStretchGestureFollowing();
+                        if (OnEndStretchGestureFollowing != null)
+                            OnEndStretchGestureFollowing();
 
-                        if (EndRotateFestureFollowing != null)
-                            EndRotateFestureFollowing();
+                        if (OnEndRotateFestureFollowing != null)
+                            OnEndRotateFestureFollowing();
 
                     }
                 }
@@ -390,6 +426,11 @@ namespace FullTotal.ImageTransformations
                 zoomFactor = 0;
         }
 
+        public void SetRotationAngle(double angleInDegrees)
+        {
+            this.angle = angleInDegrees; 
+        }
+
         #endregion Kinect public methods
 
 
@@ -401,6 +442,7 @@ namespace FullTotal.ImageTransformations
             {
                 var st = GetScaleTransform(child);
                 var tt = GetTranslateTransform(child);
+                var rot = GetRotateTransform(child);
 
                 double zoom = e.Delta > 0 ? .2 : -.2;
                 if (!(e.Delta > 0) && (st.ScaleX < .4 || st.ScaleY < .4)) //limit oddalania
@@ -413,11 +455,13 @@ namespace FullTotal.ImageTransformations
                 abosuluteX = relative.X * st.ScaleX + tt.X;
                 abosuluteY = relative.Y * st.ScaleY + tt.Y;
 
+                
                 st.ScaleX += zoom;
-                st.ScaleY += zoom;
+                st.ScaleY += zoom; 
 
                 tt.X = abosuluteX - relative.X * st.ScaleX;
                 tt.Y = abosuluteY - relative.Y * st.ScaleY;
+
             }
         }
 
@@ -444,7 +488,11 @@ namespace FullTotal.ImageTransformations
 
         void child_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.Reset();
+            //this.Reset();
+            double x = ((Image)this.child).ActualWidth / 2;
+            double y = ((Image)this.child).ActualHeight / 2;
+            var location = e.GetPosition(this);
+            RotateLeft(30, x, y);
         }
 
         private void child_MouseMove(object sender, MouseEventArgs e)
@@ -454,9 +502,12 @@ namespace FullTotal.ImageTransformations
                 if (child.IsMouseCaptured)
                 {
                     var tt = GetTranslateTransform(child);
+
                     Vector v = start - e.GetPosition(this);
                     tt.X = origin.X - v.X;
                     tt.Y = origin.Y - v.Y;
+                    if (OnMoving != null)
+                        OnMoving("tt.X: " + tt.X + " tt.Y: " + tt.Y);
                 }
             }
         }
@@ -466,8 +517,14 @@ namespace FullTotal.ImageTransformations
             if (child != null)
             {
                 var rt = GetRotateTransform(child);
-                rt.CenterX = centerX;
-                rt.CenterY = centerY;
+                var st = GetScaleTransform(child);
+                var tt = GetTranslateTransform(child);
+                var x = centerX * st.ScaleX + tt.X;
+                var y = centerY * st.ScaleY + tt.Y;
+                var angleRadians = Math.PI * (rt.Angle) / 180;
+                //uwzglednij skalowanie i przesuniecie
+                rt.CenterX = x;// *Math.Cos(angleRadians) + y * Math.Sin(angleRadians);
+                rt.CenterY = y;//-x*Math.Sin(angleRadians) + y*Math.Cos(angleRadians);
                 rt.Angle += angle;
             }
         }
