@@ -455,7 +455,6 @@ namespace FullTotal.ImageTransformations
                 abosuluteX = relative.X * st.ScaleX + tt.X;
                 abosuluteY = relative.Y * st.ScaleY + tt.Y;
 
-                
                 st.ScaleX += zoom;
                 st.ScaleY += zoom; 
 
@@ -470,6 +469,7 @@ namespace FullTotal.ImageTransformations
             if (child != null)
             {
                 var tt = GetTranslateTransform(child);
+               
                 start = e.GetPosition(this);
                 origin = new Point(tt.X, tt.Y);
                 this.Cursor = Cursors.Hand;
@@ -502,12 +502,17 @@ namespace FullTotal.ImageTransformations
                 if (child.IsMouseCaptured)
                 {
                     var tt = GetTranslateTransform(child);
+                    var rt = GetRotateTransform(child);
+                    var st = GetScaleTransform(child);
 
                     Vector v = start - e.GetPosition(this);
-                    tt.X = origin.X - v.X;
-                    tt.Y = origin.Y - v.Y;
+                    var x = (origin.X - (v.X));
+                    var y = (origin.Y - (v.Y ));
+                    var angleRadians = Math.PI * (rt.Angle) / 180;
+                    tt.X = x*Math.Cos(angleRadians)+y*Math.Sin(angleRadians);
+                    tt.Y = -x*Math.Sin(angleRadians) + y*Math.Cos(angleRadians);
                     if (OnMoving != null)
-                        OnMoving("tt.X: " + tt.X + " tt.Y: " + tt.Y);
+                        OnMoving("x: " + x + " tt.X: " + tt.X + " y: " + y +" tt.Y: " + tt.Y);
                 }
             }
         }
@@ -519,13 +524,15 @@ namespace FullTotal.ImageTransformations
                 var rt = GetRotateTransform(child);
                 var st = GetScaleTransform(child);
                 var tt = GetTranslateTransform(child);
-                var x = centerX * st.ScaleX + tt.X;
-                var y = centerY * st.ScaleY + tt.Y;
-                var angleRadians = Math.PI * (rt.Angle) / 180;
-                //uwzglednij skalowanie i przesuniecie
-                rt.CenterX = x;// *Math.Cos(angleRadians) + y * Math.Sin(angleRadians);
-                rt.CenterY = y;//-x*Math.Sin(angleRadians) + y*Math.Cos(angleRadians);
+
+                var x = tt.X;
+                var y = tt.Y;
+
+                rt.CenterX = centerX * st.ScaleX + tt.X;
+                rt.CenterY = centerY * st.ScaleY + tt.Y;
                 rt.Angle += angle;
+
+
             }
         }
 
