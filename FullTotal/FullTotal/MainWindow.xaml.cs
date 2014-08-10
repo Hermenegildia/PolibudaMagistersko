@@ -64,6 +64,7 @@ namespace FullTotal
         {
             var originalSize = this.zoomBorder.PointToScreen(new Point(this.zoomBorder.ActualWidth, this.zoomBorder.ActualHeight)) - this.zoomBorder.PointToScreen(new Point(0, 0));
             stretchGestureDetector = new StretchGestureDetector(this.sensor, this.zoomBorder, originalSize);
+            stretchGestureDetector.MinimalPeriodBetweenGestures = 350;
             stretchGestureDetector.OnGestureWithDistanceDetected += stretchGestureDetector_OnGestureWithDistanceDetected;
         }
 
@@ -80,7 +81,7 @@ namespace FullTotal
         private void stretchGestureDetector_OnGestureWithDistanceDetected(string gestureName, double totalRatio)
         {
             statusBarText.Text = gestureName + " " + totalRatio.ToString();
-            //this.zoomBorder.SetZoomFactor(totalRatio);
+            this.zoomBorder.SetZoomFactor(totalRatio);
             
         }
 

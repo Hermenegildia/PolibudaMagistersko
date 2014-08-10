@@ -14,7 +14,7 @@ namespace FullTotal.ImageTransformations
 {
     public class ZoomBorder: Border
     {
-        private const double zoomRatioThreshold = 0.1;
+        private const double zoomRatioThreshold = 0.05;
 
         private UIElement child = null;
         private Point origin;
@@ -33,6 +33,9 @@ namespace FullTotal.ImageTransformations
 
         double zoomFactor = 0;
         bool wasLastGestureStretch = false;
+        DateTime lastZoomDate = DateTime.Now;
+        int timePeriodBetweenZoom = 200; 
+
 
         public void AssignKinectRegion(KinectRegion kinectRegion)
         {
@@ -166,7 +169,7 @@ namespace FullTotal.ImageTransformations
             //{
             //    leftHandPointer = e.HandPointer;
             //}
-            
+            e.Handled = true;
         }
 
 
@@ -177,17 +180,7 @@ namespace FullTotal.ImageTransformations
            
             if (rightHandPointer != null && leftHandPointer != null)
             {
-                ////przesuwanie
-                //if (!leftHandPointer.IsInGripInteraction && rightHandPointer.IsInGripInteraction)
-                //{
-                //    if (child != null)
-                //    {
-                //        var tt = GetTranslateTransform(child);
-                //        start = e.HandPointer.GetPosition(this);
-                //        origin = new Point(tt.X, tt.Y);
-                //    }
-                //}
-
+               
                 //stretching gesture begin!
                 if (rightHandPointer.IsInGripInteraction && leftHandPointer.IsInGripInteraction)
                 {
@@ -196,25 +189,24 @@ namespace FullTotal.ImageTransformations
                         if (StartStretchGestureFollowing != null)
                             StartStretchGestureFollowing();
                         wasLastGestureStretch = true;
-                        var actualSize = this.PointToScreen(new Point(e.HandPointer.GetPosition(this).X, e.HandPointer.GetPosition(this).Y)) - this.PointToScreen(new Point(0, 0));                     
-                        return;
-
-                        //if (e.HandPointer.HandType == 
+                        AssignHandPointerToBuffer(e.HandPointer);
+                        e.Handled = true;
                     }
+                    AssignHandPointerToBuffer(e.HandPointer);
                 }
             }
 
             //move tylko gdy tylko prawa ręka gripped
-             if (!wasLastGestureStretch && e.HandPointer.HandType == HandType.Right && (leftHandPointer == null || !leftHandPointer.IsInGripInteraction))
+            if (!wasLastGestureStretch && e.HandPointer.HandType == HandType.Right && (leftHandPointer == null || !leftHandPointer.IsInGripInteraction))
             {
                 var tt = GetTranslateTransform(child);
                 start = e.HandPointer.GetPosition(this);
                 origin = new Point(tt.X, tt.Y);
-                
+
                 e.HandPointer.Capture(child);
-                 
-                AssignHandPointerToBuffer(e.HandPointer);
             }
+             AssignHandPointerToBuffer(e.HandPointer);
+             e.Handled = true;
         }
 
         private void OnPointerMove(object sender, HandPointerEventArgs e)
@@ -239,7 +231,7 @@ namespace FullTotal.ImageTransformations
                         }
                     }
                 }
-                    //dwureczne --> obi rece aktywne
+                //dwureczne --> obie rece aktywne
                 else if (rightHandPointer != null && leftHandPointer != null)
                 {
                     if (rightHandPointer.IsInGripInteraction && leftHandPointer.IsInGripInteraction)
@@ -247,28 +239,36 @@ namespace FullTotal.ImageTransformations
                         //do zooming
                         if (wasLastGestureStretch)
                         {
-                            var st = GetScaleTransform(child);
-                            var tt = GetTranslateTransform(child);
+                            if (DateTime.Now.Subtract(lastZoomDate).TotalMilliseconds > timePeriodBetweenZoom)
+                            {
+                                var st = GetScaleTransform(child);
+                                var tt = GetTranslateTransform(child);
 
-                            if ((zoomFactor != 0) && (st.ScaleX < .4 || st.ScaleY < .4)) //limit oddalania
-                                return;
+                                if ((zoomFactor != 0) && (st.ScaleX < .8 || st.ScaleY < .8)) //limit oddalania
+                                    return;
 
-                            Point relative = e.HandPointer.GetPosition(child);
-                            double abosuluteX;
-                            double abosuluteY;
+                                Point relative = new Point(this.ActualWidth / 2, this.ActualHeight / 2); //zawsze wzgledem srodka ZoomBorder
+                                double abosuluteX;
+                                double abosuluteY;
 
-                            abosuluteX = relative.X * st.ScaleX + tt.X;
-                            abosuluteY = relative.Y * st.ScaleY + tt.Y;
+                                abosuluteX = relative.X * st.ScaleX + tt.X;
+                                abosuluteY = relative.Y * st.ScaleY + tt.Y;
 
-                            st.ScaleX += zoomFactor;
-                            st.ScaleY += zoomFactor;
+                                st.ScaleX += zoomFactor;
+                                st.ScaleY += zoomFactor;
 
-                            tt.X = abosuluteX - relative.X * st.ScaleX;
-                            tt.Y = abosuluteY - relative.Y * st.ScaleY;
+                                tt.X = abosuluteX - relative.X * st.ScaleX;
+                                tt.Y = abosuluteY - relative.Y * st.ScaleY;
+
+                                lastZoomDate = DateTime.Now;
+                                zoomFactor = 0;
+                            }
                         }
                     }
                 }
+                AssignHandPointerToBuffer(e.HandPointer);
             }
+            e.Handled = true;
         }
 
         private void OnPointerGripRelease(object sender, HandPointerEventArgs e)
@@ -298,18 +298,8 @@ namespace FullTotal.ImageTransformations
                     AssignHandPointerToBuffer(e.HandPointer);
                 }
 
-           
-            //{
-                //if (rightHandPointer.IsInGripInteraction && leftHandPointer.IsInGripInteraction)
-                //{
-                //    if (e.HandPointer.Captured == null)
-                //    {
-                //        if (EndStretchGestureFollowing != null)
-                //            EndStretchGestureFollowing();
-                //    }
+            e.Handled = true;
 
-                //}
-            //}
         }
 
         private void AssignHandPointerToBuffer(HandPointer handPointer)
@@ -345,7 +335,7 @@ namespace FullTotal.ImageTransformations
                     e.IsInGripInteraction = rightHandPointer.IsInGripInteraction;
                 }
 
-                rightHandPointer = e.HandPointer;
+                AssignHandPointerToBuffer(e.HandPointer);
             }
             else if (e.HandPointer.HandType == HandType.Left)
             {
@@ -367,7 +357,7 @@ namespace FullTotal.ImageTransformations
                 {
                     e.IsInGripInteraction = leftHandPointer.IsInGripInteraction;
                 }
-                leftHandPointer = e.HandPointer;
+                AssignHandPointerToBuffer(e.HandPointer);
             }
             e.Handled = true;
         }

@@ -11,10 +11,10 @@ namespace Kinect.Toolbox
 {
     public class StretchGestureDetector : TwoHandsAlgorithmicGessureDetector
     {
-        const double startThresholdLevel = 5;
+        const double startThresholdLevel = 40;
         double distanceTotal = 0;
-        double ratioX = 0;
-        double ratioY = 0;
+        //double ratioX = 0;
+        //double ratioY = 0;
         double ratioTotal = 0;
         FrameworkElement control;
 
@@ -22,15 +22,16 @@ namespace Kinect.Toolbox
         EntryKinect leftStartPosition;
         EntryKinect rightStartPosition;
         double initialDistance = 0;
+        double lastDistance = 0;
         Vector originalControlSize;
-
+        int counter = 0;
 
         //public delegate void GestureDetection(string gestureName, double distance);
         public delegate void GestureDetection(string gestureName, double totalRatio);
         public event GestureDetection OnGestureWithDistanceDetected;
 
 
-        public StretchGestureDetector(KinectSensor sensor, FrameworkElement control, Vector originalControlSize, string gestureName = "stretch", int windowSize = 5) :
+        public StretchGestureDetector(KinectSensor sensor, FrameworkElement control, Vector originalControlSize, string gestureName = "stretch", int windowSize = 10) :
             base(sensor, gestureName, windowSize)
         {
             this.control = control;
@@ -78,26 +79,23 @@ namespace Kinect.Toolbox
                   
                     double currentTotalDistance = (pointRightCurrent - pointLeftCurrent).Length;
                     //przeskalowanie
-                  
-                    //distanceTotal = (Tools.GetJointPoint(Sensor, control, rightStartPosition.SkeletonPosition) - Tools.GetJointPoint(Sensor, control, leftStartPosition.SkeletonPosition)).Length;
-                    //Debug.WriteLine("distanceTotal: " + distanceTotal);
-         
+                   
                     var actualSize = control.PointToScreen(new Point(control.ActualWidth, control.ActualHeight)) - control.PointToScreen(new Point(0, 0));
                     distanceTotal = actualSize.Length;
-                    threshold = (startThresholdLevel * actualSize.Y * actualSize.X) / (originalControlSize.X * originalControlSize.Y); 
-                    if (Math.Abs(currentTotalDistance - distanceTotal) > threshold) //jesli zmiana dystansu miedzy dlonmi, a nie tylko przesuniecie!
+                    threshold = (startThresholdLevel * actualSize.Y * actualSize.X) / (originalControlSize.X * originalControlSize.Y);
+                    if (counter == WindowSize-1)
                     {
-                        //double deltaX = pointRightCurrent.X - pointLeftCurrent.X;
-                        //double deltaY = pointRightCurrent.Y - pointLeftCurrent.Y;
+                        //dodac ostatni dystans co 10 probek (windowSize)
+                        lastDistance = (Tools.GetJointPoint(this.Sensor, control, ((EntryKinect)Entries[counter]).SkeletonPosition) - Tools.GetJointPoint(this.Sensor, control, ((EntryKinect)LeftEntries[counter]).SkeletonPosition)).Length;
+                        counter++;
+                    }
 
-                        //double currentRatioX = deltaX / actualSize.X; //wzgledne przesuniecie wzgledem rozmiaru okna
-                        //double currentRatioY = deltaY / actualSize.Y;
-
+                    if (Math.Abs(currentTotalDistance - lastDistance) > threshold) //jesli zmiana dystansu miedzy dlonmi, a nie tylko przesuniecie!
+                    {
                         double totalRatio = currentTotalDistance / distanceTotal;
                         
-                        //this.ratioX = currentRatioX;
-                        //this.ratioY = currentRatioY;
-                        if (totalRatio > initialDistance)
+                        //czy powiekszac czy zmniejszac
+                        if (currentTotalDistance > initialDistance)
                             this.ratioTotal = totalRatio;
                         else
                             this.ratioTotal = -totalRatio;
