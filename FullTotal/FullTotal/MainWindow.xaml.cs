@@ -32,11 +32,13 @@ namespace FullTotal
 
         //gestures and postures
         readonly ContextTracker contextTracker = new ContextTracker();
-        StretchGestureDetector stretchGestureDetector; 
+        StretchGestureDetector stretchGestureDetector;
+        RotationGestureDetector rotationGestureDetector;
         bool isStretchGestureActive;
         AlgorithmicPostureDetector algorithmicPostureDetector = new AlgorithmicPostureDetector();
-        int counter = 0;
-        double stretchRatio = 0;
+        int counterStretch = 0;
+        int counterRotate = 0;
+        
 
 
         public MainWindow()
@@ -64,8 +66,17 @@ namespace FullTotal
         {
             var originalSize = this.zoomBorder.PointToScreen(new Point(this.zoomBorder.ActualWidth, this.zoomBorder.ActualHeight)) - this.zoomBorder.PointToScreen(new Point(0, 0));
             stretchGestureDetector = new StretchGestureDetector(this.sensor, this.zoomBorder, originalSize);
-            stretchGestureDetector.MinimalPeriodBetweenGestures = 350;
+            stretchGestureDetector.MinimalPeriodBetweenGestures = 50;
             stretchGestureDetector.OnGestureWithDistanceDetected += stretchGestureDetector_OnGestureWithDistanceDetected;
+
+            rotationGestureDetector = new RotationGestureDetector(this.sensor, this.zoomBorder, originalSize);
+            rotationGestureDetector.MinimalPeriodBetweenGestures = 50;
+            rotationGestureDetector.OnGestureWithAngleDetected +=rotationGestureDetector_OnGestureWithAngleDetected;
+        }
+
+        private void rotationGestureDetector_OnGestureWithAngleDetected(string gestureName, float angle)
+        {
+            statusBarText.Text = gestureName + " " + angle.ToString();
         }
 
         private void InitializePostures()
@@ -80,7 +91,7 @@ namespace FullTotal
 
         private void stretchGestureDetector_OnGestureWithDistanceDetected(string gestureName, double totalRatio)
         {
-            statusBarText.Text = gestureName + " " + totalRatio.ToString();
+            //statusBarText.Text = gestureName + " " + totalRatio.ToString();
             this.zoomBorder.SetZoomFactor(totalRatio);
             
         }
@@ -245,13 +256,21 @@ namespace FullTotal
                     {
                         if (closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && closestSkeleton.Joints[JointType.HandRight].TrackingState == JointTrackingState.Tracked)
                         {
-                            if (counter == 0) //ustaw wartosci poczatkowe przy pierwszej iteracji
+                            if (counterStretch == 0) //ustaw wartosci poczatkowe przy pierwszej iteracji
                             {
                                 stretchGestureDetector.SetStartPosition(closestSkeleton);
-                                counter++;
+                                counterStretch++;
                             }
                             else
                             stretchGestureDetector.Add(closestSkeleton);
+
+                            if (counterRotate == 0)
+                            {
+                                rotationGestureDetector.SetStartPosition(closestSkeleton);
+                                counterRotate++;
+                            }
+                            else
+                                rotationGestureDetector.Add(closestSkeleton);
                         }
                     }
                     

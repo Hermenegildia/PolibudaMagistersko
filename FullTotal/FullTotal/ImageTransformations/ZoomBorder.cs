@@ -27,14 +27,17 @@ namespace FullTotal.ImageTransformations
         public delegate void GestureDelegate();
         public event GestureDelegate StartStretchGestureFollowing;
         public event GestureDelegate EndStretchGestureFollowing;
+        public event GestureDelegate StartRotateFestureFollowing;
+        public event GestureDelegate EndRotateFestureFollowing;
 
         public delegate void VectorLengthUpdate(double vectorLength);
-        public event VectorLengthUpdate OnVectorLengthUpdate;
+        
 
         double zoomFactor = 0;
         bool wasLastGestureStretch = false;
+        bool wasLastGestureRotate = false;
         DateTime lastZoomDate = DateTime.Now;
-        int timePeriodBetweenZoom = 200; 
+        const int timePeriodBetweenZoom = 200; 
 
 
         public void AssignKinectRegion(KinectRegion kinectRegion)
@@ -186,9 +189,14 @@ namespace FullTotal.ImageTransformations
                 {
                     if (e.HandPointer.Captured == null)
                     {
-                        if (StartStretchGestureFollowing != null)
-                            StartStretchGestureFollowing();
-                        wasLastGestureStretch = true;
+                        //if (StartStretchGestureFollowing != null)
+                        //    StartStretchGestureFollowing();
+                        //wasLastGestureStretch = true;
+                        
+                        if (StartRotateFestureFollowing != null)
+                            StartRotateFestureFollowing();
+                        wasLastGestureRotate = true;
+
                         AssignHandPointerToBuffer(e.HandPointer);
                         e.Handled = true;
                     }
@@ -216,7 +224,7 @@ namespace FullTotal.ImageTransformations
                 if (leftHandPointer == null || !leftHandPointer.IsInGripInteraction)
                 {
                     //move
-                    if (e.HandPointer.HandType == HandType.Right)
+                    if (e.HandPointer.HandType == HandType.Right && e.HandPointer.IsInGripInteraction)
                     {
                         if (rightHandPointer == null)
                             rightHandPointer = e.HandPointer;
@@ -244,7 +252,7 @@ namespace FullTotal.ImageTransformations
                                 var st = GetScaleTransform(child);
                                 var tt = GetTranslateTransform(child);
 
-                                if ((zoomFactor != 0) && (st.ScaleX < .8 || st.ScaleY < .8)) //limit oddalania
+                                if ((zoomFactor < 0) && (st.ScaleX < .8 || st.ScaleY < .8)) //limit oddalania
                                     return;
 
                                 Point relative = new Point(this.ActualWidth / 2, this.ActualHeight / 2); //zawsze wzgledem srodka ZoomBorder
@@ -274,19 +282,25 @@ namespace FullTotal.ImageTransformations
         private void OnPointerGripRelease(object sender, HandPointerEventArgs e)
         {
             //zakoncz stretching gesture
-            if (wasLastGestureStretch)
+            if (wasLastGestureStretch || wasLastGestureRotate)
             {
                 AssignHandPointerToBuffer(e.HandPointer);
                 if (rightHandPointer != null && leftHandPointer != null)
                 {
                     if (!rightHandPointer.IsInGripInteraction && !leftHandPointer.IsInGripInteraction)
+                    {
                         wasLastGestureStretch = false;
+                        wasLastGestureRotate = false;
+                    }
 
                     if (child != null)
                     {
                         e.HandPointer.Capture(null);
                         if (EndStretchGestureFollowing != null)
                             EndStretchGestureFollowing();
+
+                        if (EndRotateFestureFollowing != null)
+                            EndRotateFestureFollowing();
 
                     }
                 }

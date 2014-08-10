@@ -11,7 +11,7 @@ namespace Kinect.Toolbox
 {
     public class StretchGestureDetector : TwoHandsAlgorithmicGessureDetector
     {
-        const double startThresholdLevel = 40;
+        const double startThresholdLevel = 30;
         double distanceTotal = 0;
         //double ratioX = 0;
         //double ratioY = 0;
