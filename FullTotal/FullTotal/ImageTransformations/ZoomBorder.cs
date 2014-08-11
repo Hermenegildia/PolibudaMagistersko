@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace FullTotal.ImageTransformations
 {
@@ -103,20 +104,22 @@ namespace FullTotal.ImageTransformations
             if (child != null)
             {
                 TransformGroup group = new TransformGroup();
-                ScaleTransform st = new ScaleTransform();
-               
-                TranslateTransform tt = new TranslateTransform();
+                ScaleTransform st = new ScaleTransform(1,1);
+                
+                TranslateTransform tt = new TranslateTransform(0,0);
                
                 //added by Ala
-                RotateTransform rt = new RotateTransform();
+                RotateTransform rt = new RotateTransform(0);
               
                 //
                 group.Children.Add(st);
+              
                 group.Children.Add(tt);
+
                 group.Children.Add(rt);
 
                 child.RenderTransform = group;
-                child.RenderTransformOrigin = new Point(0.0, 0.0);
+                //child.RenderTransformOrigin = new Point(0.0, 0.0);
               
                 this.MouseWheel += child_MouseWheel;
                 this.MouseLeftButtonDown += child_MouseLeftButtonDown;
@@ -233,6 +236,7 @@ namespace FullTotal.ImageTransformations
                     if (e.HandPointer.HandType == HandType.Right && e.HandPointer.IsInGripInteraction)
                     {
                         DoMoving(e);
+                        e.Handled = true;
                     }
                     
                 }
@@ -246,11 +250,13 @@ namespace FullTotal.ImageTransformations
                         if (wasLastGestureStretch)
                         {
                             DoZooming();
+                            e.Handled = true;
                         }
 
                         if (wasLastGestureRotate)
                         {
                             DoRotation();
+                            e.Handled = true;
                         }
                     }
                     
@@ -312,6 +318,9 @@ namespace FullTotal.ImageTransformations
 
                 tt.X = origin.X - v.X;
                 tt.Y = origin.Y - v.Y;
+
+                if (OnMoving != null)
+                    OnMoving( " tt.X: " + tt.X +  " tt.Y: " + tt.Y);
             }
         }
 
@@ -455,8 +464,10 @@ namespace FullTotal.ImageTransformations
                 abosuluteX = relative.X * st.ScaleX + tt.X;
                 abosuluteY = relative.Y * st.ScaleY + tt.Y;
 
+                
                 st.ScaleX += zoom;
-                st.ScaleY += zoom; 
+                st.ScaleY += zoom;
+                
 
                 tt.X = abosuluteX - relative.X * st.ScaleX;
                 tt.Y = abosuluteY - relative.Y * st.ScaleY;
@@ -492,6 +503,7 @@ namespace FullTotal.ImageTransformations
             double x = ((Image)this.child).ActualWidth / 2;
             double y = ((Image)this.child).ActualHeight / 2;
             var location = e.GetPosition(this);
+            var location2 = e.GetPosition(this.child);
             RotateLeft(30, x, y);
         }
 
@@ -506,11 +518,11 @@ namespace FullTotal.ImageTransformations
                     var st = GetScaleTransform(child);
 
                     Vector v = start - e.GetPosition(this);
-                    var x = (origin.X - (v.X));
-                    var y = (origin.Y - (v.Y ));
+                    var x = (origin.X - v.X);
+                    var y = (origin.Y - v.Y );
                     var angleRadians = Math.PI * (rt.Angle) / 180;
-                    tt.X = x*Math.Cos(angleRadians)+y*Math.Sin(angleRadians);
-                    tt.Y = -x*Math.Sin(angleRadians) + y*Math.Cos(angleRadians);
+                    tt.X = x;//x*Math.Cos(angleRadians)+y*Math.Sin(angleRadians);
+                    tt.Y = y;// -x * Math.Sin(angleRadians) + y * Math.Cos(angleRadians);
                     if (OnMoving != null)
                         OnMoving("x: " + x + " tt.X: " + tt.X + " y: " + y +" tt.Y: " + tt.Y);
                 }
@@ -528,11 +540,12 @@ namespace FullTotal.ImageTransformations
                 var x = tt.X;
                 var y = tt.Y;
 
-                rt.CenterX = centerX * st.ScaleX + tt.X;
-                rt.CenterY = centerY * st.ScaleY + tt.Y;
+                rt.CenterX = centerX * st.ScaleX +tt.X*st.ScaleX;
+                rt.CenterY = centerY * st.ScaleY +tt.Y*st.ScaleY;
+
                 rt.Angle += angle;
 
-
+               
             }
         }
 

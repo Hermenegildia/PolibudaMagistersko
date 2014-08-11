@@ -62,13 +62,14 @@ namespace Kinect.Toolbox
                 var pointRightCurrent = Tools.GetJointPoint(Sensor, control, ((EntryKinect)Entries[WindowSize - 1]).SkeletonPosition);
                 var pointLeftCurrent = Tools.GetJointPoint(Sensor, control, ((EntryKinect)LeftEntries[WindowSize - 1]).SkeletonPosition);
 
-                    var vecR = new Vector2((float)pointRightCurrent.X, (float)pointRightCurrent.Y);
-                    var vecL = new Vector2((float)pointLeftCurrent.X, (float)pointLeftCurrent.Y);
-                    //angle = GoldenSection.GetAngleBetween(Vector2.Zero, vec2 - vec1);
+                var vecR = new Vector2((float)pointRightCurrent.X, (float)pointRightCurrent.Y);
+                var vecL = new Vector2((float)pointLeftCurrent.X, (float)pointLeftCurrent.Y);
+                //angle = GoldenSection.GetAngleBetween(Vector2.Zero, vec2 - vec1);
                 //wartosc kata wyrazona w radianach
-                    var bufAngle = GoldenSection.GetAngleBetween(new Vector2((float)initialVector.X, (float)initialVector.Y), vecL - vecR);//vecR - vecL);
-                   angle = 180 * bufAngle / Math.PI;
-                    return true;
+                var handsVec = vecR - vecL;
+                var bufAngle = GoldenSection.GetAngleBetween(new Vector2((float)initialVector.X, (float)initialVector.Y), handsVec);//new Vector2(Math.Abs(handsVec.X), Math.Abs(handsVec.Y)));//vecR - vecL);
+                angle = 180 * bufAngle / Math.PI;
+                return true;
 
             }
 

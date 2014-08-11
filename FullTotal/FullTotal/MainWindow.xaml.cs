@@ -72,7 +72,7 @@ namespace FullTotal
             stretchGestureDetector.OnGestureWithDistanceDetected += stretchGestureDetector_OnGestureWithDistanceDetected;
 
             rotationGestureDetector = new RotationGestureDetector(this.sensor, this.zoomBorder, originalSize);
-            rotationGestureDetector.MinimalPeriodBetweenGestures = 50;
+            //rotationGestureDetector.MinimalPeriodBetweenGestures = 50;
             rotationGestureDetector.OnGestureWithAngleDetected +=rotationGestureDetector_OnGestureWithAngleDetected;
         }
 
