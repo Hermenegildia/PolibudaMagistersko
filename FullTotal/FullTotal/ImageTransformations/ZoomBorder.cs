@@ -53,7 +53,6 @@ namespace FullTotal.ImageTransformations
                 //KinectRegion.RemoveQueryInteractionStatusHandler(this.child, OnQuery); //usuń stare powiązania
                 //KinectRegion.AddQueryInteractionStatusHandler(this.child, OnQuery); //obsluga medicalImage przez kinectRegion
 
-
                 //KinectRegion.RemoveQueryInteractionStatusHandler(this, OnQuery); //usuń stare powiązania
                 //KinectRegion.AddQueryInteractionStatusHandler(this, OnQuery); //obsluga ZoomBorder przez kinectRegion
                 //KinectRegion.RemoveHandPointerGripHandler(this.child, OnPointerGrip); //usuń stare powiązania
@@ -102,24 +101,19 @@ namespace FullTotal.ImageTransformations
         public void Initialize(UIElement element)
         {
             this.child = element;
-
+          
             if (child != null)
             {
                 TransformGroup group = new TransformGroup();
                 ScaleTransform st = new ScaleTransform(1,1);
-                
-                TranslateTransform tt = new TranslateTransform(0,0);
-               
+                TranslateTransform tt = new TranslateTransform(0,0);               
                 //added by Ala
                 RotateTransform rt = new RotateTransform(0);
-                SkewTransform skewTr = new SkewTransform(0, 0);
                 //
-                group.Children.Add(skewTr);
                 group.Children.Add(rt);
-            
-                group.Children.Add(tt);
-
                 group.Children.Add(st);
+                group.Children.Add(tt);
+              
 
                 child.RenderTransform = group;
                 //child.RenderTransformOrigin = new Point(0.0, 0.0);
@@ -191,10 +185,8 @@ namespace FullTotal.ImageTransformations
         //grip prawa + lewa -> move -> release = rozciąganie
         private void OnPointerGrip(object sender, HandPointerEventArgs e)
         {
-           
             if (rightHandPointer != null && leftHandPointer != null)
             {
-               
                 //stretching/rotating gesture begin!
                 if (rightHandPointer.IsInGripInteraction && leftHandPointer.IsInGripInteraction)
                 {
@@ -207,8 +199,6 @@ namespace FullTotal.ImageTransformations
                         //if (OnStartRotateFestureFollowing != null)
                         //    OnStartRotateFestureFollowing();
                         //wasLastGestureRotate = true;
-
-                        
                         
                     //}
                     AssignHandPointerToBuffer(e.HandPointer);
@@ -503,12 +493,12 @@ namespace FullTotal.ImageTransformations
 
         void child_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.Reset();
-            //double x = ((Image)this.child).ActualWidth / 2;
-            //double y = ((Image)this.child).ActualHeight / 2;
-            //var location = e.GetPosition(this);
-            //var location2 = e.GetPosition(this.child);
-            //RotateLeft(30, x, y);
+            //this.Reset();
+            double x = ((Image)this.child).ActualWidth / 2;
+            double y = ((Image)this.child).ActualHeight / 2;
+            var location = e.GetPosition(this);
+            var location2 = e.GetPosition(this.child);
+            RotateLeft(30, x, y);
         }
 
         private void child_MouseMove(object sender, MouseEventArgs e)
@@ -541,11 +531,11 @@ namespace FullTotal.ImageTransformations
                 var st = GetScaleTransform(child);
                 var tt = GetTranslateTransform(child);
 
-                var x = tt.X;
-                var y = tt.Y;
+                //var x = tt.X;
+                //var y = tt.Y;
 
-                rt.CenterX = centerX * st.ScaleX +tt.X*st.ScaleX;
-                rt.CenterY = centerY * st.ScaleY +tt.Y*st.ScaleY;
+                rt.CenterX = centerX * st.ScaleX + tt.X;// *st.ScaleX;
+                rt.CenterY = centerY * st.ScaleY + tt.Y;// *st.ScaleY;
 
                 rt.Angle += angle;
 
