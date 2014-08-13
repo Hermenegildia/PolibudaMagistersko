@@ -53,16 +53,16 @@ namespace FullTotal.ImageTransformations
                 //KinectRegion.RemoveQueryInteractionStatusHandler(this.child, OnQuery); //usuń stare powiązania
                 //KinectRegion.AddQueryInteractionStatusHandler(this.child, OnQuery); //obsluga medicalImage przez kinectRegion
 
-                //KinectRegion.RemoveQueryInteractionStatusHandler(this, OnQuery); //usuń stare powiązania
-                //KinectRegion.AddQueryInteractionStatusHandler(this, OnQuery); //obsluga ZoomBorder przez kinectRegion
-                //KinectRegion.RemoveHandPointerGripHandler(this.child, OnPointerGrip); //usuń stare powiązania
-                //KinectRegion.AddHandPointerGripHandler(this.child, OnPointerGrip);
-                //KinectRegion.RemoveHandPointerMoveHandler(this.child, OnPointerMove); //usuń stare powiązania
-                //KinectRegion.AddHandPointerMoveHandler(this.child, OnPointerMove);
-                //KinectRegion.RemoveHandPointerGripReleaseHandler(this.child, OnPointerGripRelease); //usuń stare powiązania
-                //KinectRegion.AddHandPointerGripReleaseHandler(this.child, OnPointerGripRelease);
-                //KinectRegion.RemoveHandPointerLeaveHandler(this, OnPointerLeave); //usuń stare powiązania
-                //KinectRegion.AddHandPointerLeaveHandler(this, OnPointerLeave); ////uwolnij uścisk gdy łapka schodzi z image
+                KinectRegion.RemoveQueryInteractionStatusHandler(this, OnQuery); //usuń stare powiązania
+                KinectRegion.AddQueryInteractionStatusHandler(this, OnQuery); //obsluga ZoomBorder przez kinectRegion
+                KinectRegion.RemoveHandPointerGripHandler(this.child, OnPointerGrip); //usuń stare powiązania
+                KinectRegion.AddHandPointerGripHandler(this.child, OnPointerGrip);
+                KinectRegion.RemoveHandPointerMoveHandler(this.child, OnPointerMove); //usuń stare powiązania
+                KinectRegion.AddHandPointerMoveHandler(this.child, OnPointerMove);
+                KinectRegion.RemoveHandPointerGripReleaseHandler(this.child, OnPointerGripRelease); //usuń stare powiązania
+                KinectRegion.AddHandPointerGripReleaseHandler(this.child, OnPointerGripRelease);
+                KinectRegion.RemoveHandPointerLeaveHandler(this, OnPointerLeave); //usuń stare powiązania
+                KinectRegion.AddHandPointerLeaveHandler(this, OnPointerLeave); ////uwolnij uścisk gdy łapka schodzi z image
             }
             
         }
@@ -195,10 +195,10 @@ namespace FullTotal.ImageTransformations
                     if (OnStartStretchGestureFollowing != null)
                         OnStartStretchGestureFollowing();
                     wasLastGestureStretch = true;
-                        
-                        //if (OnStartRotateFestureFollowing != null)
-                        //    OnStartRotateFestureFollowing();
-                        //wasLastGestureRotate = true;
+
+                    //if (OnStartRotateFestureFollowing != null)
+                    //    OnStartRotateFestureFollowing();
+                    //wasLastGestureRotate = true;
                         
                     //}
                     AssignHandPointerToBuffer(e.HandPointer);
@@ -462,7 +462,6 @@ namespace FullTotal.ImageTransformations
                 st.ScaleX += zoom;
                 st.ScaleY += zoom;
 
-
                 tt.X = abosuluteX - relative.X * st.ScaleX;
                 tt.Y = abosuluteY - relative.Y * st.ScaleY;
 
@@ -530,13 +529,13 @@ namespace FullTotal.ImageTransformations
                 var rt = GetRotateTransform(child);
                 var st = GetScaleTransform(child);
                 var tt = GetTranslateTransform(child);
-
+                var group = (TransformGroup)this.child.RenderTransform;
                 //var x = tt.X;
                 //var y = tt.Y;
 
-                rt.CenterX = centerX * st.ScaleX + tt.X;// *st.ScaleX;
-                rt.CenterY = centerY * st.ScaleY + tt.Y;// *st.ScaleY;
-
+                rt.CenterX = centerX * st.ScaleX + tt.X;// *st.ScaleX; group.Value.OffsetX;//
+                rt.CenterY = centerY * st.ScaleY + tt.Y;// *st.ScaleY; group.Value.OffsetY;//
+                //child.RenderTransformOrigin = new Point(centerX * st.ScaleX + tt.X, centerY * st.ScaleY + tt.Y);// *st.ScaleX; group.Value.OffsetX;//
                 rt.Angle += angle;
 
                
