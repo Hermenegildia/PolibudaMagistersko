@@ -52,16 +52,18 @@ namespace FullTotal.ImageTransformations
             {
                 //KinectRegion.RemoveQueryInteractionStatusHandler(this.child, OnQuery); //usuń stare powiązania
                 //KinectRegion.AddQueryInteractionStatusHandler(this.child, OnQuery); //obsluga medicalImage przez kinectRegion
-                KinectRegion.RemoveQueryInteractionStatusHandler(this, OnQuery); //usuń stare powiązania
-                KinectRegion.AddQueryInteractionStatusHandler(this, OnQuery); //obsluga ZoomBorder przez kinectRegion
-                KinectRegion.RemoveHandPointerGripHandler(this.child, OnPointerGrip); //usuń stare powiązania
-                KinectRegion.AddHandPointerGripHandler(this.child, OnPointerGrip);
-                KinectRegion.RemoveHandPointerMoveHandler(this.child, OnPointerMove); //usuń stare powiązania
-                KinectRegion.AddHandPointerMoveHandler(this.child, OnPointerMove);
-                KinectRegion.RemoveHandPointerGripReleaseHandler(this.child, OnPointerGripRelease); //usuń stare powiązania
-                KinectRegion.AddHandPointerGripReleaseHandler(this.child, OnPointerGripRelease);
-                KinectRegion.RemoveHandPointerLeaveHandler(this, OnPointerLeave); //usuń stare powiązania
-                KinectRegion.AddHandPointerLeaveHandler(this, OnPointerLeave); ////uwolnij uścisk gdy łapka schodzi z image
+
+
+                //KinectRegion.RemoveQueryInteractionStatusHandler(this, OnQuery); //usuń stare powiązania
+                //KinectRegion.AddQueryInteractionStatusHandler(this, OnQuery); //obsluga ZoomBorder przez kinectRegion
+                //KinectRegion.RemoveHandPointerGripHandler(this.child, OnPointerGrip); //usuń stare powiązania
+                //KinectRegion.AddHandPointerGripHandler(this.child, OnPointerGrip);
+                //KinectRegion.RemoveHandPointerMoveHandler(this.child, OnPointerMove); //usuń stare powiązania
+                //KinectRegion.AddHandPointerMoveHandler(this.child, OnPointerMove);
+                //KinectRegion.RemoveHandPointerGripReleaseHandler(this.child, OnPointerGripRelease); //usuń stare powiązania
+                //KinectRegion.AddHandPointerGripReleaseHandler(this.child, OnPointerGripRelease);
+                //KinectRegion.RemoveHandPointerLeaveHandler(this, OnPointerLeave); //usuń stare powiązania
+                //KinectRegion.AddHandPointerLeaveHandler(this, OnPointerLeave); ////uwolnij uścisk gdy łapka schodzi z image
             }
             
         }
@@ -110,13 +112,14 @@ namespace FullTotal.ImageTransformations
                
                 //added by Ala
                 RotateTransform rt = new RotateTransform(0);
-              
+                SkewTransform skewTr = new SkewTransform(0, 0);
                 //
-                group.Children.Add(st);
-              
+                group.Children.Add(skewTr);
+                group.Children.Add(rt);
+            
                 group.Children.Add(tt);
 
-                group.Children.Add(rt);
+                group.Children.Add(st);
 
                 child.RenderTransform = group;
                 //child.RenderTransformOrigin = new Point(0.0, 0.0);
@@ -197,13 +200,13 @@ namespace FullTotal.ImageTransformations
                 {
                     //if (e.HandPointer.Captured == null)
                     //{
-                        //if (StartStretchGestureFollowing != null)
-                        //    StartStretchGestureFollowing();
-                        //wasLastGestureStretch = true;
+                    if (OnStartStretchGestureFollowing != null)
+                        OnStartStretchGestureFollowing();
+                    wasLastGestureStretch = true;
                         
-                        if (OnStartRotateFestureFollowing != null)
-                            OnStartRotateFestureFollowing();
-                        wasLastGestureRotate = true;
+                        //if (OnStartRotateFestureFollowing != null)
+                        //    OnStartRotateFestureFollowing();
+                        //wasLastGestureRotate = true;
 
                         
                         
@@ -449,6 +452,7 @@ namespace FullTotal.ImageTransformations
         {
             if (child != null)
             {
+
                 var st = GetScaleTransform(child);
                 var tt = GetTranslateTransform(child);
                 var rot = GetRotateTransform(child);
@@ -467,7 +471,7 @@ namespace FullTotal.ImageTransformations
                 
                 st.ScaleX += zoom;
                 st.ScaleY += zoom;
-                
+
 
                 tt.X = abosuluteX - relative.X * st.ScaleX;
                 tt.Y = abosuluteY - relative.Y * st.ScaleY;
@@ -499,12 +503,12 @@ namespace FullTotal.ImageTransformations
 
         void child_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            //this.Reset();
-            double x = ((Image)this.child).ActualWidth / 2;
-            double y = ((Image)this.child).ActualHeight / 2;
-            var location = e.GetPosition(this);
-            var location2 = e.GetPosition(this.child);
-            RotateLeft(30, x, y);
+            this.Reset();
+            //double x = ((Image)this.child).ActualWidth / 2;
+            //double y = ((Image)this.child).ActualHeight / 2;
+            //var location = e.GetPosition(this);
+            //var location2 = e.GetPosition(this.child);
+            //RotateLeft(30, x, y);
         }
 
         private void child_MouseMove(object sender, MouseEventArgs e)
@@ -514,17 +518,17 @@ namespace FullTotal.ImageTransformations
                 if (child.IsMouseCaptured)
                 {
                     var tt = GetTranslateTransform(child);
-                    var rt = GetRotateTransform(child);
-                    var st = GetScaleTransform(child);
+                    //var rt = GetRotateTransform(child);
+                    //var st = GetScaleTransform(child);
 
                     Vector v = start - e.GetPosition(this);
                     var x = (origin.X - v.X);
                     var y = (origin.Y - v.Y );
-                    var angleRadians = Math.PI * (rt.Angle) / 180;
+                    //var angleRadians = Math.PI * (rt.Angle) / 180;
                     tt.X = x;//x*Math.Cos(angleRadians)+y*Math.Sin(angleRadians);
                     tt.Y = y;// -x * Math.Sin(angleRadians) + y * Math.Cos(angleRadians);
                     if (OnMoving != null)
-                        OnMoving("x: " + x + " tt.X: " + tt.X + " y: " + y +" tt.Y: " + tt.Y);
+                        OnMoving("v.X: " + v.X + " tt.X: " + tt.X + " v.Y: " + v.Y + " tt.Y: " + tt.Y);
                 }
             }
         }

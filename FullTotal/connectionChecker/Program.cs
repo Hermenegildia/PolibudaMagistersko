@@ -16,7 +16,7 @@ namespace connectionChecker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new StartupWindow());
+            Application.Run(new Start());
         }
     }
 }
