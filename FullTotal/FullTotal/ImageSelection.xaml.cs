@@ -20,7 +20,7 @@ namespace FullTotal
     /// <summary>
     /// Interaction logic for UcImageSelection.xaml
     /// </summary>
-    public partial class UcImageSelection : Window
+    public partial class ImageSelection : Window
     {
 
         public static readonly DependencyProperty PageLeftEnabledProperty = DependencyProperty.Register(
@@ -36,13 +36,13 @@ namespace FullTotal
         private readonly KinectSensorChooser sensorChooser;
 
 
-        public UcImageSelection(KinectSensorChooser sensorChooser)
+        public ImageSelection(KinectSensorChooser sensorChooser)
         {
             InitializeComponent();
             
             // initialize the sensor chooser and UI
 
-            this.sensorChooser = new KinectSensorChooser();
+            this.sensorChooser = sensorChooser;
             //this.sensorChooser.RequiredConnectionId = sensorChooser.RequiredConnectionId;
             this.sensorChooser.KinectChanged += SensorChooserOnKinectChanged;
             this.sensorChooserUi.KinectSensorChooser = this.sensorChooser;

@@ -17,6 +17,8 @@ namespace Kinect.Toolbox
         FrameworkElement control;
         Vector originalControlSize;
         Vector initialVector;
+        Point initialRightPoint;
+        Point initialLeftPoint;
 
         public delegate void GestureDetection(string gestureName, double angle);
         public event GestureDetection OnGestureWithAngleDetected;
@@ -50,8 +52,9 @@ namespace Kinect.Toolbox
                 leftStartPosition = new EntryKinect { Position = position.ToVector3(), SkeletonPosition = position, Time = DateTime.Now };
 
             }
-            initialVector = Tools.GetJointPoint(Sensor, control, rightStartPosition.SkeletonPosition) - Tools.GetJointPoint(Sensor, control, leftStartPosition.SkeletonPosition);
-            
+            //initialVector = Tools.GetJointPoint(Sensor, control, rightStartPosition.SkeletonPosition) - Tools.GetJointPoint(Sensor, control, leftStartPosition.SkeletonPosition);
+            initialLeftPoint = Tools.GetJointPoint(Sensor, control, leftStartPosition.SkeletonPosition);
+            initialRightPoint = Tools.GetJointPoint(Sensor, control, rightStartPosition.SkeletonPosition);
         }
 
 
@@ -62,13 +65,28 @@ namespace Kinect.Toolbox
                 var pointRightCurrent = Tools.GetJointPoint(Sensor, control, ((EntryKinect)Entries[WindowSize - 1]).SkeletonPosition);
                 var pointLeftCurrent = Tools.GetJointPoint(Sensor, control, ((EntryKinect)LeftEntries[WindowSize - 1]).SkeletonPosition);
 
-                var vecR = new Vector2((float)pointRightCurrent.X, (float)pointRightCurrent.Y);
-                var vecL = new Vector2((float)pointLeftCurrent.X, (float)pointLeftCurrent.Y);
-                //angle = GoldenSection.GetAngleBetween(Vector2.Zero, vec2 - vec1);
-                //wartosc kata wyrazona w radianach
-                var handsVec = vecR - vecL;
-                var bufAngle = GoldenSection.GetAngleBetween(new Vector2((float)initialVector.X, (float)initialVector.Y), handsVec);//new Vector2(Math.Abs(handsVec.X), Math.Abs(handsVec.Y)));//vecR - vecL);
-                angle = 180 * bufAngle / Math.PI;
+                //var vecR = new Vector2((float)pointRightCurrent.X, (float)pointRightCurrent.Y);
+                //var vecL = new Vector2((float)pointLeftCurrent.X, (float)pointLeftCurrent.Y);
+                ////angle = GoldenSection.GetAngleBetween(Vector2.Zero, vec2 - vec1);
+                ////wartosc kata wyrazona w radianach
+                //var vecDif = vecR - vecL;
+                //Vector2 handsVec = new Vector2(Math.Abs( vecDif.X), Math.Abs(vecDif.Y));
+                //var bufAngle = GoldenSection.GetAngleBetween(new Vector2((float)initialVector.X, (float)initialVector.Y), handsVec);//new Vector2(Math.Abs(handsVec.X), Math.Abs(handsVec.Y)));//vecR - vecL);
+                //if (Math.Abs(bufAngle) == MathHelper.PiOver2)
+                //    bufAngle = 0;
+                if (pointRightCurrent.X == pointLeftCurrent.X)
+                    return false;
+                else
+                {
+                    var m1 = (pointRightCurrent.Y - pointLeftCurrent.Y) / (pointRightCurrent.X - pointLeftCurrent.X);
+                    var m2 = (initialRightPoint.Y - initialLeftPoint.Y) / (initialRightPoint.X - initialLeftPoint.X);
+                    //tg(alfa) =  (m2-m1)/(1+m1*m2)
+                    if (m1 * m2 != -1)
+                        angle = Math.Atan((m2 - m1) / (1 + m1 * m2));
+                    else
+                        return false;
+                }
+                angle = 180 * angle / Math.PI;
                 return true;
 
             }

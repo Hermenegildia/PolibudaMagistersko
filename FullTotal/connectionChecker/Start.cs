@@ -1,4 +1,5 @@
-﻿using System;
+﻿using connectionChecker.Classes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,12 +13,12 @@ namespace connectionChecker
 {
     public partial class Start : Form
     {
-        List<string> imagePaths = new List<string>();
+        BindingList<ImagePath> imagePaths = new BindingList<ImagePath>();
 
         public Start()
         {
             InitializeComponent();
-           
+            lbPhotos.DataSource = imagePaths;
         }
 
         private void btAdd_Click(object sender, EventArgs e)
@@ -31,15 +32,22 @@ namespace connectionChecker
             {
                 if (ofd.CheckPathExists)
                 {
+                    
                     List<string> fileNamesList = ofd.FileNames.ToList<string>();
                     foreach (string fileName in fileNamesList)
-                        imagePaths.Add(fileName);
-                    lbPhotos.DataSource = imagePaths;
-                    lbPhotos.Refresh();
+                        imagePaths.Add(new ImagePath(fileName));
+                
                 }
             }
         }
 
-      
+       
+
+        private void btStart_Click(object sender, EventArgs e)
+        {
+
+        }
+
+       
     }
 }

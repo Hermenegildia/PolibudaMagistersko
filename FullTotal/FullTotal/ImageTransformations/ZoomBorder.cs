@@ -439,7 +439,7 @@ namespace FullTotal.ImageTransformations
 
         public void SetRotationAngle(double angleInDegrees)
         {
-            this.angle = angleInDegrees; 
+            this.angle = -angleInDegrees; 
         }
 
         #endregion Kinect public methods
@@ -501,12 +501,12 @@ namespace FullTotal.ImageTransformations
 
         void child_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            //this.Reset();
-            double x = ((Image)this.child).ActualWidth / 2;
-            double y = ((Image)this.child).ActualHeight / 2;
-            var location = e.GetPosition(this);
-            var location2 = e.GetPosition(this.child);
-            RotateLeft(30, x, y);
+            this.Reset();
+            //double x = ((Image)this.child).ActualWidth / 2;
+            //double y = ((Image)this.child).ActualHeight / 2;
+            //var location = e.GetPosition(this);
+            //var location2 = e.GetPosition(this.child);
+            //RotateLeft(30, x, y);
         }
 
         private void child_MouseMove(object sender, MouseEventArgs e)

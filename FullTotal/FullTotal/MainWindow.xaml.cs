@@ -39,12 +39,15 @@ namespace FullTotal
         AlgorithmicPostureDetector algorithmicPostureDetector = new AlgorithmicPostureDetector();
         int counterStretch = 0;
         int counterRotate = 0;
-        
+        List<ImagePath> imagesList;
 
 
-        public MainWindow()
+        public MainWindow(List< ImagePath> imagesList)
         {
             InitializeComponent();
+
+            this.imagesList = imagesList;
+
             isStretchGestureActive = false;
             isRotateGestureActive = false;
             
@@ -61,7 +64,7 @@ namespace FullTotal
                 JitterRadius = 0.08f,
                 MaxDeviationRadius = 0.07f
             };
-            
+            InitializeKinect();
         }
 
         private void InitializeGestures()
@@ -100,7 +103,7 @@ namespace FullTotal
         }
 
       
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void InitializeKinect()
         {
             kinectSensorChooser = new KinectSensorChooser();
             kinectSensorChooser.KinectChanged += kinectSencorChooser_KinectChanged;
@@ -121,7 +124,7 @@ namespace FullTotal
 
         private void zoomBorder_OnMoving(string position)
         {
-            this.statusBarText.Text = position;
+            //this.statusBarText.Text = position;
         }
 
         private void zoomBorder_EndRotateFestureFollowing()
@@ -347,6 +350,7 @@ namespace FullTotal
                 this.sensor.Stop();
                 sensor = null;
             }
+
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -357,10 +361,20 @@ namespace FullTotal
 
         private void KinectCircleButton_Click(object sender, RoutedEventArgs e)
         {
-            UcImageSelection imageSelection = new UcImageSelection(this.kinectSensorChooser);
-            
+            ImageSelection imageSelection = new ImageSelection(this.kinectSensorChooser);
+            PauseKinectInThisWindow();
             imageSelection.ShowDialog();
+            InitializeKinect();
             
+        }
+
+        private void PauseKinectInThisWindow()
+        {
+            this.sensor.DepthStream.Disable();
+            this.sensor.SkeletonStream.Disable();
+            this.sensor.SkeletonFrameReady -= sensor_SkeletonFrameReady;
+          
+            this.sensor = null;
         }
 
         private void KinectCircleButton_Click_ResetZoomable(object sender, RoutedEventArgs e)
