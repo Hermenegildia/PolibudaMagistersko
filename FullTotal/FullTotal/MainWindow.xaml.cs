@@ -40,13 +40,14 @@ namespace FullTotal
         int counterStretch = 0;
         int counterRotate = 0;
         List<ImagePath> imagesList;
-
+        ImagePath selected = new ImagePath(@"C:\Users\alA\Downloads\MultiSizeImageSample\Resources\Fig1.jpg");
 
         public MainWindow(List< ImagePath> imagesList)
         {
             InitializeComponent();
 
             this.imagesList = imagesList;
+            this.medicalImage.Source = GetImageFormPath(imagesList[0].Path);
 
             isStretchGestureActive = false;
             isRotateGestureActive = false;
@@ -65,6 +66,17 @@ namespace FullTotal
                 MaxDeviationRadius = 0.07f
             };
             InitializeKinect();
+        }
+
+        private ImageSource GetImageFormPath(string p)
+        {
+          
+            BitmapImage bi = new BitmapImage();
+            bi.BeginInit();
+            bi.UriSource = new Uri(p);
+            bi.EndInit();
+           
+            return bi;
         }
 
         private void InitializeGestures()
@@ -361,13 +373,16 @@ namespace FullTotal
 
         private void KinectCircleButton_Click(object sender, RoutedEventArgs e)
         {
-            ImageSelection imageSelection = new ImageSelection(this.kinectSensorChooser);
-            PauseKinectInThisWindow();
+            ImageSelection imageSelection = new ImageSelection(this.kinectSensorChooser, imagesList);
+            //PauseKinectInThisWindow();
             imageSelection.ShowDialog();
+       
+            selected = imageSelection.GetSelectedImagePath();
+            this.medicalImage.Source = GetImageFormPath(selected.Path);
             InitializeKinect();
-            
         }
 
+        
         private void PauseKinectInThisWindow()
         {
             this.sensor.DepthStream.Disable();
