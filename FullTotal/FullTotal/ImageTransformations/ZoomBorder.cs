@@ -439,7 +439,10 @@ namespace FullTotal.ImageTransformations
 
         public void SetRotationAngle(double angleInDegrees)
         {
-            this.angle = -angleInDegrees; 
+            if (this.angle == 0)
+                this.angle = -angleInDegrees; 
+            else
+                this.angle -= angleInDegrees; 
         }
 
         #endregion Kinect public methods
