@@ -42,7 +42,12 @@ namespace FullTotal.ImageTransformations
         DateTime lastZoomDate = DateTime.Now;
         const int timePeriodBetweenZoom = 200;
         double angle = 0;
+        bool isStretchEnabled = true;
 
+        public void AssignGestureDetectionType(bool isStretchEnabled)
+        {
+            this.isStretchEnabled = isStretchEnabled;
+        }
 
         public void AssignKinectRegion(KinectRegion kinectRegion)
         {
@@ -190,15 +195,19 @@ namespace FullTotal.ImageTransformations
                 //stretching/rotating gesture begin!
                 if (rightHandPointer.IsInGripInteraction && leftHandPointer.IsInGripInteraction)
                 {
-                    //if (e.HandPointer.Captured == null)
-                    //{
-                    if (OnStartStretchGestureFollowing != null)
-                        OnStartStretchGestureFollowing();
-                    wasLastGestureStretch = true;
+                    if (isStretchEnabled)
+                    {
 
-                    //if (OnStartRotateFestureFollowing != null)
-                    //    OnStartRotateFestureFollowing();
-                    //wasLastGestureRotate = true;
+                        if (OnStartStretchGestureFollowing != null)
+                            OnStartStretchGestureFollowing();
+                        wasLastGestureStretch = true;
+                    }
+                    else
+                    {
+                        if (OnStartRotateFestureFollowing != null)
+                            OnStartRotateFestureFollowing();
+                        wasLastGestureRotate = true;
+                    }
                         
                     //}
                     AssignHandPointerToBuffer(e.HandPointer);
@@ -533,8 +542,8 @@ namespace FullTotal.ImageTransformations
                 //var x = tt.X;
                 //var y = tt.Y;
 
-                rt.CenterX = centerX * st.ScaleX + tt.X;// *st.ScaleX; group.Value.OffsetX;//
-                rt.CenterY = centerY * st.ScaleY + tt.Y;// *st.ScaleY; group.Value.OffsetY;//
+                rt.CenterX = centerX * st.ScaleX +tt.X;// *st.ScaleX; group.Value.OffsetX;//
+                rt.CenterY = centerY * st.ScaleY +tt.Y;// *st.ScaleY; group.Value.OffsetY;//
                 //child.RenderTransformOrigin = new Point(centerX * st.ScaleX + tt.X, centerY * st.ScaleY + tt.Y);// *st.ScaleX; group.Value.OffsetX;//
                 rt.Angle += angle;
 

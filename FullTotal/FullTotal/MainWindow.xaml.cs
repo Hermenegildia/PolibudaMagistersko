@@ -182,6 +182,7 @@ namespace FullTotal
                     this.sensor.SkeletonStream.Enable(parameters);
 
                     this.sensor.SkeletonFrameReady += sensor_SkeletonFrameReady;
+                    
                     //this.sensor.ColorFrameReady += sensor_ColorFrameReady;
                     //this.sensor.DepthFrameReady += sensor_DepthFrameReady;
                     //this.sensor.AllFramesReady += sensor_AllFramesReady;
@@ -274,6 +275,10 @@ namespace FullTotal
                     {
                         if (counterStretch == 0) //ustaw wartosci poczatkowe przy pierwszej iteracji
                         {
+                            //HandPointer leftPointer = kinectRegion.HandPointers.FirstOrDefault(x => x.HandType == HandType.Left);
+                            //HandPointer rightPointer = kinectRegion.HandPointers.FirstOrDefault(x => x.HandType == HandType.Right);
+                            //stretchGestureDetector.SetStartPosition(leftPointer.GetPosition(this.kinectRegion, this.kinectRegion);
+                            
                             stretchGestureDetector.SetStartPosition(closestSkeleton);
                             counterStretch++;
                         }
@@ -348,6 +353,34 @@ namespace FullTotal
         {
             if (e.Key == Key.Escape)
                 this.Close();
+        }
+
+        private void KinectCircleButton_Click(object sender, RoutedEventArgs e)
+        {
+            UcImageSelection imageSelection = new UcImageSelection(this.kinectSensorChooser);
+            
+            imageSelection.ShowDialog();
+            
+        }
+
+        private void KinectCircleButton_Click_ResetZoomable(object sender, RoutedEventArgs e)
+        {
+            this.zoomBorder.Reset();
+        }
+
+        private void KinectCircleButton_Click_SwitchStretchAndRotate(object sender, RoutedEventArgs e)
+        {
+            if (this.stretchRotateButton.Label.ToString().Contains("Przybliż"))
+            {
+                this.zoomBorder.AssignGestureDetectionType(false);
+                this.stretchRotateButton.Label = "Obrót";
+            }
+                    else if (this.stretchRotateButton.Label.ToString().Contains("Obrót"))
+            {
+
+                this.zoomBorder.AssignGestureDetectionType(true);
+                this.stretchRotateButton.Label = "Przybliż/oddal";
+                    }
         }
 
     }

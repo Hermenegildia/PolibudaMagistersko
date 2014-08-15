@@ -161,6 +161,9 @@ to keep control</value>
   <data name="ScrollingListSelectionMessage" xml:space="preserve">
     <value>You have selected {0}</value>
   </data>
+  <data name="SelectedMessage" xml:space="preserve">
+    <value>You selected item #{0}</value>
+  </data>
   <data name="SuboptimalScreenResolutionMessage" xml:space="preserve">
     <value>This sample was designed 1920 x 1080 screen resolution. Running it in a lower resolution may result in incorrect layout and reduced functionality. Do you wish to continue?</value>
   </data>

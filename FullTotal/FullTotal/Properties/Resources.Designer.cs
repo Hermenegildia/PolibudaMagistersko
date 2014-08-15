@@ -180,6 +180,15 @@ namespace FullTotal.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You selected item #{0}.
+        /// </summary>
+        internal static string SelectedMessage {
+            get {
+                return ResourceManager.GetString("SelectedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This sample was designed 1920 x 1080 screen resolution. Running it in a lower resolution may result in incorrect layout and reduced functionality. Do you wish to continue?.
         /// </summary>
         internal static string SuboptimalScreenResolutionMessage {

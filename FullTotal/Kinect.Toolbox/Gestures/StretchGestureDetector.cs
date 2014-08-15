@@ -2,6 +2,7 @@
 using Microsoft.Kinect.Toolkit.Controls;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,8 @@ namespace Kinect.Toolbox
         double threshold;
         EntryKinect leftStartPosition;
         EntryKinect rightStartPosition;
+        Point rightStartPoint;
+        Point leftStartPoint;
         double initialDistance = 0;
         double lastDistance = 0;
         Vector originalControlSize;
@@ -65,6 +68,19 @@ namespace Kinect.Toolbox
             //zoomBorder ma 1024x693
             var actualSize = control.PointToScreen(new Point(control.ActualWidth, control.ActualHeight)) - control.PointToScreen(new Point(0, 0));
             threshold = (startThresholdLevel * actualSize.Y * actualSize.X) / (originalControlSize.X * originalControlSize.Y); 
+        }
+
+        public void SetStartPosition(Point leftHandPoint, Point rightHandPoint)
+        {
+
+            rightStartPoint = rightHandPoint;
+            leftStartPoint = leftHandPoint;
+            
+            initialDistance = (rightStartPoint - leftStartPoint).Length;
+            //przeskalowanie domyślnej dyszki dla rozdzielczości 1600x900 (kinectRegion ma rozmiary 1600x717) na aktualne rozmiary kontrolki
+            //zoomBorder ma 1024x693
+            var actualSize = control.PointToScreen(new Point(control.ActualWidth, control.ActualHeight)) - control.PointToScreen(new Point(0, 0));
+            threshold = (startThresholdLevel * actualSize.Y * actualSize.X) / (originalControlSize.X * originalControlSize.Y);
         }
 
         protected bool ScanPositions()
@@ -142,3 +158,4 @@ namespace Kinect.Toolbox
         }
     }
 }
+
