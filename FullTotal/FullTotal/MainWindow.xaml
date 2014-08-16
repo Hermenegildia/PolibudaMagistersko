@@ -8,7 +8,7 @@
         mc:Ignorable="d" 
         xmlns:local="clr-namespace:FullTotal.ImageTransformations"
         Title="KiMageViewer" d:DesignHight="600" d:DesignWidth="750" WindowStartupLocation="CenterScreen"
-        WindowState="Maximized"  Closing="Window_Closing" KeyDown="Window_KeyDown">
+        WindowState="Maximized"  Closing="Window_Closing" KeyDown="Window_KeyDown" Loaded="Window_Loaded">
 
     <Window.Resources>
         <SolidColorBrush x:Key="MediumGreyBrush" Color="#ff6e6e6e"/>
@@ -53,46 +53,10 @@
         </Grid>
         <!--</Viewbox>-->
         <k:KinectRegion Grid.ColumnSpan="2"  Grid.Row="1"  Name="kinectRegion">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="auto"/>
-                    <!--<RowDefinition Height="*"/>-->
-                </Grid.RowDefinitions>
-                <!--<Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>-->
-
-                <!--<Viewbox Stretch="Uniform" Grid.ColumnSpan="2" Grid.Row="0">-->
-                    <Grid >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                    <Viewbox Grid.Column="0" Stretch="Uniform" HorizontalAlignment="Left">
-                        <StackPanel  >
-                        <k:KinectCircleButton Click="KinectCircleButton_Click_ResetZoomable"  Visibility="Visible" Label="Resetuj obraz" VerticalLabelAlignment="Bottom" Height="100" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                            <k:KinectCircleButton x:Name="stretchRotateButton" Click="KinectCircleButton_Click_SwitchStretchAndRotate"  Visibility="Visible" Label="Przybliż/oddal" VerticalLabelAlignment="Bottom" Height="100" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                            <k:KinectCircleButton   Visibility="Hidden" Label="Wybierz obraz" VerticalLabelAlignment="Bottom" Height="100" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                        <k:KinectCircleButton Click="KinectCircleButton_Click"  Visibility="Visible" Label="Wybierz obraz" VerticalLabelAlignment="Bottom" Height="100" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                        </StackPanel>
-                    </Viewbox>
-                    <Viewbox Grid.Column="1" Stretch="Uniform" HorizontalAlignment="Center">
-                        <Grid>
-                            <Canvas x:Name="kinectCanvas"/> <!--Grid.Column="1"/>-->
-                            <local:ZoomBorder  x:Name="zoomBorder" ClipToBounds="True" Background="WhiteSmoke"><!--Grid.Column="1" Grid.RowSpan="2"-->
-                                <Image Name="medicalImage"  Visibility="Hidden"/> <!--Source="C:\Users\alA\Downloads\MultiSizeImageSample\Resources\Fig1.jpg"-->
-                            </local:ZoomBorder> 
-                        </Grid>
-                    </Viewbox>
-                </Grid>
-                <!--</Viewbox>-->
-                
-                <DockPanel Grid.Row="2" Grid.ColumnSpan="2">
-                    <TextBlock x:Name="statusBarText" DockPanel.Dock="Left" Margin="0 0 10 0" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18"><Run Text="Kinect status"/></TextBlock>
-                </DockPanel>
-            </Grid>
+            
         </k:KinectRegion>
+        <DockPanel Grid.Row="2" Grid.ColumnSpan="2">
+            <TextBlock x:Name="statusBarText" DockPanel.Dock="Left" Margin="0 0 10 0" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18"><Run Text="Kinect status"/></TextBlock>
+        </DockPanel>
     </Grid>
 </Window>

@@ -31,26 +31,34 @@ namespace FullTotal
         KinectSensor sensor;
 
         //gestures and postures
-        readonly ContextTracker contextTracker = new ContextTracker();
-        StretchGestureDetector stretchGestureDetector;
-        RotationGestureDetector rotationGestureDetector;
-        bool isStretchGestureActive;
-        bool isRotateGestureActive;
-        AlgorithmicPostureDetector algorithmicPostureDetector = new AlgorithmicPostureDetector();
-        int counterStretch = 0;
-        int counterRotate = 0;
+        //readonly ContextTracker contextTracker = new ContextTracker();
+        //StretchGestureDetector stretchGestureDetector;
+        //RotationGestureDetector rotationGestureDetector;
+        //bool isStretchGestureActive;
+        //bool isRotateGestureActive;
+        //AlgorithmicPostureDetector algorithmicPostureDetector = new AlgorithmicPostureDetector();
+        //int counterStretch = 0;
+        //int counterRotate = 0;
+
         List<ImagePath> imagesList;
-        ImagePath selected = new ImagePath(@"C:\Users\alA\Downloads\MultiSizeImageSample\Resources\Fig1.jpg");
+        ImagePath selected = new ImagePath();
+
+        bool isStarting = true;
+        UserControl currentControl;
+        UcImageSelection ucImageSelection;
+        MainControl mainControl;
 
         public MainWindow(List< ImagePath> imagesList)
         {
             InitializeComponent();
 
             this.imagesList = imagesList;
-            this.medicalImage.Source = GetImageFormPath(imagesList[0].Path);
+            //this.medicalImage.Source = GetImageFormPath(imagesList[0].Path);
+         
 
-            isStretchGestureActive = false;
-            isRotateGestureActive = false;
+            //MainControl
+            //isStretchGestureActive = false;
+            //isRotateGestureActive = false;
             
             parameters = new TransformSmoothParameters
             {
@@ -65,10 +73,56 @@ namespace FullTotal
                 JitterRadius = 0.08f,
                 MaxDeviationRadius = 0.07f
             };
+            
             InitializeKinect();
+            //if (isStarting)
+            //{
+            //    mainControl = new MainControl(this.kinectRegion, this.kinectSensorChooser.Kinect, GetImageFromPath(imagesList[0].Path));
+            //    mainControl.OpenUcImageSelection += mainControl_OpenUcImageSelection;
+            //    this.kinectRegion.Content = mainControl;
+            //    isStarting = false;
+            //}
+           
+            //MainControl
+            //InitializeZoomBorder();
         }
 
-        private ImageSource GetImageFormPath(string p)
+        private void mainControl_OpenUcImageSelection()
+        {
+            ucImageSelection = new UcImageSelection(imagesList);
+            ucImageSelection.ImageSuccessfullySelected += ucImageSelection_ImageSuccessfullySelected;
+            this.kinectRegion.Content = ucImageSelection;
+        }
+
+        private void ucImageSelection_ImageSuccessfullySelected()
+        {
+            selected = ucImageSelection.GetSelectedImagePath();
+            mainControl = new MainControl(this.kinectRegion, this.kinectSensorChooser.Kinect, GetImageFromPath(selected.Path));
+            //usuń ewentualne stare powiązania i dodaj nowe
+            mainControl.OpenUcImageSelection -= mainControl_OpenUcImageSelection;
+            mainControl.OpenUcImageSelection += mainControl_OpenUcImageSelection;
+            mainControl.Loaded -= mainControl_Loaded;
+            mainControl.Loaded +=mainControl_Loaded;
+            this.kinectRegion.Content = mainControl;
+         
+           
+            //this.medicalImage.Source = GetImageFormPath(selected.Path);
+        }
+
+        private void mainControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.mainControl.InitializeGestures();
+            this.mainControl.InitializePostures();
+        }
+
+        private Image GetImageFromPath(string path)
+        {
+            Image result = new Image();
+            result.Source = GetImageSourceFormPath(path);
+            return result;
+        }
+
+        private ImageSource GetImageSourceFormPath(string p)
         {
           
             BitmapImage bi = new BitmapImage();
@@ -79,40 +133,44 @@ namespace FullTotal
             return bi;
         }
 
-        private void InitializeGestures()
-        {
-            var originalSize = this.zoomBorder.PointToScreen(new Point(this.zoomBorder.ActualWidth, this.zoomBorder.ActualHeight)) - this.zoomBorder.PointToScreen(new Point(0, 0));
-            stretchGestureDetector = new StretchGestureDetector(this.sensor, this.zoomBorder, originalSize);
-            stretchGestureDetector.MinimalPeriodBetweenGestures = 50;
-            stretchGestureDetector.OnGestureWithDistanceDetected += stretchGestureDetector_OnGestureWithDistanceDetected;
+        //MainControl
+        //private void InitializeGestures()
+        //{
+        //    var originalSize = this.zoomBorder.PointToScreen(new Point(this.zoomBorder.ActualWidth, this.zoomBorder.ActualHeight)) - this.zoomBorder.PointToScreen(new Point(0, 0));
+        //    stretchGestureDetector = new StretchGestureDetector(this.sensor, this.zoomBorder, originalSize);
+        //    stretchGestureDetector.MinimalPeriodBetweenGestures = 50;
+        //    stretchGestureDetector.OnGestureWithDistanceDetected += stretchGestureDetector_OnGestureWithDistanceDetected;
 
-            rotationGestureDetector = new RotationGestureDetector(this.sensor, this.zoomBorder, originalSize);
-            //rotationGestureDetector.MinimalPeriodBetweenGestures = 50;
-            rotationGestureDetector.OnGestureWithAngleDetected +=rotationGestureDetector_OnGestureWithAngleDetected;
-        }
+        //    rotationGestureDetector = new RotationGestureDetector(this.sensor, this.zoomBorder, originalSize);
+        //    //rotationGestureDetector.MinimalPeriodBetweenGestures = 50;
+        //    rotationGestureDetector.OnGestureWithAngleDetected +=rotationGestureDetector_OnGestureWithAngleDetected;
+        //}
 
-        private void rotationGestureDetector_OnGestureWithAngleDetected(string gestureName, double angle)
-        {
-            statusBarText.Text = gestureName + " " + angle.ToString();
-            zoomBorder.SetRotationAngle(angle);
-        }
+        //MainControl
+        //private void rotationGestureDetector_OnGestureWithAngleDetected(string gestureName, double angle)
+        //{
+        //    statusBarText.Text = gestureName + " " + angle.ToString();
+        //    zoomBorder.SetRotationAngle(angle);
+        //}
 
-        private void InitializePostures()
-        {
-            algorithmicPostureDetector.PostureDetected +=algorithmicPostureDetector_PostureDetected;
-        }
+        //MainControl
+        //private void InitializePostures()
+        //{
+        //    algorithmicPostureDetector.PostureDetected +=algorithmicPostureDetector_PostureDetected;
+        //}
 
-        private void algorithmicPostureDetector_PostureDetected(string posture)
-        {
-            this.NameTextBlock.Text = posture;
-        }
+        //MainControl
+        //private void algorithmicPostureDetector_PostureDetected(string posture)
+        //{
+        //    this.NameTextBlock.Text = posture;
+        //}
 
-        private void stretchGestureDetector_OnGestureWithDistanceDetected(string gestureName, double totalRatio)
-        {
-            //statusBarText.Text = gestureName + " " + totalRatio.ToString();
-            this.zoomBorder.SetZoomFactor(totalRatio);
-            
-        }
+        //MainControl
+        //private void stretchGestureDetector_OnGestureWithDistanceDetected(string gestureName, double totalRatio)
+        //{
+        //    //statusBarText.Text = gestureName + " " + totalRatio.ToString();
+        //    this.zoomBorder.SetZoomFactor(totalRatio);
+        //}
 
       
         private void InitializeKinect()
@@ -126,40 +184,51 @@ namespace FullTotal
             var regionSensorBinding = new Binding("Kinect") { Source = this.kinectSensorChooser };
             BindingOperations.SetBinding(this.kinectRegion, KinectRegion.KinectSensorProperty, regionSensorBinding);
 
-            this.zoomBorder.AssignKinectRegion(this.kinectRegion);
-            this.zoomBorder.OnStartStretchGestureFollowing += border_StartStretchGestureFollowing;
-            this.zoomBorder.OnEndStretchGestureFollowing +=zoomBorder_EndStretchGestureFollowing;
-            this.zoomBorder.OnStartRotateFestureFollowing +=zoomBorder_StartRotateFestureFollowing;
-            this.zoomBorder.OnEndRotateFestureFollowing += zoomBorder_EndRotateFestureFollowing;
-            this.zoomBorder.OnMoving +=zoomBorder_OnMoving;
+            
         }
 
-        private void zoomBorder_OnMoving(string position)
-        {
-            //this.statusBarText.Text = position;
-        }
+        //MainControl
+        //private void InitializeZoomBorder()
+        //{
+        //    this.zoomBorder.AssignKinectRegion(this.kinectRegion);
+        //    this.zoomBorder.OnStartStretchGestureFollowing += border_StartStretchGestureFollowing;
+        //    this.zoomBorder.OnEndStretchGestureFollowing += zoomBorder_EndStretchGestureFollowing;
+        //    this.zoomBorder.OnStartRotateFestureFollowing += zoomBorder_StartRotateFestureFollowing;
+        //    this.zoomBorder.OnEndRotateFestureFollowing += zoomBorder_EndRotateFestureFollowing;
+        //    this.zoomBorder.OnMoving += zoomBorder_OnMoving;
+        //}
 
-        private void zoomBorder_EndRotateFestureFollowing()
-        {
-            counterRotate = 0;
-            isRotateGestureActive = false;
-        }
+        //MainControl
+        //private void zoomBorder_OnMoving(string position)
+        //{
+        //    //this.statusBarText.Text = position;
+        //}
 
-        private void zoomBorder_StartRotateFestureFollowing()
-        {
-            isRotateGestureActive = true;
-        }
+        //MainControl
+        //private void zoomBorder_EndRotateFestureFollowing()
+        //{
+        //    counterRotate = 0;
+        //    isRotateGestureActive = false;
+        //}
 
-        private void zoomBorder_EndStretchGestureFollowing()
-        {
-            isStretchGestureActive = false;
-            counterStretch = 0;
-        }
+        //MainControl
+        //private void zoomBorder_StartRotateFestureFollowing()
+        //{
+        //    isRotateGestureActive = true;
+        //}
 
-        private void border_StartStretchGestureFollowing()
-        {
-            isStretchGestureActive = true;
-        }
+        //MainControl
+        //private void zoomBorder_EndStretchGestureFollowing()
+        //{
+        //    isStretchGestureActive = false;
+        //    counterStretch = 0;
+        //}
+
+        //MainControl
+        //private void border_StartStretchGestureFollowing()
+        //{
+        //    isStretchGestureActive = true;
+        //}
 
         private void kinectSencorChooser_KinectChanged(object sender, KinectChangedEventArgs e)
         {
@@ -226,10 +295,21 @@ namespace FullTotal
                     try
                     {
                         this.sensor.Start();
-                        this.medicalImage.Visibility = Visibility.Visible;
+                        //MainControl --> wywalone?
+                        //this.medicalImage.Visibility = Visibility.Visible;
                         this.statusBarText.Text = Properties.Resources.KinectReady;
-                        InitializeGestures();
-                        InitializePostures();
+
+                        if (isStarting)
+                        {
+                            mainControl = new MainControl(this.kinectRegion, this.kinectSensorChooser.Kinect, GetImageFromPath(imagesList[0].Path));
+                            mainControl.OpenUcImageSelection += mainControl_OpenUcImageSelection;
+                            this.kinectRegion.Content = mainControl;
+                            //MainControl
+                            mainControl.Loaded += mainControl_Loaded;
+                            isStarting = false;
+                        }
+
+                        
                     }
                     catch { }
                 }
@@ -277,41 +357,42 @@ namespace FullTotal
             {
                 if (closestSkeleton.TrackingState != SkeletonTrackingState.Tracked)
                     return;
-
-                contextTracker.Add(closestSkeleton.Position.ToVector3(), closestSkeleton.TrackingId);
+                //MainControl
+                this.mainControl.MyContextTracker.Add(closestSkeleton.Position.ToVector3(), closestSkeleton.TrackingId);
                 //stabilities.Add(closestSkeleton.TrackingId, contextTracker.IsStableRelativeToCurrentSpeed(closestSkeleton.TrackingId) ? "Stable" : "Non stable");
-                if (!contextTracker.IsStableRelativeToCurrentSpeed(closestSkeleton.TrackingId))
+                if (!this.mainControl.MyContextTracker.IsStableRelativeToCurrentSpeed(closestSkeleton.TrackingId))
                     return;
 
-                algorithmicPostureDetector.TrackPostures(closestSkeleton);
-                if (isStretchGestureActive)
+                //MainControl
+                this.mainControl.MyAlgorithmicPostureDetector.TrackPostures(closestSkeleton);
+                if (this.mainControl.IsStretchGestureActive)
                 {
                     if (closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && closestSkeleton.Joints[JointType.HandRight].TrackingState == JointTrackingState.Tracked)
                     {
-                        if (counterStretch == 0) //ustaw wartosci poczatkowe przy pierwszej iteracji
+                        if (this.mainControl.CounterStretch == 0) //ustaw wartosci poczatkowe przy pierwszej iteracji
                         {
                             //HandPointer leftPointer = kinectRegion.HandPointers.FirstOrDefault(x => x.HandType == HandType.Left);
                             //HandPointer rightPointer = kinectRegion.HandPointers.FirstOrDefault(x => x.HandType == HandType.Right);
                             //stretchGestureDetector.SetStartPosition(leftPointer.GetPosition(this.kinectRegion, this.kinectRegion);
                             
-                            stretchGestureDetector.SetStartPosition(closestSkeleton);
-                            counterStretch++;
+                            this.mainControl.MyStretchGestureDetector.SetStartPosition(closestSkeleton);
+                            this.mainControl.CounterStretch++;
                         }
                         else
-                            stretchGestureDetector.Add(closestSkeleton);
+                            this.mainControl.MyStretchGestureDetector.Add(closestSkeleton);
                     }
                 }
-                if (isRotateGestureActive)
+                if (this.mainControl.IsRotateGestureActive)
                 {
                     if (closestSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked && closestSkeleton.Joints[JointType.HandRight].TrackingState == JointTrackingState.Tracked)
                     {
-                        if (counterRotate == 0)
+                        if (this.mainControl.CounterRotate == 0)
                         {
-                            rotationGestureDetector.SetStartPosition(closestSkeleton);
-                            counterRotate++;
+                            this.mainControl.MyRotationGestureDetector.SetStartPosition(closestSkeleton);
+                            this.mainControl.CounterRotate++;
                         }
                         else
-                            rotationGestureDetector.Add(closestSkeleton);
+                            this.mainControl.MyRotationGestureDetector.Add(closestSkeleton);
                     }
                 }
             }
@@ -371,46 +452,57 @@ namespace FullTotal
                 this.Close();
         }
 
-        private void KinectCircleButton_Click(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            ImageSelection imageSelection = new ImageSelection(this.kinectSensorChooser, imagesList);
-            //PauseKinectInThisWindow();
-            imageSelection.ShowDialog();
-       
-            selected = imageSelection.GetSelectedImagePath();
-            this.medicalImage.Source = GetImageFormPath(selected.Path);
-            InitializeKinect();
+            if (mainControl != null)
+            {
+                this.mainControl.InitializeGestures();
+                this.mainControl.InitializePostures();
+            }
         }
+
+       //MainControl
+        //private void KinectCircleButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    //ImageSelection imageSelection = new ImageSelection(this.kinectSensorChooser, imagesList);
+        //    //imageSelection.ShowDialog();
+
+        //    ucImageSelection = new UcImageSelection(imagesList);
+        //    ucImageSelection.ImageSuccessfullySelected +=ucImageSelection_ImageSuccessfullySelected;
+        //    this.kinectRegion.Content = ucImageSelection;
+       
+        //    //selected = imageSelection.GetSelectedImagePath();
+
+        //    //selected = ucImageSelection.GetSelectedImagePath();
+        //    //this.medicalImage.Source = GetImageFormPath(selected.Path);
+        //    //InitializeComponent();
+        //}
+
+       
 
         
-        private void PauseKinectInThisWindow()
-        {
-            this.sensor.DepthStream.Disable();
-            this.sensor.SkeletonStream.Disable();
-            this.sensor.SkeletonFrameReady -= sensor_SkeletonFrameReady;
-          
-            this.sensor = null;
-        }
+     
+        //MainControl
+        //private void KinectCircleButton_Click_ResetZoomable(object sender, RoutedEventArgs e)
+        //{
+        //    this.zoomBorder.Reset();
+        //}
 
-        private void KinectCircleButton_Click_ResetZoomable(object sender, RoutedEventArgs e)
-        {
-            this.zoomBorder.Reset();
-        }
+        //MainControl
+        //private void KinectCircleButton_Click_SwitchStretchAndRotate(object sender, RoutedEventArgs e)
+        //{
+        //    if (this.stretchRotateButton.Label.ToString().Contains("Przybliż"))
+        //    {
+        //        this.zoomBorder.AssignGestureDetectionType(false);
+        //        this.stretchRotateButton.Label = "Obrót";
+        //    }
+        //            else if (this.stretchRotateButton.Label.ToString().Contains("Obrót"))
+        //    {
 
-        private void KinectCircleButton_Click_SwitchStretchAndRotate(object sender, RoutedEventArgs e)
-        {
-            if (this.stretchRotateButton.Label.ToString().Contains("Przybliż"))
-            {
-                this.zoomBorder.AssignGestureDetectionType(false);
-                this.stretchRotateButton.Label = "Obrót";
-            }
-                    else if (this.stretchRotateButton.Label.ToString().Contains("Obrót"))
-            {
-
-                this.zoomBorder.AssignGestureDetectionType(true);
-                this.stretchRotateButton.Label = "Przybliż/oddal";
-                    }
-        }
+        //        this.zoomBorder.AssignGestureDetectionType(true);
+        //        this.stretchRotateButton.Label = "Przybliż/oddal";
+        //            }
+        //}
 
     }
 }

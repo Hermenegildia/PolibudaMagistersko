@@ -78,6 +78,9 @@
     </ApplicationDefinition>
     <Compile Include="Classes\ImagePath.cs" />
     <Compile Include="KinectHoverButton.cs" />
+    <Compile Include="MainControl.xaml.cs">
+      <DependentUpon>MainControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SelectionDisplay.xaml.cs">
       <DependentUpon>SelectionDisplay.xaml</DependentUpon>
     </Compile>
@@ -87,6 +90,13 @@
     <Compile Include="ImageSelection.xaml.cs">
       <DependentUpon>ImageSelection.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UcImageSelection.xaml.cs">
+      <DependentUpon>UcImageSelection.xaml</DependentUpon>
+    </Compile>
+    <Page Include="MainControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -115,6 +125,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ImageSelection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UcImageSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

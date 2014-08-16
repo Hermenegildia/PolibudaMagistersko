@@ -1,19 +1,16 @@
-﻿<Window x:Class="FullTotal.ImageSelection"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        xmlns:local= "clr-namespace:FullTotal"
-        xmlns:k="http://schemas.microsoft.com/kinect/2013"
-        Title="Wybór obrazu"  Closing="WindowClosing" WindowState="Maximized"
-        mc:Ignorable="d"
-        d:DesignWidth="1200"
+﻿<UserControl x:Class="FullTotal.UcImageSelection"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local= "clr-namespace:FullTotal"
+             xmlns:k="http://schemas.microsoft.com/kinect/2013"
+             mc:Ignorable="d" 
+               d:DesignWidth="1200"
         d:DesignHeight="700"
-        MinWidth="500"
-        MinHeight="700"
-        FontFamily="Segoe UI">
+       >
 
-    <Window.Resources>
+    <Control.Resources>
         <PathGeometry x:Key="ChevronGeometry" x:Shared="False">
             F1M150.001,146.9932L126.565,169.3822L126.565,153.5962L150.001,130.6182L173.435,153.5962L173.435,169.3822z
         </PathGeometry>
@@ -98,50 +95,35 @@
         <Style x:Key="KinectHoverButtonScrollLeftStyle" TargetType="{x:Type local:KinectHoverButton}" BasedOn="{StaticResource KinectHoverButtonStyle}">
             <Setter Property="Content" Value="{StaticResource ChevronLeft}"/>
         </Style>
-    </Window.Resources>
-    <Grid>
+    </Control.Resources>
+
+    <Grid x:Name="kinectRegionGrid" Margin="10,20,10,20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="170" />
         </Grid.RowDefinitions>
-
-        <Grid Grid.Row="0"  Margin="10 0 10 20">
-            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="Images\Logo.png" Stretch="None" Margin="0 0 0 4"/>
-            <k:KinectUserViewer k:KinectRegion.KinectRegion="{Binding ElementName=kinectRegion}" Height="100" HorizontalAlignment="Center" VerticalAlignment="Top" />
-            <k:KinectSensorChooserUI HorizontalAlignment="Center" VerticalAlignment="Top" Name="sensorChooserUi" />
-            <TextBlock HorizontalAlignment="Right" Margin="0,76,-1,0" VerticalAlignment="Top" Foreground="{StaticResource MediumGreyBrush}" FontSize="18">Wybór zdjęć</TextBlock>
+        <k:KinectScrollViewer Grid.Row="0" Name="scrollViewer" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled">
+            <WrapPanel VerticalAlignment="Center" x:Name="wrapPanel" Orientation="Vertical" k:KinectTileButton.Click="KinectTileButtonClick">
+                <!-- items for design layout.  They will be replaced at runtime. -->
+                <k:KinectTileButton Label="1"/>
+                <k:KinectTileButton Label="2"/>
+                <k:KinectTileButton Label="3"/>
+                <k:KinectTileButton Label="4"/>
+                <k:KinectTileButton Label="5"/>
+                <k:KinectTileButton Label="6"/>
+                <k:KinectTileButton Label="7"/>
+                <k:KinectTileButton Label="8"/>
+                <k:KinectTileButton Label="9"/>
+                <k:KinectTileButton Label="10"/>
+            </WrapPanel>
+        </k:KinectScrollViewer>
+        <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0, 10, 0, 10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <k:KinectCircleButton Grid.ColumnSpan="3" Click="PageLeftButtonClick" Label="Akceptuj" LabelPosition="Bottom"/>
         </Grid>
-
-        <k:KinectRegion Grid.Row="1" x:Name="kinectRegion">
-            <Grid x:Name="kinectRegionGrid" Margin="10,20,10,20">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="170" />
-                </Grid.RowDefinitions>
-                <k:KinectScrollViewer Grid.Row="0" Name="scrollViewer" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled">
-                    <WrapPanel VerticalAlignment="Center" x:Name="wrapPanel" Orientation="Vertical" k:KinectTileButton.Click="KinectTileButtonClick">
-                        <!-- items for design layout.  They will be replaced at runtime. -->
-                        <k:KinectTileButton Label="1"/>
-                        <k:KinectTileButton Label="2"/>
-                        <k:KinectTileButton Label="3"/>
-                        <k:KinectTileButton Label="4"/>
-                        <k:KinectTileButton Label="5"/>
-                        <k:KinectTileButton Label="6"/>
-                        <k:KinectTileButton Label="7"/>
-                        <k:KinectTileButton Label="8"/>
-                        <k:KinectTileButton Label="9"/>
-                        <k:KinectTileButton Label="10"/>
-                    </WrapPanel>
-                </k:KinectScrollViewer>
-                <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0, 10, 0, 10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <k:KinectCircleButton Grid.ColumnSpan="3" Click="PageLeftButtonClick" Label="Akceptuj" LabelPosition="Bottom"/>
-                </Grid>
-            </Grid>
-        </k:KinectRegion>
     </Grid>
-</Window>
+</UserControl>
