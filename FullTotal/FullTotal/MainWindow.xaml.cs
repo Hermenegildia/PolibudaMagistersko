@@ -271,7 +271,7 @@ namespace FullTotal
                     //this.sensor.DepthFrameReady += sensor_DepthFrameReady;
                     //this.sensor.AllFramesReady += sensor_AllFramesReady;
                     this.kinectRegion.KinectSensor = this.sensor;
-
+                    
                     try
                     {
                         this.sensor.DepthStream.Range = DepthRange.Near;

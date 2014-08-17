@@ -64,7 +64,7 @@
                     <Grid>
                         <Canvas x:Name="kinectCanvas"/>
                         <!--Grid.Column="1"/>-->
-                        <local:ZoomBorder  x:Name="zoomBorder" ClipToBounds="True" Background="WhiteSmoke">
+                        <local:ZoomBorder  x:Name="zoomBorder" ClipToBounds="False" Background="WhiteSmoke">
                             <!--Grid.Column="1" Grid.RowSpan="2"-->
                             <Image Name="medicalImage"  Visibility="Hidden"/>
                             <!--Source="C:\Users\alA\Downloads\MultiSizeImageSample\Resources\Fig1.jpg"-->
