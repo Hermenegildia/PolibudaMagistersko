@@ -22,7 +22,6 @@ namespace Kinect.Toolbox
         PathSorter pathSorter = new PathSorter();
 
         readonly List<Entry> leftEntries = new List<Entry>();
-        readonly List<Entry> bothHandsEntries = new List<Entry>();
 
 
         protected List<Entry> LeftEntries
@@ -30,10 +29,7 @@ namespace Kinect.Toolbox
             get { return leftEntries; }
         }
 
-        protected List<Entry> BothHandsEntries
-        {
-            get { return bothHandsEntries; }
-        }
+        
 
 
         public bool IsRecordingPath

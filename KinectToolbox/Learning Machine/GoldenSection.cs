@@ -138,7 +138,9 @@ namespace Kinect.Toolbox.Gestures.Learning_Machine
 
             //Tools.SavePointsToFile(locals, "obrocone");
             locals.ScaleToReferenceWorld();
+            //Tools.SavePointsToFile(locals, "przeskalowane");
             locals.CenterToOrigin();
+            //Tools.SavePointsToFile(locals, "wysrodkowane");
 
             return locals;
         }

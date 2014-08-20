@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="Kinect.Toolbox.AudioStreamManager" Collapsed="true">
-    <Position X="0.5" Y="1.75" Width="1.5" />
+    <Position X="1.25" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAAAAAAAAAAAAAABAAAEAAAAAAAAAAAAAE=</HashCode>
       <FileName>AudioStreamManager.cs</FileName>
@@ -9,21 +9,21 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Kinect.Toolbox.MagneticPropertyHolder" Collapsed="true">
-    <Position X="14.75" Y="2.5" Width="1.5" />
+    <Position X="24.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAAAAAAAAAAAAAAAAAAAYAAEAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Behaviors\MagneticPropertyHolder.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.BindableNUICamera" Collapsed="true">
-    <Position X="5" Y="1.75" Width="1.5" />
+    <Position X="5.75" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAQIAAIAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
       <FileName>BindableNUICamera.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.ColorStreamManager" Collapsed="true">
-    <Position X="7.25" Y="1.75" Width="1.5" />
+    <Position X="8" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAgAABAAAAAAAAAAgAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>ColorStreamManager.cs</FileName>
@@ -31,113 +31,183 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Kinect.Toolbox.ContextPoint" Collapsed="true">
-    <Position X="14.75" Y="0.5" Width="1.5" />
+    <Position X="19.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
       <FileName>Context\ContextPoint.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.ContextTracker" Collapsed="true">
-    <Position X="16.5" Y="0.5" Width="1.5" />
+    <Position X="21" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAACAACAAAAAAAAAAAAAAAAAAQAQAAAAgBIAAAAA=</HashCode>
       <FileName>Context\ContextTracker.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.MouseImpostor" Collapsed="true">
-    <Position X="20" Y="2.5" Width="1.5" />
+    <Position X="19.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Controls\MouseImpostor.xaml.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.PresenceControl" Collapsed="true">
-    <Position X="14.75" Y="3.5" Width="1.5" />
+    <Position X="26.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAABAAAAAAAADAAAAAAAAJIAAAAAAQAAAAAgAAQAA=</HashCode>
       <FileName>Controls\PresenceControl.xaml.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.DepthStreamManager" Collapsed="true">
-    <Position X="2.75" Y="1.75" Width="1.5" />
+    <Position X="3.5" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAAAAAAgAAAAAAAAAAAAQAAAAAgAAAAA=</HashCode>
       <FileName>DepthStreamManager.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
+  <Class Name="Kinect.Toolbox.CombinedGestureDetector" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAgAAAIAAgAAAABEAAAAAQAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Gestures\CombinedGestureDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="Kinect.Toolbox.Entry" Collapsed="true">
-    <Position X="13" Y="1.5" Width="1.5" />
+    <Position X="1" Y="10.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAgAAAAEAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
       <FileName>Gestures\Entry.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Kinect.Toolbox.GestureDetector">
-    <Position X="2.75" Y="6.5" Width="2.25" />
+  <Class Name="Kinect.Toolbox.EntryKinect" Collapsed="true">
+    <Position X="1" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Gestures\EntryKinect.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kinect.Toolbox.GestureDetector" Collapsed="true">
+    <Position X="8.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIACAAAAAQAICAABAAgAAAACAABAAQEAAAEAAAAAAA=</HashCode>
       <FileName>Gestures\GestureDetector.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Kinect.Toolbox.SwipeGestureDetector">
-    <Position X="2.75" Y="11.5" Width="3.5" />
+  <Class Name="Kinect.Toolbox.ParellelCombinedGestureDetector" Collapsed="true">
+    <Position X="3.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgQAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Gestures\ParellelCombinedGestureDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kinect.Toolbox.PathSorter" Collapsed="true">
+    <Position X="22.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAIAAAAAAAAEAAIABAAAAAAAAAAgCAAIAAAAAAAAA=</HashCode>
+      <FileName>Gestures\PathSorter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kinect.Toolbox.PathSorterEntry" Collapsed="true">
+    <Position X="24.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>Gestures\PathSorterEntry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kinect.Toolbox.RotationGestureDetector" Collapsed="true">
+    <Position X="10.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAIAAAAAAAAAAAAAAAAACAAAAAAABAAAA=</HashCode>
+      <FileName>Gestures\RotationGestureDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kinect.Toolbox.SerialCombinedGestureDetector" Collapsed="true">
+    <Position X="1.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Gestures\SerialCombinedGestureDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kinect.Toolbox.StretchGestureDetector" Collapsed="true">
+    <Position X="12.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAQAIEAAAAAAAAAAAEAAAACAAAAAAEAAAAA=</HashCode>
+      <FileName>Gestures\StretchGestureDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kinect.Toolbox.SwipeGestureDetector" Collapsed="true">
+    <Position X="6" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AABAAAAAAAAAIAAAAAAAQAAQAAAgAACAAAAAAAAAAAA=</HashCode>
       <FileName>Gestures\SwipeGestureDetector.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Kinect.Toolbox.TemplatedGestureDetector">
-    <Position X="6.5" Y="6.75" Width="2.5" />
+  <Class Name="Kinect.Toolbox.TemplatedGestureDetector" Collapsed="true">
+    <Position X="8.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AgIAAAAAQAAAIAAAAAACAAAAAAAUABIgIAACAAQAAAA=</HashCode>
       <FileName>Gestures\TemplatedGestureDetector.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="Kinect.Toolbox.TwoHandsAlgorithmicGessureDetector" Collapsed="true">
+    <Position X="11.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIBAAEAAQABIAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Gestures\TwoHandsAlgorithmicGessureDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kinect.Toolbox.TwoHandsTemplatedGestureDetector" Collapsed="true">
+    <Position X="15" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgIAAAEAQAABIAAAAABWAAAAAAAUABIgIAACAAQEAAA=</HashCode>
+      <FileName>Gestures\TwoHandsTemplatedGestureDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="Kinect.Toolbox.GoldenSectionExtensions" Collapsed="true">
-    <Position X="16.5" Y="1.5" Width="1.5" />
+    <Position X="17.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAEAACAAAAAAABgEAAAAAAAAAAAAAAIEAQ=</HashCode>
       <FileName>Learning Machine\GoldenSectionExtensions.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.LearningMachine" Collapsed="true">
-    <Position X="13" Y="2.5" Width="1.5" />
+    <Position X="22.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAgAAAQAAAAEAAAAAAAIAAAAQAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Learning Machine\LearningMachine.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.RecordedPath" Collapsed="true">
-    <Position X="16.5" Y="3.5" Width="1.5" />
+    <Position X="17.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AACAAgCAAAAAgAAAAAAAAAAAAAAAAAAgAAAAAAAAgAA=</HashCode>
+      <HashCode>AACAAgCAAAAAgAAgAAAAAAAAAAAAAAAgAAAAAAAAgAA=</HashCode>
       <FileName>Learning Machine\RecordedPath.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.MathHelper" Collapsed="true">
-    <Position X="16.5" Y="2.5" Width="1.5" />
+    <Position X="26.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAQBAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Math\MathHelper.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.MouseController" Collapsed="true">
-    <Position X="18.25" Y="2.5" Width="1.5" />
+    <Position X="17.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQBAAAAAwAAwAZDAAGFgAAAiAAkABQAAIAEAAEiAAI=</HashCode>
       <FileName>Mouse\MouseController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.MouseInterop" Collapsed="true">
-    <Position X="13" Y="3.5" Width="1.5" />
+    <Position X="21" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAIAAAAIAAAAAAAA=</HashCode>
       <FileName>Mouse\MouseInterop.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.Notifier" Collapsed="true">
-    <Position X="3.75" Y="0.5" Width="1.5" />
+    <Position X="4.5" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAACAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Notifier.cs</FileName>
@@ -145,119 +215,112 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Kinect.Toolbox.AlgorithmicPostureDetector" Collapsed="true">
-    <Position X="8.25" Y="4.75" Width="1.5" />
+    <Position X="11.25" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AABAAAAAEAAIAAAAAAAAgAAABAAQAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Postures\AlgorithmicPostureDetector.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.PostureDetector" Collapsed="true">
-    <Position X="9.5" Y="3.5" Width="1.5" />
+    <Position X="10.25" Y="7.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAEEAAQBAAAAAAAAAAAAAAACAgAAAAQCQAAAAA=</HashCode>
       <FileName>Postures\PostureDetector.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.TemplatedPostureDetector" Collapsed="true">
-    <Position X="10.5" Y="4.75" Width="1.5" />
+    <Position X="9" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AgAAAAAAUAAAACAAAAAAAAAAAAAUAAIAACACAAAAAAA=</HashCode>
       <FileName>Postures\TemplatedPostureDetector.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.SkeletonDisplayManager" Collapsed="true">
-    <Position X="16.5" Y="4.5" Width="1.5" />
+    <Position X="26.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAAAAAAAAAgAAAAgAAAAAAAAAABAAAAAEAgAAAAA=</HashCode>
       <FileName>SkeletonDisplayManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.Tools" Collapsed="true">
-    <Position X="20" Y="4.5" Width="1.5" />
+    <Position X="19.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAABAAAAAAAAIAAAAAAEAAMAAAQAAAAAAEAAAA=</HashCode>
+      <HashCode>AAAAAAAABAAAAAAAAIAAAAAAEAAMAAgQAAAAAAEAAAA=</HashCode>
       <FileName>Tools.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Kinect.Toolbox.Gestures.TwoHandsTemplatedGestureDetector">
-    <Position X="0.5" Y="7.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Gestures\TwoHandsTemplatedGestureDetector.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="Kinect.Toolbox.Gestures.Learning_Machine.CustomBinder" Collapsed="true">
-    <Position X="18.25" Y="0.5" Width="1.5" />
+    <Position X="22.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Learning Machine\CustomBinder.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.Gestures.Learning_Machine.GoldenSection" Collapsed="true">
-    <Position X="14.75" Y="1.5" Width="1.5" />
+    <Position X="26.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAgAAAAIAAQAAEAAAAAAAAAAAAAAAAAAAACgAAA=</HashCode>
+      <HashCode>AAAAAAgAAAAIgAQAAEAAAAAAAAAAAAAAAAAAAACgAAA=</HashCode>
       <FileName>Learning Machine\GoldenSection.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.Record.ColorRecorder" Collapsed="true">
-    <Position X="13" Y="0.5" Width="1.5" />
+    <Position X="17.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAABAg=</HashCode>
       <FileName>Record\ColorRecorder.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.Record.DepthRecorder" Collapsed="true">
-    <Position X="20" Y="0.5" Width="1.5" />
+    <Position X="24.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAABAg=</HashCode>
       <FileName>Record\DepthRecorder.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.Record.KinectRecorder" Collapsed="true">
-    <Position X="18.25" Y="1.5" Width="1.5" />
+    <Position X="19.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAABAAAAAAAAABAAAAAAAAAAAAAAAAAKQAAAABIBgA=</HashCode>
       <FileName>Record\KinectRecorder.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.Record.SkeletonRecorder" Collapsed="true">
-    <Position X="18.25" Y="4.5" Width="1.5" />
+    <Position X="17.5" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAABAg=</HashCode>
       <FileName>Record\SkeletonRecorder.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.Record.ReplayColorImageFrame" Collapsed="true">
-    <Position X="2.75" Y="4.75" Width="1.5" />
+    <Position X="3.5" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BAAAAAAABAAAEAAAAAAAAGQAAAgIAAAACAAAAgAgAAA=</HashCode>
       <FileName>Replay\Color\ReplayColorImageFrame.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.Record.ReplayColorImageFrameReadyEventArgs" Collapsed="true">
-    <Position X="18.25" Y="3.5" Width="1.5" />
+    <Position X="19.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Replay\Color\ReplayColorImageFrameReadyEventArgs.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.Record.ReplayDepthImageFrame" Collapsed="true">
-    <Position X="5" Y="4.75" Width="1.5" />
+    <Position X="5.75" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BAgAAAAABAAAEAAAIAAAAGQAAAgIAAAACAAAAAAgAAA=</HashCode>
       <FileName>Replay\Depth\ReplayDepthImageFrame.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.Record.ReplayDepthImageFrameReadyEventArgs" Collapsed="true">
-    <Position X="20" Y="3.5" Width="1.5" />
+    <Position X="21" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Replay\Depth\ReplayDepthImageFrameReadyEventArgs.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.Record.KinectReplay" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="20" Y="1.5" Width="1.5" />
+    <Position X="21" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAABAAgEAAAAAAAAAIAAAgALQAAQAEQAAA=</HashCode>
       <FileName>Replay\KinectReplay.cs</FileName>
@@ -265,91 +328,91 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Kinect.Toolbox.Record.ReplayFrame" Collapsed="true">
-    <Position X="2.75" Y="3.5" Width="1.5" />
+    <Position X="3.5" Y="7.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAACAAAAAAAAAAAAAAAQAAAACAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Replay\ReplayFrame.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.Record.ReplaySystem&lt;T&gt;" Collapsed="true">
-    <Position X="14.75" Y="4.5" Width="1.5" />
+    <Position X="24.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAAAAAAAAAAAAAACAAAAAAAJAAAAQAAAgA=</HashCode>
       <FileName>Replay\ReplaySystem.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.Record.ReplaySkeletonFrame" Collapsed="true">
-    <Position X="0.5" Y="4.75" Width="1.5" />
+    <Position X="1.25" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEAAAAAABAAAAAAIAAAAAAQAAAAAAAAAAAAAAAAAAIA=</HashCode>
       <FileName>Replay\Skeletons\ReplaySkeletonFrame.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Kinect.Toolbox.Record.ReplaySkeletonFrameReadyEventArgs" Collapsed="true">
-    <Position X="13" Y="4.5" Width="1.5" />
+    <Position X="22.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
       <FileName>Replay\Skeletons\ReplaySkeletonFrameReadyEventArgs.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Struct Name="Kinect.Toolbox.Rectangle" Collapsed="true">
-    <Position X="16.5" Y="5.75" Width="1.5" />
+    <Position X="21" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAABAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAYAA=</HashCode>
       <FileName>Learning Machine\Rectangle.cs</FileName>
     </TypeIdentifier>
   </Struct>
   <Struct Name="Kinect.Toolbox.Vector2" Collapsed="true">
-    <Position X="18.25" Y="5.75" Width="1.5" />
+    <Position X="22.75" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAYAUAAABAAQAAAAAAAAAAAAAAYAA=</HashCode>
       <FileName>Math\Vector2.cs</FileName>
     </TypeIdentifier>
   </Struct>
   <Struct Name="Kinect.Toolbox.Vector3" Collapsed="true">
-    <Position X="20" Y="5.75" Width="1.5" />
+    <Position X="24.5" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAYAUAAABACQAAAAAAAAAAAAAAYAE=</HashCode>
       <FileName>Math\Vector3.cs</FileName>
     </TypeIdentifier>
   </Struct>
   <Struct Name="Kinect.Toolbox.MOUSEINPUT" Collapsed="true">
-    <Position X="14.75" Y="5.75" Width="1.5" />
+    <Position X="19.25" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAAAAAIAAAAAAAAAIAAAAAAAEAAAgAAAAAAAABAA=</HashCode>
       <FileName>Mouse\MouseInterop.cs</FileName>
     </TypeIdentifier>
   </Struct>
   <Struct Name="Kinect.Toolbox.INPUT" Collapsed="true">
-    <Position X="13" Y="5.75" Width="1.5" />
+    <Position X="17.5" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAQgAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Mouse\MouseInterop.cs</FileName>
     </TypeIdentifier>
   </Struct>
   <Interface Name="Kinect.Toolbox.IStreamManager" Collapsed="true">
-    <Position X="13" Y="7" Width="1.5" />
+    <Position X="17.5" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>IStreamManager.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Enum Name="Kinect.Toolbox.MouseEventDataXButtons" Collapsed="true">
-    <Position X="14.75" Y="8" Width="1.5" />
+    <Position X="19.25" Y="8" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ACAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
       <FileName>Mouse\MouseInterop.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="Kinect.Toolbox.MOUSEEVENTF" Collapsed="true">
-    <Position X="16.5" Y="8" Width="1.5" />
+    <Position X="21" Y="8" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IAgAAAAACAQgAAAAUAAACBAAAAAAIgACAAAAAAAAAoA=</HashCode>
       <FileName>Mouse\MouseInterop.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="Kinect.Toolbox.Record.KinectRecordOptions" Collapsed="true">
-    <Position X="13" Y="8" Width="1.5" />
+    <Position X="17.5" Y="8" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAgAAAAAA=</HashCode>
       <FileName>Record\KinectRecordOptions.cs</FileName>

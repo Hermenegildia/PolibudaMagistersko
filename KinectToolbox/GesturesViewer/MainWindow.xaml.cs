@@ -20,7 +20,7 @@ namespace GesturesViewer
         KinectSensor kinectSensor;
 
         SwipeGestureDetector swipeGestureRecognizer;
-        //TemplatedGestureDetector circleGestureRecognizer;
+        TemplatedGestureDetector circleGestureRecognizer;
         //SerialCombinedGestureDetector serialCombinedGestureDetector;
         //TwoHandsTemplatedGestureDetector twoHandsGestureRecognizer;
         TwoHandsTemplatedGestureDetector leftRotationGestureRecognizer;
@@ -161,7 +161,7 @@ namespace GesturesViewer
 
             kinectSensor.Start();
 
-            //LoadCircleGestureDetector();
+            LoadCircleGestureDetector();
             //LoadLetterTPostureDetector();
             //LoadEightGestureDetector();
             //LoadSerialCombinedGestureDetector();
@@ -328,7 +328,7 @@ namespace GesturesViewer
                             swipeGestureRecognizer.Add(joint.Position, kinectSensor);
                             //eightGestureRecognizer.Add(joint.Position, kinectSensor);
 
-                            //circleGestureRecognizer.Add(joint.Position, kinectSensor);
+                            circleGestureRecognizer.Add(joint.Position, kinectSensor);
                         }
                         else if (joint.JointType == JointType.HandLeft && controlMouse.IsChecked == true)
                         {

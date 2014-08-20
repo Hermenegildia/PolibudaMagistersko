@@ -9,17 +9,17 @@ namespace GesturesViewer
 {
     partial class MainWindow
     {
-        //void LoadCircleGestureDetector()
-        //{
-        //    using (Stream recordStream = File.Open(circleKBPath, FileMode.OpenOrCreate))
-        //    {
-        //        circleGestureRecognizer = new TemplatedGestureDetector("Circle", recordStream);
-        //        circleGestureRecognizer.DisplayCanvas = gesturesCanvas;
-        //        circleGestureRecognizer.OnGestureDetected += OnGestureDetected;
-                
-        //        MouseController.Current.ClickGestureDetector = circleGestureRecognizer;
-        //    }
-        //}
+        void LoadCircleGestureDetector()
+        {
+            using (Stream recordStream = File.Open(circleKBPath, FileMode.OpenOrCreate))
+            {
+                circleGestureRecognizer = new TemplatedGestureDetector("Circle", recordStream);
+                circleGestureRecognizer.DisplayCanvas = gesturesCanvas;
+                circleGestureRecognizer.OnGestureDetected += OnGestureDetected;
+
+                MouseController.Current.ClickGestureDetector = circleGestureRecognizer;
+            }
+        }
 
     
 
@@ -70,15 +70,15 @@ namespace GesturesViewer
 
         private void recordGesture_Click(object sender, RoutedEventArgs e)
         {
-            //if (circleGestureRecognizer.IsRecordingPath)
-            //{
-            //    circleGestureRecognizer.EndRecordTemplate();
-            //    recordGesture.Content = "Record Gesture";
-            //    return;
-            //}
+            if (circleGestureRecognizer.IsRecordingPath)
+            {
+                circleGestureRecognizer.EndRecordTemplate();
+                recordGesture.Content = "Record Gesture";
+                return;
+            }
 
-            //circleGestureRecognizer.StartRecordTemplate();
-            //recordGesture.Content = "Stop Recording";
+            circleGestureRecognizer.StartRecordTemplate();
+            recordGesture.Content = "Stop Recording";
 
             //if (eightGestureRecognizer.IsRecordingPath)
             //{
@@ -140,16 +140,16 @@ namespace GesturesViewer
 
         void CloseGestureDetector()
         {
-            //if (circleGestureRecognizer != null)
-            //{
+            if (circleGestureRecognizer != null)
+            {
 
-            //    //string newPath = Path.Combine(Environment.CurrentDirectory, @"data\eska.save");
-            //    using (Stream recordStream = File.Create(circleKBPath))
-            //    {
-            //        circleGestureRecognizer.SaveState(recordStream);
-            //    }
-            //    circleGestureRecognizer.OnGestureDetected -= OnGestureDetected;
-            //}
+                //string newPath = Path.Combine(Environment.CurrentDirectory, @"data\eska.save");
+                using (Stream recordStream = File.Create(circleKBPath))
+                {
+                    circleGestureRecognizer.SaveState(recordStream);
+                }
+                circleGestureRecognizer.OnGestureDetected -= OnGestureDetected;
+            }
 
             //obsługa mojego gestu ósemeczki
             //if (eightGestureRecognizer != null)
